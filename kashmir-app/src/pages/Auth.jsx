@@ -74,18 +74,8 @@ const handleSubmit = async () => {
 };
 
 
-  const demoLogin = (role) => {
-    const creds = role === 'admin' ? { e: 'admin@kashmir.com', p: 'admin123' } : { e: 'user@kashmir.com', p: 'user123' };
-    setEmail(creds.e); setPassword(creds.p);
-  };
-
   return (
     <AuthLayout title="Welcome Back" subtitle="Sign in to your Kashmir Portal account">
-      <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
-        <button onClick={() => demoLogin('user')} style={{ flex: 1, padding: '9px', background: 'rgba(26,122,110,0.08)', border: '1px solid rgba(26,122,110,0.2)', borderRadius: 10, fontFamily: 'Nunito', fontWeight: 700, fontSize: '0.78rem', color: 'var(--kashmir-teal)', cursor: 'pointer' }}>Demo User</button>
-        <button onClick={() => demoLogin('admin')} style={{ flex: 1, padding: '9px', background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.3)', borderRadius: 10, fontFamily: 'Nunito', fontWeight: 700, fontSize: '0.78rem', color: '#A07820', cursor: 'pointer' }}>Demo Admin</button>
-      </div>
-
       <div className="form-group">
         <label className="form-label">Email Address</label>
         <input className="form-input" type="email" placeholder="your@email.com" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSubmit()}/>
