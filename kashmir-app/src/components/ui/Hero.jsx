@@ -27,7 +27,7 @@ export default function Hero() {
 
       {/* ── Background Images (position:absolute, behind everything) ── */}
       {SLIDES.map((s, i) => (
-        <div key={i} style={{
+        <div key={i} className={`home-hero-bg ${s.title === 'Gulmarg' ? 'home-hero-bg-gulmarg' : ''}`} style={{
           position: 'absolute', inset: 0,
           backgroundImage: `url(${s.bg})`,
           backgroundSize: 'cover', backgroundPosition: 'center',
@@ -188,8 +188,14 @@ export default function Hero() {
       <style>{`
         @media (max-width: 768px) {
           .hero-thumb { display: none !important; }
+          .home-hero-bg-gulmarg {
+            background-position: 36% center !important;
+          }
         }
         @media (max-width: 480px) {
+          .home-hero-bg-gulmarg {
+            background-position: 34% center !important;
+          }
           .hero-stats { flex-wrap: nowrap !important; overflow-x: auto; }
         }
       `}</style>
