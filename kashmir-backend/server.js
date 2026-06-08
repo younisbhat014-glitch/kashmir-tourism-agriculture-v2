@@ -28,6 +28,7 @@ const configuredOrigins = [
 const isAllowedOrigin = (origin) => {
   if (!origin) return true;
   return configuredOrigins.includes(origin)
+    || /^https:\/\/[a-z0-9-]+\.up\.railway\.app$/.test(origin)
     || /^http:\/\/(localhost|127\.0\.0\.1):517\d$/.test(origin);
 };
 
