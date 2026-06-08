@@ -2,8 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dns = require('dns');
-const bcrypt = require('bcryptjs');
-const User = require('./models/User');
 const Machine = require('./models/Machine');
 require('dotenv').config();
 
@@ -71,29 +69,6 @@ app.get('/health', (req, res) => {
   });
 });
 
-const seedDevelopmentUsers = async () => {
-  if (process.env.NODE_ENV !== 'development') return;
-
-  const demoUsers = [
-    { name: 'Admin Kashmir', email: 'admin@kashmir.com', password: 'admin123', role: 'admin', avatar: 'admin' },
-    { name: 'Amir Wani', email: 'user@kashmir.com', password: 'user123', role: 'user', avatar: 'user' },
-  ];
-
-  for (const demoUser of demoUsers) {
-    const exists = await User.exists({ email: demoUser.email });
-    if (exists) continue;
-
-    const hashedPassword = await bcrypt.hash(demoUser.password, 10);
-    await User.create({
-      name: demoUser.name,
-      email: demoUser.email,
-      password: hashedPassword,
-      role: demoUser.role,
-      avatar: demoUser.avatar,
-    });
-  }
-};
-
 const seedDevelopmentMachines = async () => {
   if (await Machine.exists({})) return;
 
@@ -114,7 +89,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 })
   .then(async () => {
     console.log('MongoDB connected');
-    await seedDevelopmentUsers();
     await seedDevelopmentMachines();
     const server = app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

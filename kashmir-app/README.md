@@ -24,14 +24,9 @@ npm run dev
 # http://localhost:5173
 ```
 
-## 🔑 Demo Login Credentials
+## 🔑 Login
 
-| Role  | Email                  | Password  |
-|-------|------------------------|-----------|
-| Admin | admin@kashmir.com      | admin123  |
-| User  | user@kashmir.com       | user123   |
-
-You can also register a new account from the Register page.
+Use the Register page to create an account. Admin access should be granted only by an existing administrator.
 
 ## 📁 Project Structure
 

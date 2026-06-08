@@ -86,38 +86,4 @@ router.get('/me', auth, async (req, res) => {
   res.json(publicUser(req.user));
 });
 
-// One-time admin bootstrap for production setup.
-router.post('/bootstrap-admin', async (req, res) => {
-  try {
-    const { email, key } = req.body;
-
-    if (!process.env.ADMIN_BOOTSTRAP_KEY) {
-      return res.status(500).json({ message: 'Admin bootstrap is not configured' });
-    }
-
-    if (key !== process.env.ADMIN_BOOTSTRAP_KEY) {
-      return res.status(403).json({ message: 'Invalid bootstrap key' });
-    }
-
-    const normalizedEmail = email?.toLowerCase().trim();
-    if (!normalizedEmail) {
-      return res.status(400).json({ message: 'Email is required' });
-    }
-
-    const user = await User.findOneAndUpdate(
-      { email: normalizedEmail },
-      { role: 'admin' },
-      { new: true }
-    );
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.json({ message: `${user.email} is now admin`, user: publicUser(user) });
-  } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
-  }
-});
-
 module.exports = router;
