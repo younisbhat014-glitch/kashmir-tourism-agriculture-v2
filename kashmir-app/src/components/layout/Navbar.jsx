@@ -80,7 +80,7 @@ export default function Navbar() {
                   padding: '7px 14px', textDecoration: 'none', color: 'white',
                   fontWeight: 600, fontSize: '0.82rem', transition: 'all 0.3s',
                 }}>
-                  <span>{user.avatar}</span>
+                  {user.role !== 'admin' && <span>{user.avatar}</span>}
                   <span>{user.name.split(' ')[0]}</span>
                   {user.role === 'admin' && (
                     <span style={{ background: 'var(--kashmir-gold)', color: 'var(--kashmir-deep)', fontSize: '0.6rem', padding: '2px 7px', borderRadius: 50, fontWeight: 800 }}>ADMIN</span>
@@ -158,7 +158,7 @@ export default function Navbar() {
                 background: 'rgba(255,255,255,0.08)', borderRadius: 14, padding: '12px 16px',
                 textDecoration: 'none', color: 'white', fontWeight: 700,
               }}>
-                <span style={{ fontSize: '1.3rem' }}>{user.avatar}</span>
+                {user.role !== 'admin' && <span style={{ fontSize: '1.3rem' }}>{user.avatar}</span>}
                 <div>
                   <div style={{ fontSize: '0.9rem' }}>{user.name}</div>
                   <div style={{ fontSize: '0.72rem', color: 'var(--kashmir-gold)', textTransform: 'uppercase' }}>{user.role} Dashboard</div>
