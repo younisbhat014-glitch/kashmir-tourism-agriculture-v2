@@ -746,10 +746,11 @@ table[style*="background: white"] {
     position: fixed;
     left: 12px;
     right: 12px;
-    bottom: 78px;
+    top: calc(84px + env(safe-area-inset-top, 0px));
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
     width: auto;
     max-width: none;
-    max-height: min(620px, calc(100vh - 104px));
+    max-height: none;
     border-radius: 18px;
     display: flex;
     flex-direction: column;
@@ -999,10 +1000,11 @@ table[style*="background: white"] {
   .chatbot-window {
     left: 12px !important;
     right: 12px !important;
-    bottom: 76px !important;
+    top: calc(84px + env(safe-area-inset-top, 0px)) !important;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
     width: auto !important;
     max-width: none !important;
-    max-height: calc(100vh - 100px) !important;
+    max-height: none !important;
   }
 
   .chatbot-bubble {
