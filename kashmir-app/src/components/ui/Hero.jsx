@@ -189,33 +189,35 @@ export default function Hero() {
         @media (max-width: 768px) {
           .hero-thumb {
             display: block !important;
-            position: absolute !important;
-            top: 126px !important;
-            right: 5vw !important;
-            z-index: 8 !important;
+            position: relative !important;
+            z-index: 1 !important;
+            width: fit-content !important;
+            margin: 0 0 12px auto !important;
             animation: floatSide 8s ease-in-out infinite !important;
           }
           .hero-thumb-card {
-            padding: 6px !important;
-            border-radius: 18px !important;
-            box-shadow: 0 14px 34px rgba(0,0,0,0.32) !important;
+            padding: 5px !important;
+            border-radius: 16px !important;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.28) !important;
           }
           .hero-thumb-image {
-            width: 92px !important;
-            height: 112px !important;
-            border-radius: 14px !important;
+            width: 76px !important;
+            height: 88px !important;
+            border-radius: 12px !important;
           }
           .hero-thumb-caption {
-            margin-top: 6px !important;
+            margin-top: 5px !important;
             border-radius: 10px !important;
-            padding: 5px 8px !important;
+            padding: 4px 7px !important;
+            max-width: 92px !important;
           }
           .hero-thumb-caption div:first-child {
-            font-size: 0.55rem !important;
-            letter-spacing: 0.5px !important;
+            font-size: 0.5rem !important;
+            letter-spacing: 0.4px !important;
           }
           .hero-thumb-caption div:last-child {
-            font-size: 0.72rem !important;
+            font-size: 0.66rem !important;
+            line-height: 1.1 !important;
           }
           .hero-thumb-dots {
             display: none !important;
@@ -226,15 +228,14 @@ export default function Hero() {
         }
         @media (max-width: 480px) {
           .hero-thumb {
-            top: 118px !important;
-            right: 5vw !important;
+            margin: 0 0 10px auto !important;
           }
           .hero-thumb-image {
-            width: 78px !important;
-            height: 96px !important;
+            width: 68px !important;
+            height: 80px !important;
           }
           .hero-thumb-caption {
-            padding: 4px 7px !important;
+            max-width: 84px !important;
           }
           .home-hero-bg-gulmarg {
             background-position: 34% center !important;
