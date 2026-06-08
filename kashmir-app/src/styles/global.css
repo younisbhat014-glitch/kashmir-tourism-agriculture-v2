@@ -1798,3 +1798,32 @@ table[style*="background: white"] {
     width: clamp(350px, 48vw, 430px) !important;
   }
 }
+
+/* Mobile modal safety: keep form actions above browser controls */
+@media (max-width: 768px) {
+  .modal-overlay {
+    align-items: flex-start !important;
+    overflow-y: auto !important;
+    padding: calc(76px + env(safe-area-inset-top, 0px)) 14px calc(92px + env(safe-area-inset-bottom, 0px)) !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-box {
+    max-height: calc(100dvh - 168px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
+    overflow-y: auto !important;
+    padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)) !important;
+    scroll-padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .modal-box > div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@supports not (height: 100dvh) {
+  @media (max-width: 768px) {
+    .modal-box {
+      max-height: calc(100vh - 168px) !important;
+    }
+  }
+}
