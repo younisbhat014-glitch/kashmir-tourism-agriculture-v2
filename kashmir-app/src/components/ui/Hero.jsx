@@ -116,14 +116,14 @@ export default function Hero() {
             animation: 'floatSide 8s ease-in-out infinite',
           }}>
             {/* Glass card behind thumb */}
-            <div style={{
+            <div className="hero-thumb-card" style={{
               background: 'rgba(255,255,255,0.08)',
               backdropFilter: 'blur(14px)',
               border: '1px solid rgba(255,255,255,0.18)',
               borderRadius: 28, padding: 10,
               boxShadow: '0 24px 60px rgba(0,0,0,0.45)',
             }}>
-              <div style={{ width: 170, height: 210, borderRadius: 20, overflow: 'hidden',
+              <div className="hero-thumb-image" style={{ width: 170, height: 210, borderRadius: 20, overflow: 'hidden',
                 boxShadow: '0 0 0 2px rgba(201,168,76,0.5)' }}>
                 <img
                   src={slide.thumb} alt={slide.title}
@@ -133,7 +133,7 @@ export default function Hero() {
             </div>
 
             {/* Caption */}
-            <div style={{
+            <div className="hero-thumb-caption" style={{
               marginTop: 10, textAlign: 'center',
               background: 'rgba(13,59,46,0.75)', backdropFilter: 'blur(12px)',
               borderRadius: 12, padding: '7px 14px',
@@ -144,7 +144,7 @@ export default function Hero() {
             </div>
 
             {/* Dots */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 10 }}>
+            <div className="hero-thumb-dots" style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 10 }}>
               {SLIDES.map((_, i) => (
                 <div key={i} onClick={() => setCurrent(i)} style={{
                   width: i === current ? 22 : 7, height: 7,
@@ -187,12 +187,55 @@ export default function Hero() {
       {/* ── Responsive styles ── */}
       <style>{`
         @media (max-width: 768px) {
-          .hero-thumb { display: none !important; }
+          .hero-thumb {
+            display: block !important;
+            position: absolute !important;
+            top: 126px !important;
+            right: 5vw !important;
+            z-index: 8 !important;
+            animation: floatSide 8s ease-in-out infinite !important;
+          }
+          .hero-thumb-card {
+            padding: 6px !important;
+            border-radius: 18px !important;
+            box-shadow: 0 14px 34px rgba(0,0,0,0.32) !important;
+          }
+          .hero-thumb-image {
+            width: 92px !important;
+            height: 112px !important;
+            border-radius: 14px !important;
+          }
+          .hero-thumb-caption {
+            margin-top: 6px !important;
+            border-radius: 10px !important;
+            padding: 5px 8px !important;
+          }
+          .hero-thumb-caption div:first-child {
+            font-size: 0.55rem !important;
+            letter-spacing: 0.5px !important;
+          }
+          .hero-thumb-caption div:last-child {
+            font-size: 0.72rem !important;
+          }
+          .hero-thumb-dots {
+            display: none !important;
+          }
           .home-hero-bg-gulmarg {
             background-position: 36% center !important;
           }
         }
         @media (max-width: 480px) {
+          .hero-thumb {
+            top: 118px !important;
+            right: 5vw !important;
+          }
+          .hero-thumb-image {
+            width: 78px !important;
+            height: 96px !important;
+          }
+          .hero-thumb-caption {
+            padding: 4px 7px !important;
+          }
           .home-hero-bg-gulmarg {
             background-position: 34% center !important;
           }
