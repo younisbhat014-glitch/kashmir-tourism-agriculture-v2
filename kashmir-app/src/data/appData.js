@@ -4,7 +4,7 @@ export const BG_IMAGES = [
   'https://etimg.etb2bimg.com/photo/104229474.cms',
   // 'https://www.viktorianz.com/upload/images/kashmir-1.jpg', // Kashmir valley
   'https://images.openai.com/static-rsc-4/S_5mPE7iOvVVJlHfJ4B_xN0n0C0h2p341AN8U7Ib70Et0k2CbAmGxXYhF37IijoqTr8zSZmonpqsuv2fSJy4giZev81omVgGsas9S2h5VG-8oaJYkyMTAfSmEG4d9JSMdY7UpxDgJ49TORgO20Q4dNCHhqcBdtiuy3yCPkw_8N1xmolfVzGwtzmvLmyG3Ekv?purpose=fullsize', // Kashmir valley
-  'https://brownchinarkashmir.com/wp-content/uploads/2024/10/gulmarg_brown_chinar_kashmir.jpg.webp', // Gulmarg snow
+  'https://mnmtravels.in/images/blogs/c4b7d41b422c25a8591d521141c7322f.png', // Gulmarg snow
   'https://svrfarms.com/wp-content/uploads/2025/04/New-Project-12.webp', // Mountains
   'https://images.squarespace-cdn.com/content/v1/578753d7d482e9c3a909de40/cad2533a-046b-427f-a2ed-e1b5acf94c38/IMG_8542.jpg?format=2500w', // Snow peaks
 ];
