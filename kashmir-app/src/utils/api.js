@@ -1,4 +1,7 @@
-const API = import.meta.env.VITE_API_URL || 'https://kashmir-tourism-agriculture-v2-production.up.railway.app/api';
+export const API = import.meta.env.VITE_API_URL
+  || (import.meta.env.DEV
+    ? 'http://localhost:5000/api'
+    : 'https://kashmir-tourism-agriculture-v2-production.up.railway.app/api');
 
 const getToken = () => localStorage.getItem('kashmir_token');
 

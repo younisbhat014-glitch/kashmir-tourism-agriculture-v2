@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { API } from '../utils/api';
 
-const API = import.meta.env.VITE_API_URL || 'https://kashmir-tourism-agriculture-v2-production.up.railway.app/api';
 const getToken = () => localStorage.getItem('kashmir_token');
 const authHeaders = () => ({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` });
 
