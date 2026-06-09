@@ -11,6 +11,11 @@ const saveSession = ({ user, token }) => {
   localStorage.setItem(TOKEN_KEY, token);
 };
 
+const clearSession = () => {
+  localStorage.removeItem(USER_KEY);
+  localStorage.removeItem(TOKEN_KEY);
+};
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [users, setUsers] = useState([]);
@@ -18,13 +23,15 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const saved = localStorage.getItem(USER_KEY);
-    if (saved) {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (saved && token) {
       try {
         setUser(JSON.parse(saved));
       } catch {
-        localStorage.removeItem(USER_KEY);
-        localStorage.removeItem(TOKEN_KEY);
+        clearSession();
       }
+    } else {
+      clearSession();
     }
     setLoading(false);
   }, []);
@@ -63,12 +70,15 @@ export function AuthProvider({ children }) {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem(USER_KEY);
-    localStorage.removeItem(TOKEN_KEY);
+    clearSession();
   };
 
   const addBooking = async (booking) => {
     if (!user) return { success: false, message: 'Please login first' };
+    if (!localStorage.getItem(TOKEN_KEY)) {
+      logout();
+      return { success: false, message: 'Session expired. Please login again.' };
+    }
 
     const payload = {
       ...booking,
@@ -78,6 +88,10 @@ export function AuthProvider({ children }) {
     try {
       const savedBooking = await createBookingAPI(payload);
       if (savedBooking.message && !savedBooking._id) {
+        if (/token|access denied|user not found/i.test(savedBooking.message)) {
+          logout();
+          return { success: false, message: 'Session expired. Please login again.' };
+        }
         return { success: false, message: savedBooking.message };
       }
 
