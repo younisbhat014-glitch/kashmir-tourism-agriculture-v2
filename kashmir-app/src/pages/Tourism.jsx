@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/ui/Toast';
-import { HOTELS, RESTAURANTS, VEHICLES, WEATHER_DATA } from '../data/appData';
+import { WEATHER_DATA } from '../data/appData';
 import { TOURIST_SPOTS } from '../data/touristSpotsData';
 import { fetchWeatherByQuery } from '../services/weatherApi';
+import { getHotelsAPI, getRestaurantsAPI, getVehiclesAPI } from '../utils/api';
 
 function BookingModal({ item, type, onClose, onBook }) {
   const [form, setForm] = useState({ checkIn: '', checkOut: '', guests: 1, name: '', phone: '', date: '', time: '12:00', from: '', to: '' });
@@ -195,6 +196,9 @@ export default function Tourism() {
   const { user, addBooking } = useAuth();
   const toast = useToast();
   const [filter, setFilter] = useState('All');
+  const [hotels, setHotels] = useState([]);
+  const [restaurants, setRestaurants] = useState([]);
+  const [vehicles, setVehicles] = useState([]);
 
   useEffect(() => {
     const requestedTab = searchParams.get('tab');
@@ -202,6 +206,16 @@ export default function Tourism() {
       setTab(requestedTab);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    Promise.all([getHotelsAPI(), getRestaurantsAPI(), getVehiclesAPI()])
+      .then(([hotelData, restaurantData, vehicleData]) => {
+        if (Array.isArray(hotelData)) setHotels(hotelData);
+        if (Array.isArray(restaurantData)) setRestaurants(restaurantData);
+        if (Array.isArray(vehicleData)) setVehicles(vehicleData);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleBook = (item, type) => {
     if (!user) { toast('Please login to book!', 'error'); return; }
@@ -309,8 +323,8 @@ export default function Tourism() {
         {/* HOTELS */}
         {tab === 'hotels' && (
           <div className="grid-3">
-            {HOTELS.map((hotel, i) => (
-              <div key={hotel.id} className="glass-card" style={{ overflow: 'hidden', animation: `slideInCard 0.5s ease ${i*0.08}s both` }}>
+            {hotels.map((hotel, i) => (
+              <div key={hotel._id} className="glass-card" style={{ overflow: 'hidden', animation: `slideInCard 0.5s ease ${i*0.08}s both` }}>
                 <div style={{ position: 'relative', height: 210, overflow: 'hidden' }}>
                   <img src={hotel.image} alt={hotel.name} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}
                     onMouseEnter={e => e.target.style.transform='scale(1.08)'}
@@ -340,8 +354,8 @@ export default function Tourism() {
         {/* RESTAURANTS */}
         {tab === 'restaurants' && (
           <div className="grid-3">
-            {RESTAURANTS.map((r, i) => (
-              <div key={r.id} className="glass-card" style={{ overflow: 'hidden', animation: `slideInCard 0.5s ease ${i*0.08}s both` }}>
+            {restaurants.map((r, i) => (
+              <div key={r._id} className="glass-card" style={{ overflow: 'hidden', animation: `slideInCard 0.5s ease ${i*0.08}s both` }}>
                 <div style={{ position: 'relative', height: 200, overflow: 'hidden' }}>
                   <img src={r.image} alt={r.name} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}
                     onMouseEnter={e => e.target.style.transform='scale(1.08)'}
@@ -368,8 +382,8 @@ export default function Tourism() {
         {/* VEHICLES */}
         {tab === 'vehicles' && (
           <div className="grid-3">
-            {VEHICLES.map((v, i) => (
-              <div key={v.id} className="glass-card" style={{ overflow: 'hidden', animation: `slideInCard 0.5s ease ${i*0.08}s both` }}>
+            {vehicles.map((v, i) => (
+              <div key={v._id} className="glass-card" style={{ overflow: 'hidden', animation: `slideInCard 0.5s ease ${i*0.08}s both` }}>
                 <div style={{ position: 'relative', height: 200, overflow: 'hidden' }}>
                   <img src={v.image} alt={v.name} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}
                     onMouseEnter={e => e.target.style.transform='scale(1.08)'}

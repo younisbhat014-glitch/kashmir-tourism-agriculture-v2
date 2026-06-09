@@ -39,6 +39,15 @@ export const getMyBookingsAPI = () =>
   }).then(r => r.json());
 
 // Crop listing APIs
+export const getHotelsAPI = () =>
+  fetch(`${API}/hotels`).then(r => r.json());
+
+export const getRestaurantsAPI = () =>
+  fetch(`${API}/restaurants`).then(r => r.json());
+
+export const getVehiclesAPI = () =>
+  fetch(`${API}/vehicles`).then(r => r.json());
+
 export const getCropsAPI = () =>
   fetch(`${API}/crops`).then(r => r.json());
 

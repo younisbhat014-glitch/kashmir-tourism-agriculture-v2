@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/ui/Toast';
-import { CROPS, CROP_CALENDAR } from '../data/appData';
+import { CROP_CALENDAR } from '../data/appData';
 import { createCropAPI, getCropsAPI, getMachinesAPI } from '../utils/api';
 
 function SellModal({ onClose, onSubmit }) {
@@ -216,7 +216,7 @@ export default function Agriculture() {
   const [machines, setMachines] = useState([]);
   const { user, addBooking } = useAuth();
   const toast = useToast();
-  const allCrops = [...listedCrops, ...CROPS];
+  const allCrops = listedCrops;
 
   useEffect(() => {
     const requestedTab = searchParams.get('tab');
@@ -657,8 +657,8 @@ export default function Agriculture() {
               <h3 style={{ fontFamily: 'Cormorant Garamond', fontSize: '1.6rem', marginBottom: 8 }}>🌿 Market Price Today</h3>
               <p style={{ opacity: 0.8, marginBottom: 20, fontSize: '0.88rem' }}>Live prices from Kashmir Agricultural Produce Marketing Corporation</p>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px,1fr))', gap: 12 }}>
-                {CROPS.slice(0,6).map(crop => (
-                  <div key={crop.id} style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 12, padding: '10px 14px', textAlign: 'center' }}>
+                {allCrops.slice(0,6).map(crop => (
+                  <div key={crop._id} style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 12, padding: '10px 14px', textAlign: 'center' }}>
                     <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.7)', marginBottom: 2 }}>{crop.name.slice(0,16)}</div>
                     <div style={{ fontWeight: 800, color: 'var(--kashmir-gold)', fontSize: '1rem' }}>₹{crop.price}</div>
                     <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)' }}>per {crop.unit}</div>

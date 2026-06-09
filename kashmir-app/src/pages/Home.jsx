@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/ui/Hero';
-import { HOTELS, TOURIST_SPOTS, CROPS } from '../data/appData';
+import { TOURIST_SPOTS } from '../data/appData';
+import { getCropsAPI, getHotelsAPI } from '../utils/api';
 
 function useInView(threshold = 0.15) {
   const ref = useRef(null);
@@ -99,7 +100,7 @@ function FeaturedPlaces() {
   );
 }
 
-function FeaturedHotels() {
+function FeaturedHotels({ hotels }) {
   const ref = useInView();
   return (
     <section ref={ref} style={{ padding: '80px 8%', background: 'var(--kashmir-light)' }}>
@@ -112,8 +113,8 @@ function FeaturedHotels() {
           <Link to="/tourism?tab=hotels" className="btn-teal" style={{ textDecoration: 'none' }}>View All Hotels →</Link>
         </div>
         <div className="grid-3">
-          {HOTELS.slice(0, 3).map((hotel, i) => (
-            <div key={hotel.id} className={`glass-card fade-in-up animate-delay-${i+1}`} style={{ overflow: 'hidden' }}>
+          {hotels.slice(0, 3).map((hotel, i) => (
+            <div key={hotel._id} className={`glass-card fade-in-up animate-delay-${i+1}`} style={{ overflow: 'hidden' }}>
               <div style={{ position: 'relative', height: 200, overflow: 'hidden' }}>
                 <img src={hotel.image} alt={hotel.name} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}
                   onMouseEnter={e => e.target.style.transform='scale(1.08)'}
@@ -141,7 +142,7 @@ function FeaturedHotels() {
   );
 }
 
-function AgricultureHighlight() {
+function AgricultureHighlight({ crops }) {
   const ref = useInView();
   return (
     <section ref={ref} style={{ padding: '80px 8%', background: 'linear-gradient(135deg, var(--kashmir-deep) 0%, #1a4a30 100%)', position: 'relative', overflow: 'hidden' }}>
@@ -173,8 +174,8 @@ function AgricultureHighlight() {
             <Link to="/agriculture" className="btn-primary" style={{ textDecoration: 'none', display: 'inline-block' }}>Explore Agriculture Hub →</Link>
           </div>
           <div className="agri-crop-preview-grid fade-in-right" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-            {CROPS.slice(0,4).map((crop,i) => (
-              <div key={crop.id} style={{
+            {crops.slice(0,4).map((crop,i) => (
+              <div key={crop._id} style={{
                 background: 'rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden',
                 border: '1px solid rgba(255,255,255,0.1)',
                 animation: `floatUp ${5+i}s ease-in-out infinite`,
@@ -254,13 +255,25 @@ function CTASection() {
 }
 
 export default function Home() {
+  const [hotels, setHotels] = useState([]);
+  const [crops, setCrops] = useState([]);
+
+  useEffect(() => {
+    Promise.all([getHotelsAPI(), getCropsAPI()])
+      .then(([hotelData, cropData]) => {
+        if (Array.isArray(hotelData)) setHotels(hotelData);
+        if (Array.isArray(cropData)) setCrops(cropData);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <div>
       <Hero />
       <FeatureTicker />
       <FeaturedPlaces />
-      <FeaturedHotels />
-      <AgricultureHighlight />
+      <FeaturedHotels hotels={hotels} />
+      <AgricultureHighlight crops={crops} />
       <Testimonials />
       <CTASection />
     </div>

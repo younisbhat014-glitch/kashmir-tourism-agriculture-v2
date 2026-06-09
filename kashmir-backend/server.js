@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dns = require('dns');
-const Machine = require('./models/Machine');
+const seedDefaultCatalog = require('./services/seedDefaultCatalog');
 require('dotenv').config();
 
 const app = express();
@@ -69,19 +69,6 @@ app.get('/health', (req, res) => {
   });
 });
 
-const seedDevelopmentMachines = async () => {
-  if (await Machine.exists({})) return;
-
-  await Machine.insertMany([
-    { name: 'Mahindra Tractor 575', type: 'Tractor', hp: 45, buyPrice: 680000, rentPerDay: 2500, image: 'https://assets.tractorjunction.com/tractor-junction/assets/images/tractor-images/tractor-image-0-1731604906.webp?width=538&height=320', available: true, owner: 'Malik Farm Rentals' },
-    { name: 'Combined Harvester', type: 'Harvester', hp: 80, buyPrice: 1800000, rentPerDay: 8000, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRR_Le5rgbHLvP3T1GgOzzNZjhqcPRTu0osMw&s', available: true, owner: 'AgriTech Kashmir' },
-    { name: 'Rotavator (7 ft)', type: 'Attachment', buyPrice: 85000, rentPerDay: 700, image: 'https://5.imimg.com/data5/SELLER/Default/2024/5/423345404/GI/AP/BE/88644821/spike-rotavator-agritron-500x500.jpg', available: true, owner: 'Farm Equipment Co.' },
-    { name: 'Sprinkler Irrigation Set', type: 'Irrigation', buyPrice: 45000, rentPerDay: 400, image: 'https://5.imimg.com/data5/SELLER/Default/2024/5/415084128/FC/ZC/HS/2503855/sprinkler-irrigation-system.png', available: false, owner: 'Irrigation Depot' },
-    { name: 'Potato Digger', type: 'Harvester', buyPrice: 120000, rentPerDay: 1200, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXwkdT7rGeQ-a6b7ggV8yu-upgskFg7yEqCQ&s', available: true, owner: 'Bhat Agri Solutions' },
-    { name: 'Mini Power Tiller', type: 'Tiller', hp: 9, buyPrice: 95000, rentPerDay: 900, image: 'https://toolz4industry.com/wp-content/uploads/2023/05/power-gold-71cc-power-tiller-12.jpg', available: true, owner: 'SmallFarm Tools' },
-  ]);
-};
-
 mongoose.connect(process.env.MONGODB_URI, {
   serverSelectionTimeoutMS: 30000,
   socketTimeoutMS: 45000,
@@ -89,7 +76,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 })
   .then(async () => {
     console.log('MongoDB connected');
-    await seedDevelopmentMachines();
+    await seedDefaultCatalog();
     const server = app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
