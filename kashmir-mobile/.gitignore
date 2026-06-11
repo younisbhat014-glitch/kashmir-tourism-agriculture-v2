@@ -8,6 +8,7 @@ node_modules/
 dist/
 dist-android/
 dist-android-clean/
+dist-sdk54/
 web-build/
 expo-env.d.ts
 
