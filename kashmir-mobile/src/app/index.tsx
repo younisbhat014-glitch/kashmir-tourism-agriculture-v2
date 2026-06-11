@@ -7,6 +7,25 @@ import { colors } from '@/constants/app-theme';
 
 const WEBSITE_URL = 'https://aware-kashmir-portal-c64d.up.railway.app/';
 const WEBSITE_HOST = 'aware-kashmir-portal-c64d.up.railway.app';
+const MOBILE_USER_AGENT =
+  'Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Mobile Safari/537.36 KashmirPortalApp/1.0';
+const FORCE_MOBILE_VIEWPORT = `
+  (function () {
+    var viewport = document.querySelector('meta[name="viewport"]');
+    if (!viewport) {
+      viewport = document.createElement('meta');
+      viewport.name = 'viewport';
+      document.head.appendChild(viewport);
+    }
+    viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
+    document.documentElement.style.width = '100%';
+    document.documentElement.style.maxWidth = '100vw';
+    document.body.style.width = '100%';
+    document.body.style.maxWidth = '100vw';
+    window.dispatchEvent(new Event('resize'));
+    true;
+  })();
+`;
 
 export default function WebsiteApp() {
   const webView = useRef<WebView>(null);
@@ -68,6 +87,11 @@ export default function WebsiteApp() {
         ref={webView}
         source={{ uri: WEBSITE_URL }}
         style={styles.webView}
+        userAgent={MOBILE_USER_AGENT}
+        injectedJavaScriptBeforeContentLoaded={FORCE_MOBILE_VIEWPORT}
+        injectedJavaScript={FORCE_MOBILE_VIEWPORT}
+        textZoom={100}
+        setSupportMultipleWindows={false}
         sharedCookiesEnabled
         thirdPartyCookiesEnabled
         javaScriptEnabled
