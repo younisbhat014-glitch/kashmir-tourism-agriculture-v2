@@ -10,6 +10,7 @@ dist-android/
 dist-android-clean/
 dist-sdk54/
 dist-design/
+dist-webview/
 web-build/
 expo-env.d.ts
 

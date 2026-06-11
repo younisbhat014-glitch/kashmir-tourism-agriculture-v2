@@ -12,6 +12,9 @@
     },
     "android": {
       "package": "com.kashmir.paradiseportal",
+      "permissions": [
+        "android.permission.INTERNET"
+      ],
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
