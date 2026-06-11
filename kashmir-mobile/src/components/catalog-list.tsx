@@ -39,7 +39,7 @@ export function CatalogList({ loader }: { loader: () => Promise<CatalogItem[]> }
 }
 
 const styles = StyleSheet.create({
-  content: { padding: 16, paddingBottom: 32, backgroundColor: colors.mist, flexGrow: 1 },
+  content: { padding: 16, paddingBottom: 32, backgroundColor: colors.cream, flexGrow: 1 },
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 30 },
   emptyTitle: { color: colors.ink, fontSize: 17, fontWeight: '700', textAlign: 'center' },
   emptyText: { color: colors.muted, marginTop: 8 },

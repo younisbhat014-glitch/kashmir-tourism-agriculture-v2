@@ -14,7 +14,8 @@ export default function TabsLayout() {
       headerShown: false,
       tabBarActiveTintColor: colors.teal,
       tabBarInactiveTintColor: colors.muted,
-      tabBarStyle: { height: 66, paddingTop: 7, paddingBottom: 8 },
+      tabBarStyle: { height: 70, paddingTop: 7, paddingBottom: 9, backgroundColor: '#FFFDF8', borderTopColor: colors.border },
+      tabBarLabelStyle: { fontSize: 10, fontWeight: '700' },
     }}>
       <Tabs.Screen name="index" options={{ title: 'Home', tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" color={color} size={size} /> }} />
       <Tabs.Screen name="tourism" options={{ title: 'Tourism', tabBarIcon: ({ color, size }) => <Ionicons name="map-outline" color={color} size={size} /> }} />

@@ -23,9 +23,9 @@ export default function AgricultureScreen() {
 }
 
 const styles = StyleSheet.create({
-  page: { flex: 1, backgroundColor: colors.mist },
-  tabs: { flexDirection: 'row', gap: 8, padding: 12, backgroundColor: colors.white },
-  tab: { flex: 1, paddingVertical: 11, borderRadius: 12, alignItems: 'center', backgroundColor: colors.mist },
+  page: { flex: 1, backgroundColor: colors.cream },
+  tabs: { flexDirection: 'row', gap: 8, padding: 12, backgroundColor: colors.cream },
+  tab: { flex: 1, paddingVertical: 11, borderRadius: 16, alignItems: 'center', backgroundColor: colors.white, borderWidth: 1, borderColor: colors.border },
   activeTab: { backgroundColor: colors.teal },
   tabText: { color: colors.muted, textTransform: 'capitalize', fontWeight: '700' },
   activeText: { color: colors.white },

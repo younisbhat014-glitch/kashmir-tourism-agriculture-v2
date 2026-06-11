@@ -76,6 +76,14 @@ export type CatalogItem = {
   rating?: number;
   category?: string;
   type?: string;
+  description?: string;
+  cuisine?: string;
+  specialty?: string;
+  unit?: string;
+  stock?: number;
+  organic?: boolean;
+  features?: string[];
+  amenities?: string[];
 };
 
 export type Booking = {
