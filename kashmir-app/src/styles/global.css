@@ -1694,12 +1694,7 @@ table[style*="background: white"] {
 
 /* ===== MOBILE / TABLET CARD SWIPE ===== */
 @media (max-width: 900px) {
-  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> .glass-card),
-  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> a > .glass-card),
-  main div[style*="display: grid"]:has(> .glass-card),
-  main .agri-feature-grid,
-  main .agri-crop-preview-grid,
-  main .about-contact-grid {
+  main .mobile-swipe-row {
     display: flex !important;
     grid-template-columns: none !important;
     overflow-x: auto !important;
@@ -1714,43 +1709,27 @@ table[style*="background: white"] {
     padding-bottom: 14px;
   }
 
-  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> .glass-card)::-webkit-scrollbar,
-  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> a > .glass-card)::-webkit-scrollbar,
-  main div[style*="display: grid"]:has(> .glass-card)::-webkit-scrollbar,
-  main .agri-feature-grid::-webkit-scrollbar,
-  main .agri-crop-preview-grid::-webkit-scrollbar,
-  main .about-contact-grid::-webkit-scrollbar {
+  main .mobile-swipe-row::-webkit-scrollbar {
     display: none;
   }
 
-  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> .glass-card) > *,
-  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> a > .glass-card) > *,
-  main div[style*="display: grid"]:has(> .glass-card) > *,
-  main .agri-feature-grid > *,
-  main .agri-crop-preview-grid > *,
-  main .about-contact-grid > * {
+  main .mobile-swipe-row > * {
     flex: 0 0 clamp(290px, 82vw, 390px) !important;
     width: clamp(290px, 82vw, 390px) !important;
     scroll-snap-align: start;
   }
 
-  main :is(.grid-2, .grid-3, .grid-4):has(> .glass-card) > .glass-card > div:first-child:has(> img),
-  main :is(.grid-2, .grid-3, .grid-4):has(> a > .glass-card) > a > .glass-card > div:first-child:has(> img),
-  main div[style*="display: grid"]:has(> .glass-card) > .glass-card > div:first-child:has(> img) {
+  main .mobile-swipe-row > .glass-card > div:first-child:has(> img) {
     height: auto !important;
     aspect-ratio: 16 / 9;
   }
 
-  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> .glass-card) > .glass-card h3,
-  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> a > .glass-card) > a > .glass-card h3,
-  main div[style*="display: grid"]:has(> .glass-card) > .glass-card h3 {
+  main .mobile-swipe-row > .glass-card h3 {
     font-size: clamp(1rem, 3.8vw, 1.18rem) !important;
     line-height: 1.25 !important;
   }
 
-  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> .glass-card) > .glass-card p,
-  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> a > .glass-card) > a > .glass-card p,
-  main div[style*="display: grid"]:has(> .glass-card) > .glass-card p {
+  main .mobile-swipe-row > .glass-card p {
     font-size: clamp(0.82rem, 3vw, 0.92rem) !important;
     line-height: 1.6 !important;
   }
@@ -1788,14 +1767,99 @@ table[style*="background: white"] {
 }
 
 @media (min-width: 641px) and (max-width: 900px) {
-  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> .glass-card) > *,
-  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> a > .glass-card) > *,
-  main div[style*="display: grid"]:has(> .glass-card) > *,
-  main .agri-feature-grid > *,
-  main .agri-crop-preview-grid > *,
-  main .about-contact-grid > * {
+  main .mobile-swipe-row > * {
     flex-basis: clamp(350px, 48vw, 430px) !important;
     width: clamp(350px, 48vw, 430px) !important;
+  }
+}
+
+/* ===== HOME SECTION POLISH ===== */
+.home-showcase-section {
+  position: relative;
+  isolation: isolate;
+}
+
+.home-showcase-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(201, 168, 76, 0.12), transparent 28%),
+    radial-gradient(circle at 92% 80%, rgba(21, 113, 133, 0.1), transparent 30%);
+}
+
+.agri-highlight-section {
+  border-block: 1px solid rgba(201, 168, 76, 0.28);
+}
+
+.agri-crop-preview-card {
+  min-width: 0;
+  background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.055)) !important;
+  border-color: rgba(231, 207, 126, 0.25) !important;
+  box-shadow: 0 14px 30px rgba(2, 24, 18, 0.18);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.agri-crop-preview-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(231, 207, 126, 0.55) !important;
+  box-shadow: 0 18px 36px rgba(2, 24, 18, 0.28);
+}
+
+.agri-crop-preview-image {
+  aspect-ratio: 16 / 10;
+  height: auto !important;
+}
+
+@media (max-width: 768px) {
+  .agri-highlight-section {
+    padding: 58px 5vw !important;
+  }
+
+  .agri-feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .agri-feature-grid > div {
+    padding: 12px !important;
+  }
+
+  .agri-crop-preview-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100%;
+  }
+
+  .agri-crop-preview-card {
+    width: 100% !important;
+    border-radius: 14px !important;
+  }
+
+  .agri-crop-preview-card > div {
+    padding: 9px 10px !important;
+  }
+
+  .agri-crop-preview-card > div > div:first-child {
+    font-size: 0.76rem !important;
+    line-height: 1.25;
+  }
+
+  .agri-crop-preview-card > div > div:last-child {
+    font-size: 0.72rem !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .agri-crop-preview-grid {
+    gap: 8px !important;
+  }
+
+  .agri-crop-preview-card > div {
+    padding: 8px !important;
   }
 }
 

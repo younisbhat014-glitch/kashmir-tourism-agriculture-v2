@@ -58,14 +58,14 @@ function FeatureTicker() {
 function FeaturedPlaces() {
   const ref = useInView();
   return (
-    <section ref={ref} style={{ padding: '80px 8%', background: 'white' }}>
+    <section ref={ref} className="home-showcase-section" style={{ padding: '80px 8%', background: 'white' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 50 }}>
           <div className="section-badge fade-in-up">🗺 Must Visit</div>
           <h2 className="section-title fade-in-up animate-delay-1">Top Tourist <span style={{ color: 'var(--kashmir-teal)' }}>Destinations</span></h2>
           <p className="section-subtitle fade-in-up animate-delay-2" style={{ margin: '0 auto' }}>From the shimmering Dal Lake to the snow-draped Gulmarg, discover Kashmir's iconic wonders.</p>
         </div>
-        <div className="grid-3">
+        <div className="grid-3 mobile-swipe-row">
           {TOURIST_SPOTS.slice(0, 6).map((spot, i) => (
             <div key={spot.id} className={`glass-card fade-in-up animate-delay-${i % 3 + 1}`}
               style={{ overflow: 'hidden', cursor: 'pointer' }}>
@@ -103,7 +103,7 @@ function FeaturedPlaces() {
 function FeaturedHotels({ hotels }) {
   const ref = useInView();
   return (
-    <section ref={ref} style={{ padding: '80px 8%', background: 'var(--kashmir-light)' }}>
+    <section ref={ref} className="home-showcase-section home-hotel-section" style={{ padding: '80px 8%', background: 'var(--kashmir-light)' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 48, flexWrap: 'wrap', gap: 20 }}>
           <div>
@@ -112,7 +112,7 @@ function FeaturedHotels({ hotels }) {
           </div>
           <Link to="/tourism?tab=hotels" className="btn-teal" style={{ textDecoration: 'none' }}>View All Hotels →</Link>
         </div>
-        <div className="grid-3">
+        <div className="grid-3 mobile-swipe-row">
           {hotels.slice(0, 3).map((hotel, i) => (
             <div key={hotel._id} className={`glass-card fade-in-up animate-delay-${i+1}`} style={{ overflow: 'hidden' }}>
               <div style={{ position: 'relative', height: 200, overflow: 'hidden' }}>
@@ -145,7 +145,7 @@ function FeaturedHotels({ hotels }) {
 function AgricultureHighlight({ crops }) {
   const ref = useInView();
   return (
-    <section ref={ref} style={{ padding: '80px 8%', background: 'linear-gradient(135deg, var(--kashmir-deep) 0%, #1a4a30 100%)', position: 'relative', overflow: 'hidden' }}>
+    <section ref={ref} className="agri-highlight-section" style={{ padding: '80px 8%', background: 'linear-gradient(135deg, var(--kashmir-deep) 0%, #1a4a30 100%)', position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', top: -100, right: -100, width: 400, height: 400, background: 'rgba(201,168,76,0.05)', borderRadius: '50%' }}/>
       <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <div className="agri-highlight-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'center' }}>
@@ -174,13 +174,12 @@ function AgricultureHighlight({ crops }) {
             <Link to="/agriculture" className="btn-primary" style={{ textDecoration: 'none', display: 'inline-block' }}>Explore Agriculture Hub →</Link>
           </div>
           <div className="agri-crop-preview-grid fade-in-right" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-            {crops.slice(0,4).map((crop,i) => (
-              <div key={crop._id} style={{
+            {crops.slice(0,4).map(crop => (
+              <div key={crop._id} className="agri-crop-preview-card" style={{
                 background: 'rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden',
                 border: '1px solid rgba(255,255,255,0.1)',
-                animation: `floatUp ${5+i}s ease-in-out infinite`,
               }}>
-                <img src={crop.image} alt={crop.name} style={{ width: '100%', height: 120, objectFit: 'cover' }}/>
+                <img className="agri-crop-preview-image" src={crop.image} alt={crop.name} style={{ width: '100%', height: 120, objectFit: 'cover' }}/>
                 <div style={{ padding: '10px 12px' }}>
                   <div style={{ color: 'white', fontWeight: 700, fontSize: '0.85rem' }}>{crop.name}</div>
                   <div style={{ color: 'var(--kashmir-gold)', fontSize: '0.8rem', fontWeight: 700 }}>₹{crop.price}/{crop.unit}</div>
@@ -190,7 +189,7 @@ function AgricultureHighlight({ crops }) {
           </div>
         </div>
       </div>
-      <style>{`@media(max-width:768px){.agri-highlight-grid{grid-template-columns:1fr!important;gap:32px!important}.agri-feature-grid,.agri-crop-preview-grid{grid-template-columns:1fr!important}}`}</style>
+      <style>{`@media(max-width:768px){.agri-highlight-grid{grid-template-columns:1fr!important;gap:32px!important}}`}</style>
     </section>
   );
 }
