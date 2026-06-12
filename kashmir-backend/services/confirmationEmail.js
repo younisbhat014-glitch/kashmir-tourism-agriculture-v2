@@ -196,11 +196,14 @@ const isConfiguredValue = (value) => Boolean(value && !String(value).includes('y
 
 const getSmtpUser = () => String(process.env.SMTP_USER || '').trim();
 const getSmtpPassword = () => String(process.env.SMTP_PASS || '').replace(/\s+/g, '');
+const getResendApiKey = () => String(process.env.RESEND_API_KEY || '').trim();
+const hasResendConfig = () => isConfiguredValue(getResendApiKey());
 const getFromAddress = () => (
   isConfiguredValue(process.env.MAIL_FROM)
     ? process.env.MAIL_FROM
     : `Kashmir Portal <${getSmtpUser()}>`
 );
+const getResendFromAddress = () => process.env.RESEND_FROM || 'Kashmir Portal <onboarding@resend.dev>';
 
 const hasMailConfig = () => Boolean(
   process.env.SMTP_HOST
@@ -234,9 +237,14 @@ const getTransporter = () => {
 };
 
 const verifyEmailTransport = async () => {
+  if (hasResendConfig()) {
+    console.info('[email] Resend API configured');
+    return { provider: 'resend', configured: true, verified: true };
+  }
+
   const mailTransporter = getTransporter();
   if (!mailTransporter) {
-    console.warn('[email] SMTP verification skipped: required configuration is missing');
+    console.warn('[email] Email delivery verification skipped: Resend and SMTP configuration missing');
     return { configured: false, verified: false };
   }
 
@@ -251,19 +259,51 @@ const verifyEmailTransport = async () => {
   }
 };
 
+const sendWithResend = async ({ email, user }) => {
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${getResendApiKey()}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: getResendFromAddress(),
+      to: [user.email],
+      reply_to: process.env.MAIL_REPLY_TO || process.env.SUPPORT_EMAIL,
+      subject: email.subject,
+      text: email.text,
+      html: email.html,
+    }),
+  });
+
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const message = result.message || result.name || `Resend request failed with status ${response.status}`;
+    throw new Error(message);
+  }
+
+  return { sent: true, provider: 'resend', messageId: result.id };
+};
+
 const sendBookingConfirmationEmail = async ({ booking, user }) => {
   if (!user?.email) {
     console.warn(`[email] Confirmation skipped for booking ${booking?._id}: registered user email missing`);
     return { skipped: true, reason: 'missing_user_email' };
   }
 
-  const mailTransporter = getTransporter();
-  if (!mailTransporter) {
-    console.warn(`[email] Confirmation skipped for booking ${booking?._id}: SMTP configuration missing`);
-    return { skipped: true, reason: 'missing_smtp_config' };
+  const email = buildConfirmationEmail({ booking, user });
+  if (hasResendConfig()) {
+    const info = await sendWithResend({ email, user });
+    console.info(`[email] Confirmation sent via Resend for booking ${booking._id} to ${user.email}: ${info.messageId || 'sent'}`);
+    return info;
   }
 
-  const email = buildConfirmationEmail({ booking, user });
+  const mailTransporter = getTransporter();
+  if (!mailTransporter) {
+    console.warn(`[email] Confirmation skipped for booking ${booking?._id}: Resend and SMTP configuration missing`);
+    return { skipped: true, reason: 'missing_email_config' };
+  }
+
   const info = await mailTransporter.sendMail({
     from: getFromAddress(),
     to: user.email,
@@ -273,8 +313,8 @@ const sendBookingConfirmationEmail = async ({ booking, user }) => {
     html: email.html,
   });
 
-  console.info(`[email] Confirmation sent for booking ${booking._id} to ${user.email}: ${info.messageId || 'sent'}`);
-  return { sent: true, messageId: info.messageId };
+  console.info(`[email] Confirmation sent via SMTP for booking ${booking._id} to ${user.email}: ${info.messageId || 'sent'}`);
+  return { sent: true, provider: 'smtp', messageId: info.messageId };
 };
 
 module.exports = {
