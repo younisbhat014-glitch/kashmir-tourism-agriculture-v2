@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dns = require('dns');
 const seedDefaultCatalog = require('./services/seedDefaultCatalog');
+const { verifyEmailTransport } = require('./services/confirmationEmail');
 require('dotenv').config();
 
 const app = express();
@@ -79,6 +80,7 @@ mongoose.connect(process.env.MONGODB_URI, {
     await seedDefaultCatalog();
     const server = app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
+      verifyEmailTransport();
     });
 
     server.on('error', (err) => {

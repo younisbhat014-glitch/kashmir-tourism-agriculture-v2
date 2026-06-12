@@ -194,13 +194,19 @@ const buildConfirmationEmail = ({ booking, user }) => {
 
 const isConfiguredValue = (value) => Boolean(value && !String(value).includes('your-email') && !String(value).includes('example.com'));
 
-const getFromAddress = () => process.env.MAIL_FROM || `Kashmir Portal <${process.env.SMTP_USER}>`;
+const getSmtpUser = () => String(process.env.SMTP_USER || '').trim();
+const getSmtpPassword = () => String(process.env.SMTP_PASS || '').replace(/\s+/g, '');
+const getFromAddress = () => (
+  isConfiguredValue(process.env.MAIL_FROM)
+    ? process.env.MAIL_FROM
+    : `Kashmir Portal <${getSmtpUser()}>`
+);
 
 const hasMailConfig = () => Boolean(
   process.env.SMTP_HOST
   && process.env.SMTP_PORT
-  && isConfiguredValue(process.env.SMTP_USER)
-  && isConfiguredValue(process.env.SMTP_PASS)
+  && isConfiguredValue(getSmtpUser())
+  && isConfiguredValue(getSmtpPassword())
 );
 
 let transporter;
@@ -209,8 +215,8 @@ const getTransporter = () => {
   if (!hasMailConfig()) return null;
   if (transporter) return transporter;
 
-  const auth = process.env.SMTP_USER && process.env.SMTP_PASS
-    ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
+  const auth = getSmtpUser() && getSmtpPassword()
+    ? { user: getSmtpUser(), pass: getSmtpPassword() }
     : undefined;
 
   transporter = nodemailer.createTransport({
@@ -220,9 +226,29 @@ const getTransporter = () => {
     auth,
     requireTLS: process.env.SMTP_REQUIRE_TLS !== 'false',
     connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT_MS || 10000),
+    greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT_MS || 10000),
+    socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT_MS || 15000),
   });
 
   return transporter;
+};
+
+const verifyEmailTransport = async () => {
+  const mailTransporter = getTransporter();
+  if (!mailTransporter) {
+    console.warn('[email] SMTP verification skipped: required configuration is missing');
+    return { configured: false, verified: false };
+  }
+
+  try {
+    await mailTransporter.verify();
+    console.info('[email] SMTP connection verified');
+    return { configured: true, verified: true };
+  } catch (err) {
+    const details = [err.code, err.command, err.responseCode].filter(Boolean).join('/');
+    console.error(`[email] SMTP verification failed${details ? ` (${details})` : ''}: ${err.message}`);
+    return { configured: true, verified: false, error: err.message };
+  }
 };
 
 const sendBookingConfirmationEmail = async ({ booking, user }) => {
@@ -254,4 +280,5 @@ const sendBookingConfirmationEmail = async ({ booking, user }) => {
 module.exports = {
   buildConfirmationEmail,
   sendBookingConfirmationEmail,
+  verifyEmailTransport,
 };
