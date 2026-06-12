@@ -96,6 +96,7 @@ export default function WebsiteApp() {
         thirdPartyCookiesEnabled
         javaScriptEnabled
         domStorageEnabled
+        mediaCapturePermissionGrantType="grantIfSameHostElsePrompt"
         allowsBackForwardNavigationGestures
         startInLoadingState
         pullToRefreshEnabled

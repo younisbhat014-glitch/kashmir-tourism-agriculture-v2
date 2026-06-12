@@ -1921,7 +1921,12 @@ table[style*="background: white"] {
 }
 
 .image-picker-native-input {
-  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 }
 
 .image-picker-actions {
@@ -1931,6 +1936,11 @@ table[style*="background: white"] {
 }
 
 .image-picker-button {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid rgba(26, 122, 110, 0.3);
   border-radius: 999px;
   background: rgba(26, 122, 110, 0.08);
@@ -1948,6 +1958,12 @@ table[style*="background: white"] {
 }
 
 .image-picker-button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.image-picker-button.is-disabled {
+  pointer-events: none;
   cursor: wait;
   opacity: 0.6;
 }

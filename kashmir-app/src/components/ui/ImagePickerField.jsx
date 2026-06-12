@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 const MAX_SOURCE_SIZE = 12 * 1024 * 1024;
 const MAX_OUTPUT_SIZE = 2.4 * 1024 * 1024;
@@ -40,8 +40,6 @@ async function compressImage(file) {
 }
 
 export default function ImagePickerField({ value = '', onChange, label = 'Image' }) {
-  const cameraRef = useRef(null);
-  const galleryRef = useRef(null);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState('');
 
@@ -72,16 +70,30 @@ export default function ImagePickerField({ value = '', onChange, label = 'Image'
         placeholder="Paste image URL or choose a photo below"
       />
 
-      <input ref={cameraRef} className="image-picker-native-input" type="file" accept="image/*" capture="environment" onChange={selectFile} />
-      <input ref={galleryRef} className="image-picker-native-input" type="file" accept="image/*" onChange={selectFile} />
-
       <div className="image-picker-actions">
-        <button type="button" className="image-picker-button" onClick={() => cameraRef.current?.click()} disabled={processing}>
+        <label className={`image-picker-button${processing ? ' is-disabled' : ''}`}>
           Camera
-        </button>
-        <button type="button" className="image-picker-button" onClick={() => galleryRef.current?.click()} disabled={processing}>
+          <input
+            className="image-picker-native-input"
+            type="file"
+            accept="image/*"
+            capture="environment"
+            disabled={processing}
+            onClick={event => { event.currentTarget.value = ''; }}
+            onChange={selectFile}
+          />
+        </label>
+        <label className={`image-picker-button${processing ? ' is-disabled' : ''}`}>
           Gallery
-        </button>
+          <input
+            className="image-picker-native-input"
+            type="file"
+            accept="image/*"
+            disabled={processing}
+            onClick={event => { event.currentTarget.value = ''; }}
+            onChange={selectFile}
+          />
+        </label>
         {value && (
           <button type="button" className="image-picker-button image-picker-remove" onClick={() => onChange('')} disabled={processing}>
             Remove
