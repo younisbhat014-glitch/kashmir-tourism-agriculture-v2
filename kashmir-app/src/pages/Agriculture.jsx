@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/ui/Toast';
 import { CROP_CALENDAR } from '../data/appData';
 import { createCropAPI, getCropsAPI, getMachinesAPI } from '../utils/api';
+import ImagePickerField from '../components/ui/ImagePickerField';
 
 function SellModal({ onClose, onSubmit }) {
   const [form, setForm] = useState({ cropName: '', category: 'Fruit', quantity: '', unit: 'kg', price: '', location: '', image: '', description: '', organic: false });
@@ -45,8 +46,7 @@ function SellModal({ onClose, onSubmit }) {
             <input className="form-input" placeholder="e.g. Pampore, Pulwama" value={form.location} onChange={e => set('location', e.target.value)}/>
           </div>
           <div className="form-group" style={{ gridColumn: '1/-1' }}>
-            <label className="form-label">Image URL</label>
-            <input className="form-input" placeholder="https://example.com/crop-image.jpg" value={form.image} onChange={e => set('image', e.target.value)}/>
+            <ImagePickerField value={form.image} onChange={value => set('image', value)} label="Produce Image" />
           </div>
           <div className="form-group" style={{ gridColumn: '1/-1' }}>
             <label className="form-label">Description</label>

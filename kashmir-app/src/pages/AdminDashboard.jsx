@@ -3,6 +3,7 @@ import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { API } from '../utils/api';
+import ImagePickerField from '../components/ui/ImagePickerField';
 
 const getToken = () => localStorage.getItem('kashmir_token');
 const authHeaders = () => ({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` });
@@ -96,22 +97,29 @@ function ItemModal({ type, item, onClose, onSave }) {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
           {(fields[type] || []).map(f => (
             <div key={f.key} className="form-group" style={{ gridColumn: f.key === 'image' || f.key === 'description' || f.key === 'amenities' || f.key === 'features' ? '1/-1' : 'auto' }}>
-              <label className="form-label">{f.label}</label>
-              {f.type === 'checkbox' ? (
-                <input
-                  type="checkbox"
-                  checked={form[f.key] !== false}
-                  onChange={e => set(f.key, e.target.checked)}
-                  style={{ width: 20, height: 20, accentColor: 'var(--kashmir-teal)' }}
-                />
+              {f.key === 'image' ? (
+                <ImagePickerField value={form[f.key] || ''} onChange={value => set(f.key, value)} />
+              ) : f.type === 'checkbox' ? (
+                <>
+                  <label className="form-label">{f.label}</label>
+                  <input
+                    type="checkbox"
+                    checked={form[f.key] !== false}
+                    onChange={e => set(f.key, e.target.checked)}
+                    style={{ width: 20, height: 20, accentColor: 'var(--kashmir-teal)' }}
+                  />
+                </>
               ) : (
-                <input
-                  className="form-input"
-                  type={f.type}
-                  value={form[f.key] || ''}
-                  onChange={e => set(f.key, e.target.value)}
-                  placeholder={f.label}
-                />
+                <>
+                  <label className="form-label">{f.label}</label>
+                  <input
+                    className="form-input"
+                    type={f.type}
+                    value={form[f.key] || ''}
+                    onChange={e => set(f.key, e.target.value)}
+                    placeholder={f.label}
+                  />
+                </>
               )}
             </div>
           ))}

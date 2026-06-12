@@ -1913,3 +1913,81 @@ table[style*="background: white"] {
     }
   }
 }
+
+/* Camera/gallery picker shared by admin catalog and farmer listings */
+.image-picker-field {
+  display: grid;
+  gap: 10px;
+}
+
+.image-picker-native-input {
+  display: none;
+}
+
+.image-picker-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.image-picker-button {
+  border: 1px solid rgba(26, 122, 110, 0.3);
+  border-radius: 999px;
+  background: rgba(26, 122, 110, 0.08);
+  color: var(--kashmir-teal);
+  padding: 8px 15px;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.image-picker-button:hover {
+  background: var(--kashmir-teal);
+  color: white;
+}
+
+.image-picker-button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.image-picker-remove {
+  border-color: rgba(190, 60, 60, 0.28);
+  background: rgba(190, 60, 60, 0.07);
+  color: #a83c3c;
+}
+
+.image-picker-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(26, 122, 110, 0.16);
+  border-radius: 14px;
+  background: rgba(26, 122, 110, 0.04);
+  padding: 8px;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.image-picker-preview img {
+  width: 76px;
+  height: 60px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.image-picker-note,
+.image-picker-error {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.image-picker-note {
+  color: var(--kashmir-teal);
+}
+
+.image-picker-error {
+  color: #b13b3b;
+}

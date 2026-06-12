@@ -13,7 +13,8 @@
     "android": {
       "package": "com.kashmir.paradiseportal",
       "permissions": [
-        "android.permission.INTERNET"
+        "android.permission.INTERNET",
+        "android.permission.CAMERA"
       ],
       "adaptiveIcon": {
         "backgroundColor": "#F2F4D7",
