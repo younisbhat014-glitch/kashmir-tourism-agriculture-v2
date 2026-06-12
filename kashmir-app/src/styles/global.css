@@ -1694,7 +1694,11 @@ table[style*="background: white"] {
 
 /* ===== MOBILE / TABLET CARD SWIPE ===== */
 @media (max-width: 900px) {
-  main .mobile-swipe-row {
+  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> .glass-card),
+  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> a > .glass-card),
+  main div[style*="display: grid"]:has(> .glass-card),
+  main .agri-feature-grid,
+  main .about-contact-grid {
     display: flex !important;
     grid-template-columns: none !important;
     overflow-x: auto !important;
@@ -1709,27 +1713,41 @@ table[style*="background: white"] {
     padding-bottom: 14px;
   }
 
-  main .mobile-swipe-row::-webkit-scrollbar {
+  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> .glass-card)::-webkit-scrollbar,
+  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> a > .glass-card)::-webkit-scrollbar,
+  main div[style*="display: grid"]:has(> .glass-card)::-webkit-scrollbar,
+  main .agri-feature-grid::-webkit-scrollbar,
+  main .about-contact-grid::-webkit-scrollbar {
     display: none;
   }
 
-  main .mobile-swipe-row > * {
+  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> .glass-card) > *,
+  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> a > .glass-card) > *,
+  main div[style*="display: grid"]:has(> .glass-card) > *,
+  main .agri-feature-grid > *,
+  main .about-contact-grid > * {
     flex: 0 0 clamp(290px, 82vw, 390px) !important;
     width: clamp(290px, 82vw, 390px) !important;
     scroll-snap-align: start;
   }
 
-  main .mobile-swipe-row > .glass-card > div:first-child:has(> img) {
+  main :is(.grid-2, .grid-3, .grid-4):has(> .glass-card) > .glass-card > div:first-child:has(> img),
+  main :is(.grid-2, .grid-3, .grid-4):has(> a > .glass-card) > a > .glass-card > div:first-child:has(> img),
+  main div[style*="display: grid"]:has(> .glass-card) > .glass-card > div:first-child:has(> img) {
     height: auto !important;
     aspect-ratio: 16 / 9;
   }
 
-  main .mobile-swipe-row > .glass-card h3 {
+  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> .glass-card) > .glass-card h3,
+  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> a > .glass-card) > a > .glass-card h3,
+  main div[style*="display: grid"]:has(> .glass-card) > .glass-card h3 {
     font-size: clamp(1rem, 3.8vw, 1.18rem) !important;
     line-height: 1.25 !important;
   }
 
-  main .mobile-swipe-row > .glass-card p {
+  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> .glass-card) > .glass-card p,
+  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> a > .glass-card) > a > .glass-card p,
+  main div[style*="display: grid"]:has(> .glass-card) > .glass-card p {
     font-size: clamp(0.82rem, 3vw, 0.92rem) !important;
     line-height: 1.6 !important;
   }
@@ -1767,7 +1785,11 @@ table[style*="background: white"] {
 }
 
 @media (min-width: 641px) and (max-width: 900px) {
-  main .mobile-swipe-row > * {
+  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> .glass-card) > *,
+  main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> a > .glass-card) > *,
+  main div[style*="display: grid"]:has(> .glass-card) > *,
+  main .agri-feature-grid > *,
+  main .about-contact-grid > * {
     flex-basis: clamp(350px, 48vw, 430px) !important;
     width: clamp(350px, 48vw, 430px) !important;
   }

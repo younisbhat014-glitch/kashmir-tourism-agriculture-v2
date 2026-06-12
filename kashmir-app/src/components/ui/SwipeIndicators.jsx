@@ -1,7 +1,13 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const CARD_ROW_SELECTOR = 'main .mobile-swipe-row';
+const CARD_ROW_SELECTOR = [
+  'main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> .glass-card)',
+  'main :is(.grid-2, .grid-3, .grid-4, .spot-card-grid):has(> a > .glass-card)',
+  'main div[style*="display: grid"]:has(> .glass-card)',
+  'main .agri-feature-grid',
+  'main .about-contact-grid',
+].join(',');
 
 export default function SwipeIndicators() {
   const { pathname, search } = useLocation();

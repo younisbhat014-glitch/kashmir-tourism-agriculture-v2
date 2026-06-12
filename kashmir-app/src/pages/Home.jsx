@@ -208,7 +208,7 @@ function Testimonials() {
           <div className="section-badge">💬 Reviews</div>
           <h2 className="section-title">What Our <span style={{ color: 'var(--kashmir-teal)' }}>Visitors Say</span></h2>
         </div>
-        <div className="grid-3">
+        <div className="grid-3 mobile-swipe-row">
           {testimonials.map((t, i) => (
             <div key={i} className="glass-card" style={{ padding: '28px', position: 'relative' }}>
               <div style={{ fontSize: '2rem', position: 'absolute', top: 20, right: 24, opacity: 0.15 }}>"</div>
