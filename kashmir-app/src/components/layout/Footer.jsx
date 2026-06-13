@@ -22,7 +22,7 @@ export default function Footer() {
 
   return (
     <footer style={{
-      background: 'linear-gradient(180deg, #063f32 0%, #03271d 42%, #020f0a 100%)',
+      background: 'linear-gradient(180deg, #0b5a51 0%, #094b44 100%)',
       color: 'rgba(255,255,255,0.8)',
       paddingTop: 60, paddingBottom: 30,
       position: 'relative', overflow: 'hidden',
