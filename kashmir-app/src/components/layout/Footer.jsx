@@ -22,10 +22,12 @@ export default function Footer() {
 
   return (
     <footer style={{
-      background: 'linear-gradient(180deg, var(--kashmir-deep) 0%, #050f0a 100%)',
+      background: 'linear-gradient(180deg, #063f32 0%, #03271d 42%, #020f0a 100%)',
       color: 'rgba(255,255,255,0.8)',
       paddingTop: 60, paddingBottom: 30,
       position: 'relative', overflow: 'hidden',
+      borderRadius: '34px 34px 0 0',
+      boxShadow: '0 -14px 34px rgba(4, 57, 43, 0.16)',
     }}>
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0, height: 4,

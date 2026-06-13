@@ -145,7 +145,7 @@ function FeaturedHotels({ hotels }) {
 function AgricultureHighlight({ crops }) {
   const ref = useInView();
   return (
-    <section ref={ref} className="agri-highlight-section" style={{ padding: '80px 8%', background: 'linear-gradient(135deg, var(--kashmir-deep) 0%, #1a4a30 100%)', position: 'relative', overflow: 'hidden' }}>
+    <section ref={ref} className="agri-highlight-section" style={{ padding: '80px 8%', background: 'linear-gradient(135deg, #053d30 0%, #0b5b42 52%, #1b7047 100%)', position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', top: -100, right: -100, width: 400, height: 400, background: 'rgba(201,168,76,0.05)', borderRadius: '50%' }}/>
       <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <div className="agri-highlight-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'center' }}>
@@ -233,7 +233,7 @@ function CTASection() {
   return (
     <section style={{
       padding: '80px 8%', textAlign: 'center',
-      background: 'linear-gradient(135deg, var(--kashmir-teal), var(--kashmir-deep))',
+      background: 'linear-gradient(135deg, #147f6c 0%, #075541 52%, #043b2e 100%)',
       position: 'relative', overflow: 'hidden',
     }}>
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(201,168,76,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(255,255,255,0.05) 0%, transparent 50%)' }}/>
