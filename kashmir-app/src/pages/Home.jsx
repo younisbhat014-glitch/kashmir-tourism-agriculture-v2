@@ -231,7 +231,7 @@ function Testimonials() {
 
 function CTASection() {
   return (
-    <section style={{
+    <section className="home-cta-section" style={{
       padding: '80px 8%', textAlign: 'center',
       background: 'linear-gradient(135deg, #0c5d54 0%, #095048 100%)',
       position: 'relative', overflow: 'hidden',
