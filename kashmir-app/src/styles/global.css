@@ -2049,10 +2049,13 @@ table[style*="background: white"] {
     width: clamp(220px, 62vw, 270px) !important;
   }
 
-  .home-destination-card-image,
-  .home-hotel-card-image {
-    height: 110px !important;
+  main .home-showcase-section .mobile-swipe-row > .glass-card.home-destination-card > .home-destination-card-image:first-child,
+  main .home-showcase-section .mobile-swipe-row > .glass-card.home-hotel-card > .home-hotel-card-image:first-child {
+    width: calc(100% - 20px) !important;
+    height: 92px !important;
     aspect-ratio: auto !important;
+    margin: 10px 10px 0 !important;
+    border-radius: 14px !important;
   }
 
   .home-destination-card-content,
