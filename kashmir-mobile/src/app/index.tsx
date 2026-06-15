@@ -94,6 +94,8 @@ export default function WebsiteApp() {
         setSupportMultipleWindows={false}
         sharedCookiesEnabled
         thirdPartyCookiesEnabled
+        cacheEnabled={false}
+        cacheMode="LOAD_NO_CACHE"
         javaScriptEnabled
         domStorageEnabled
         mediaCapturePermissionGrantType="grantIfSameHostElsePrompt"
