@@ -26,6 +26,30 @@ const FORCE_MOBILE_VIEWPORT = `
     true;
   })();
 `;
+const FIX_WEBVIEW_IMAGES = `
+  (function () {
+    var fallback = 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=1200&q=85';
+
+    function protectAboutImage(root) {
+      var image = root.querySelector && root.querySelector('.about-mission-image');
+      if (!image || image.dataset.webviewFallbackReady === 'true') return;
+
+      image.dataset.webviewFallbackReady = 'true';
+      image.referrerPolicy = 'no-referrer';
+      image.addEventListener('error', function () {
+        if (image.src !== fallback) image.src = fallback;
+      });
+
+      if (image.complete && image.naturalWidth === 0) image.src = fallback;
+    }
+
+    protectAboutImage(document);
+    new MutationObserver(function () {
+      protectAboutImage(document);
+    }).observe(document.documentElement, { childList: true, subtree: true });
+    true;
+  })();
+`;
 
 export default function WebsiteApp() {
   const webView = useRef<WebView>(null);
@@ -89,7 +113,7 @@ export default function WebsiteApp() {
         style={styles.webView}
         userAgent={MOBILE_USER_AGENT}
         injectedJavaScriptBeforeContentLoaded={FORCE_MOBILE_VIEWPORT}
-        injectedJavaScript={FORCE_MOBILE_VIEWPORT}
+        injectedJavaScript={`${FORCE_MOBILE_VIEWPORT}\n${FIX_WEBVIEW_IMAGES}`}
         textZoom={100}
         setSupportMultipleWindows={false}
         sharedCookiesEnabled
