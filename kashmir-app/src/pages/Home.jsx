@@ -202,7 +202,7 @@ function Testimonials() {
   ];
 
   return (
-    <section style={{ padding: '80px 8%', background: 'white' }}>
+    <section className="home-reviews-section" style={{ padding: '80px 8%', background: 'white' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 50 }}>
           <div className="section-badge">💬 Reviews</div>
@@ -210,12 +210,12 @@ function Testimonials() {
         </div>
         <div className="grid-3 mobile-swipe-row">
           {testimonials.map((t, i) => (
-            <div key={i} className="glass-card" style={{ padding: '28px', position: 'relative' }}>
+            <div key={i} className="glass-card home-review-card" style={{ padding: '28px', position: 'relative' }}>
               <div style={{ fontSize: '2rem', position: 'absolute', top: 20, right: 24, opacity: 0.15 }}>"</div>
               <div style={{ color: '#F5A623', marginBottom: 12, fontSize: '1.1rem' }}>{'⭐'.repeat(t.rating)}</div>
               <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 20, fontStyle: 'italic' }}>"{t.text}"</p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{ width: 44, height: 44, background: 'linear-gradient(135deg, var(--kashmir-teal), var(--kashmir-gold))', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>{t.avatar}</div>
+              <div className="home-review-author" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div className="home-review-avatar" style={{ width: 44, height: 44, background: 'linear-gradient(135deg, var(--kashmir-teal), var(--kashmir-gold))', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>{t.avatar}</div>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>{t.name}</div>
                   <div style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>from {t.from}</div>

@@ -2042,4 +2042,30 @@ table[style*="background: white"] {
   .home-cta-section {
     border-radius: 26px;
   }
+
+  .home-reviews-section {
+    padding-block: 62px !important;
+  }
+
+  .home-reviews-section > div > div:first-child {
+    margin-bottom: 36px !important;
+  }
+
+  .home-review-card {
+    padding: 22px !important;
+  }
+
+  .home-review-card > div:nth-child(2) {
+    margin-bottom: 8px !important;
+  }
+
+  .home-review-card > p {
+    line-height: 1.55 !important;
+    margin-bottom: 16px !important;
+  }
+
+  .home-review-avatar {
+    width: 40px !important;
+    height: 40px !important;
+  }
 }
