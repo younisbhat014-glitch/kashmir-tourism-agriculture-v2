@@ -30,6 +30,16 @@ const FIX_WEBVIEW_IMAGES = `
   (function () {
     var fallback = 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=1200&q=85';
 
+    function fitImage(image) {
+      image.style.setProperty('width', '100%', 'important');
+      image.style.setProperty('height', 'auto', 'important');
+      image.style.setProperty('aspect-ratio', '4 / 3', 'important');
+      image.style.setProperty('object-fit', 'cover', 'important');
+      image.style.setProperty('object-position', 'center', 'important');
+      image.style.setProperty('border-radius', '24px', 'important');
+      image.style.setProperty('display', 'block', 'important');
+    }
+
     function protectAboutImage(root) {
       var image = root.querySelector && root.querySelector('.about-mission-image');
       if (!image || image.dataset.webviewFallbackReady === 'true') return;
@@ -37,10 +47,16 @@ const FIX_WEBVIEW_IMAGES = `
       image.dataset.webviewFallbackReady = 'true';
       image.referrerPolicy = 'no-referrer';
       image.addEventListener('error', function () {
-        if (image.src !== fallback) image.src = fallback;
+        if (image.src !== fallback) {
+          image.src = fallback;
+          fitImage(image);
+        }
       });
 
-      if (image.complete && image.naturalWidth === 0) image.src = fallback;
+      if (image.complete && image.naturalWidth === 0) {
+        image.src = fallback;
+        fitImage(image);
+      }
     }
 
     protectAboutImage(document);
