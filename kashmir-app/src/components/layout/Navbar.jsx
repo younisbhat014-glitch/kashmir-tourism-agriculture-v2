@@ -73,7 +73,7 @@ export default function Navbar() {
           <div className="nav-desktop" style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
             {user ? (
               <>
-                <Link to={user.role === 'admin' ? '/admin' : '/dashboard'} style={{
+                <Link className="nav-user-pill" to={user.role === 'admin' ? '/admin' : '/dashboard'} style={{
                   display: 'flex', alignItems: 'center', gap: 7,
                   background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)',
                   border: '1px solid rgba(255,255,255,0.18)', borderRadius: 50,
@@ -83,7 +83,7 @@ export default function Navbar() {
                   {user.role !== 'admin' && <span>{user.avatar}</span>}
                   <span>{user.name.split(' ')[0]}</span>
                   {user.role === 'admin' && (
-                    <span style={{ background: 'var(--kashmir-gold)', color: 'var(--kashmir-deep)', fontSize: '0.6rem', padding: '2px 7px', borderRadius: 50, fontWeight: 800 }}>ADMIN</span>
+                    <span className="nav-admin-badge" style={{ background: 'var(--kashmir-gold)', color: 'var(--kashmir-deep)', fontSize: '0.6rem', padding: '2px 7px', borderRadius: 50, fontWeight: 800 }}>ADMIN</span>
                   )}
                 </Link>
                 <button onClick={handleLogout} style={{
