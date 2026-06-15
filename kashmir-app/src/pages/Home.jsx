@@ -67,9 +67,9 @@ function FeaturedPlaces() {
         </div>
         <div className="grid-3 mobile-swipe-row">
           {TOURIST_SPOTS.slice(0, 6).map((spot, i) => (
-            <div key={spot.id} className={`glass-card fade-in-up animate-delay-${i % 3 + 1}`}
+            <div key={spot.id} className={`glass-card home-destination-card fade-in-up animate-delay-${i % 3 + 1}`}
               style={{ overflow: 'hidden', cursor: 'pointer' }}>
-              <div style={{ position: 'relative', height: 200, overflow: 'hidden' }}>
+              <div className="home-destination-card-image" style={{ position: 'relative', height: 200, overflow: 'hidden' }}>
                 <img src={spot.image} alt={spot.name} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
                   onMouseEnter={e => e.target.style.transform = 'scale(1.08)'}
                   onMouseLeave={e => e.target.style.transform = 'scale(1)'}
@@ -81,7 +81,7 @@ function FeaturedPlaces() {
                   ⭐ {spot.rating}
                 </div>
               </div>
-              <div style={{ padding: '20px' }}>
+              <div className="home-destination-card-content" style={{ padding: '20px' }}>
                 <h3 style={{ fontSize: '1.2rem', marginBottom: 6, color: 'var(--kashmir-deep)' }}>{spot.name}</h3>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.6, marginBottom: 16 }}>{spot.description}</p>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -114,8 +114,8 @@ function FeaturedHotels({ hotels }) {
         </div>
         <div className="grid-3 mobile-swipe-row">
           {hotels.slice(0, 3).map((hotel, i) => (
-            <div key={hotel._id} className={`glass-card fade-in-up animate-delay-${i+1}`} style={{ overflow: 'hidden' }}>
-              <div style={{ position: 'relative', height: 200, overflow: 'hidden' }}>
+            <div key={hotel._id} className={`glass-card home-hotel-card fade-in-up animate-delay-${i+1}`} style={{ overflow: 'hidden' }}>
+              <div className="home-hotel-card-image" style={{ position: 'relative', height: 200, overflow: 'hidden' }}>
                 <img src={hotel.image} alt={hotel.name} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}
                   onMouseEnter={e => e.target.style.transform='scale(1.08)'}
                   onMouseLeave={e => e.target.style.transform='scale(1)'}
@@ -124,7 +124,7 @@ function FeaturedHotels({ hotels }) {
                   <div style={{ color: '#FFD700', fontSize: '0.85rem' }}>{'⭐'.repeat(hotel.stars)}</div>
                 </div>
               </div>
-              <div style={{ padding: '20px' }}>
+              <div className="home-hotel-card-content" style={{ padding: '20px' }}>
                 <h3 style={{ fontSize: '1.05rem', marginBottom: 4 }}>{hotel.name}</h3>
                 <div style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', marginBottom: 12 }}>📍 {hotel.location}</div>
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>

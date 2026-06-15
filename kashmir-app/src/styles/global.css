@@ -2043,6 +2043,23 @@ table[style*="background: white"] {
     border-radius: 26px;
   }
 
+  .mobile-swipe-row > .home-destination-card,
+  .mobile-swipe-row > .home-hotel-card {
+    flex: 0 0 clamp(276px, 78vw, 350px) !important;
+    width: clamp(276px, 78vw, 350px) !important;
+  }
+
+  .home-destination-card-image,
+  .home-hotel-card-image {
+    height: 164px !important;
+    aspect-ratio: auto !important;
+  }
+
+  .home-destination-card-content,
+  .home-hotel-card-content {
+    padding: 16px !important;
+  }
+
   .home-reviews-section {
     padding-block: 62px !important;
   }
