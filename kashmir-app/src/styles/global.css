@@ -2045,19 +2045,53 @@ table[style*="background: white"] {
 
   .mobile-swipe-row > .home-destination-card,
   .mobile-swipe-row > .home-hotel-card {
-    flex: 0 0 clamp(276px, 78vw, 350px) !important;
-    width: clamp(276px, 78vw, 350px) !important;
+    flex: 0 0 clamp(250px, 72vw, 310px) !important;
+    width: clamp(250px, 72vw, 310px) !important;
   }
 
   .home-destination-card-image,
   .home-hotel-card-image {
-    height: 164px !important;
+    height: 138px !important;
     aspect-ratio: auto !important;
   }
 
   .home-destination-card-content,
   .home-hotel-card-content {
-    padding: 16px !important;
+    padding: 13px 14px 15px !important;
+  }
+
+  .home-destination-card-content h3,
+  .home-hotel-card-content h3 {
+    font-size: 0.98rem !important;
+  }
+
+  .home-destination-card-content p {
+    font-size: 0.78rem !important;
+    line-height: 1.45 !important;
+    margin-bottom: 11px !important;
+  }
+
+  .home-destination-card-content > div,
+  .home-hotel-card-content > div {
+    font-size: 0.74rem !important;
+  }
+
+  .home-hotel-card-content > div:nth-child(2) {
+    margin-bottom: 9px !important;
+  }
+
+  .home-hotel-card-content > div:nth-child(3) {
+    gap: 4px !important;
+    margin-bottom: 11px !important;
+  }
+
+  .home-hotel-card-content .badge {
+    padding: 4px 8px !important;
+    font-size: 0.62rem !important;
+  }
+
+  .home-hotel-card-content .price-tag {
+    font-size: 1rem !important;
   }
 
   .home-reviews-section {
