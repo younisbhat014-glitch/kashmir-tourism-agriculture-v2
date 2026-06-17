@@ -42,7 +42,7 @@ export default function SwipeIndicators() {
         const indicator = document.createElement('div');
         indicator.className = 'floating-swipe-indicator';
         indicator.setAttribute('aria-hidden', 'true');
-        indicator.textContent = 'Swipe \u2192';
+        indicator.textContent = '\u2192';
         document.body.appendChild(indicator);
 
         const registration = { indicator, scrollTimer: undefined };

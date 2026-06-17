@@ -1761,13 +1761,16 @@ table[style*="background: white"] {
   .floating-swipe-indicator {
     position: fixed;
     z-index: 900;
-    display: block;
-    padding: 11px 16px;
-    border-radius: 999px;
-    background: rgba(9, 24, 48, 0.94);
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(226, 196, 86, 0.36);
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(8, 75, 63, 0.96), rgba(20, 154, 138, 0.94));
     color: white;
-    box-shadow: 0 8px 22px rgba(9, 24, 48, 0.28);
-    font-size: 0.78rem;
+    box-shadow: 0 10px 24px rgba(5, 41, 37, 0.26);
+    font-size: 1.1rem;
     font-weight: 800;
     line-height: 1;
     letter-spacing: 0.02em;
