@@ -161,13 +161,13 @@ export default function Hero() {
       {/* ── Stats Bar — pinned to bottom ── */}
       <div className="hero-stats" style={{
         position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 10,
-        background: 'linear-gradient(90deg, rgba(255,255,255,0.90), rgba(244,255,253,0.86), rgba(255,250,240,0.90))',
-        backdropFilter: 'blur(20px) saturate(1.2)',
-        WebkitBackdropFilter: 'blur(20px) saturate(1.2)',
-        borderTop: '1px solid rgba(255,255,255,0.55)',
-        boxShadow: '0 -12px 34px rgba(7,74,56,0.14), inset 0 1px 0 rgba(255,255,255,0.72)',
-        padding: '14px 6%',
-        display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10,
+        background: 'linear-gradient(90deg, rgba(249,255,250,0.94), rgba(239,255,252,0.90), rgba(255,251,239,0.94))',
+        backdropFilter: 'blur(24px) saturate(1.35)',
+        WebkitBackdropFilter: 'blur(24px) saturate(1.35)',
+        borderTop: '1px solid rgba(255,255,255,0.78)',
+        boxShadow: '0 -18px 46px rgba(5,68,53,0.16), inset 0 1px 0 rgba(255,255,255,0.86)',
+        padding: '12px 5.5%',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'stretch', flexWrap: 'wrap', gap: 12,
       }}>
         {[
           { val: STATS.tourists, label: 'Annual Tourists', icon: '✈️' },
@@ -176,10 +176,10 @@ export default function Hero() {
           { val: STATS.crops, label: 'Crop Varieties', icon: '🌿' },
           { val: STATS.heritage, label: 'Heritage Sites', icon: '🕌' },
         ].map(({ val, label, icon }) => (
-          <div key={label} style={{ textAlign: 'center', flex: 1, minWidth: 80 }}>
-            <div style={{ fontSize: '0.85rem', marginBottom: 1, filter: 'drop-shadow(0 0 8px rgba(26,122,110,0.22))' }}>{icon}</div>
-            <div style={{ fontFamily: 'Cormorant Garamond', fontSize: '1.3rem', fontWeight: 800, color: 'var(--kashmir-teal)', textShadow: '0 0 14px rgba(26,122,110,0.16)' }}>{val}</div>
-            <div style={{ fontSize: '0.65rem', color: 'var(--kashmir-deep)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.8, opacity: 0.78 }}>{label}</div>
+          <div key={label} className="hero-stat-card" style={{ textAlign: 'center', flex: 1, minWidth: 92 }}>
+            <div className="hero-stat-icon">{icon}</div>
+            <div className="hero-stat-value">{val}</div>
+            <div className="hero-stat-label">{label}</div>
           </div>
         ))}
       </div>
