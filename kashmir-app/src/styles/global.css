@@ -1388,20 +1388,20 @@ table[style*="background: white"] {
     flex-wrap: nowrap !important;
     overflow-x: auto !important;
     justify-content: flex-start !important;
-    gap: 10px !important;
-    padding: 10px 5vw !important;
+    gap: 12px !important;
+    padding: 10px 4vw !important;
     -webkit-overflow-scrolling: touch;
   }
 
   .hero-stats > div {
-    flex: 0 0 112px !important;
-    min-width: 112px !important;
+    flex: 0 0 156px !important;
+    min-width: 156px !important;
   }
 
   .hero-stat-card {
-    min-height: 70px;
-    padding: 8px 10px;
-    border-radius: 18px;
+    min-height: 76px;
+    padding: 8px 16px 9px;
+    border-radius: 20px;
   }
 
   .hero-stat-card::after {
@@ -1420,7 +1420,9 @@ table[style*="background: white"] {
 
   .hero-stat-label {
     font-size: 0.58rem;
-    letter-spacing: 0.1em;
+    line-height: 1.18;
+    letter-spacing: 0.09em;
+    max-width: 132px;
   }
 
   .spot-hero {
