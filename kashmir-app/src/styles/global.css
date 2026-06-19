@@ -1410,14 +1410,15 @@ table[style*="background: white"] {
   }
 
   .home-hero {
-    height: auto !important;
-    min-height: 100svh !important;
+    height: clamp(650px, 78svh, 720px) !important;
+    min-height: 650px !important;
   }
 
   .home-hero-main {
-    min-height: 100svh !important;
+    height: 100% !important;
+    min-height: 0 !important;
     justify-content: center !important;
-    padding: 118px 0 148px !important;
+    padding: 102px 0 112px !important;
   }
 
   .home-hero-row {

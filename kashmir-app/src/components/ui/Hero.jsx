@@ -191,10 +191,12 @@ export default function Hero() {
         @media (max-width: 768px) {
           .hero-thumb {
             display: block !important;
-            position: relative !important;
+            position: absolute !important;
+            top: 104px !important;
+            right: 5vw !important;
             z-index: 1 !important;
             width: fit-content !important;
-            margin: 0 0 12px auto !important;
+            margin: 0 !important;
             animation: floatSide 8s ease-in-out infinite !important;
           }
           .hero-thumb-card {
@@ -230,7 +232,8 @@ export default function Hero() {
         }
         @media (max-width: 480px) {
           .hero-thumb {
-            margin: 0 0 10px auto !important;
+            top: 100px !important;
+            right: 5vw !important;
           }
           .hero-thumb-image {
             width: 68px !important;
