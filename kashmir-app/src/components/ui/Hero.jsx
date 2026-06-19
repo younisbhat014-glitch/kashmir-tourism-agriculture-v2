@@ -65,32 +65,34 @@ export default function Hero() {
         }}>
 
           {/* LEFT TEXT — fixed layout so it never pushes buttons down */}
-          <div key={`copy-${current}`} className="home-hero-copy hero-slide-copy-enter" style={{ flex: '0 0 auto', maxWidth: 580 }}>
+          <div className="home-hero-copy" style={{ flex: '0 0 auto', maxWidth: 580 }}>
 
-            {/* Badge */}
-            <div className="home-hero-badge" style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              background: 'rgba(201,168,76,0.18)', border: '1px solid rgba(201,168,76,0.55)',
-              padding: '5px 14px', borderRadius: 50, marginBottom: 16,
-              backdropFilter: 'blur(6px)',
-            }}>
-              <span style={{ fontSize: '0.7rem', color: 'var(--kashmir-gold)', fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase' }}>
-                🌸 Welcome to {slide.tag}
-              </span>
+            <div key={`heading-${current}`} className="hero-slide-heading-enter">
+              {/* Badge */}
+              <div className="home-hero-badge" style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                background: 'rgba(201,168,76,0.18)', border: '1px solid rgba(201,168,76,0.55)',
+                padding: '5px 14px', borderRadius: 50, marginBottom: 16,
+                backdropFilter: 'blur(6px)',
+              }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--kashmir-gold)', fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase' }}>
+                  🌸 Welcome to {slide.tag}
+                </span>
+              </div>
+
+              {/* Title — clamp keeps it from exploding on small screens */}
+              <h1 className="home-hero-title" style={{
+                fontFamily: 'Cormorant Garamond',
+                fontSize: 'clamp(2rem, 5vw, 4.8rem)',
+                fontWeight: 700, color: 'white',
+                lineHeight: 1.1, marginBottom: 10,
+                /* fixed min-height prevents reflow pushing buttons */
+                minHeight: '2.2em',
+              }}>
+                {slide.title}<br/>
+                <span style={{ color: 'var(--kashmir-gold)', fontStyle: 'italic' }}>{slide.sub}</span>
+              </h1>
             </div>
-
-            {/* Title — clamp keeps it from exploding on small screens */}
-            <h1 className="home-hero-title" style={{
-              fontFamily: 'Cormorant Garamond',
-              fontSize: 'clamp(2rem, 5vw, 4.8rem)',
-              fontWeight: 700, color: 'white',
-              lineHeight: 1.1, marginBottom: 10,
-              /* fixed min-height prevents reflow pushing buttons */
-              minHeight: '2.2em',
-            }}>
-              {slide.title}<br/>
-              <span style={{ color: 'var(--kashmir-gold)', fontStyle: 'italic' }}>{slide.sub}</span>
-            </h1>
 
             <p className="home-hero-copy-text" style={{
               color: 'rgba(255,255,255,0.82)', fontSize: 'clamp(0.85rem,1.5vw,1.05rem)',
