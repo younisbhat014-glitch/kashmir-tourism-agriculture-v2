@@ -2,6 +2,26 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
+  const scrollToPageTabs = () => {
+    let attempts = 0;
+
+    const moveToTabs = () => {
+      const tabs = document.querySelector('.page-tabs');
+
+      if (tabs) {
+        const navbarOffset = 72;
+        const top = tabs.getBoundingClientRect().top + window.scrollY - navbarOffset;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
+        return;
+      }
+
+      attempts += 1;
+      if (attempts < 12) requestAnimationFrame(moveToTabs);
+    };
+
+    requestAnimationFrame(moveToTabs);
+  };
+
   const tourismLinks = [
     { label: 'Hotels & Stays', to: '/tourism?tab=hotels' },
     { label: 'Restaurant Booking', to: '/tourism?tab=restaurants' },
@@ -66,7 +86,7 @@ export default function Footer() {
           <div>
             <h4 style={{ color: 'var(--kashmir-gold)', marginBottom: 16, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: 1 }}>Tourism</h4>
             {tourismLinks.map(item => (
-              <Link key={item.label} to={item.to} style={{ display: 'block', color: 'rgba(255,255,255,0.6)', textDecoration: 'none', marginBottom: 10, fontSize: '0.88rem', transition: 'color 0.2s' }}
+              <Link key={item.label} to={item.to} onClick={scrollToPageTabs} style={{ display: 'block', color: 'rgba(255,255,255,0.6)', textDecoration: 'none', marginBottom: 10, fontSize: '0.88rem', transition: 'color 0.2s' }}
                 onMouseEnter={e => e.target.style.color='var(--kashmir-gold)'}
                 onMouseLeave={e => e.target.style.color='rgba(255,255,255,0.6)'}
               >{item.label}</Link>
@@ -77,7 +97,7 @@ export default function Footer() {
           <div>
             <h4 style={{ color: 'var(--kashmir-gold)', marginBottom: 16, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: 1 }}>Agriculture</h4>
             {agricultureLinks.map(item => (
-              <Link key={item.label} to={item.to} style={{ display: 'block', color: 'rgba(255,255,255,0.6)', textDecoration: 'none', marginBottom: 10, fontSize: '0.88rem', transition: 'color 0.2s' }}
+              <Link key={item.label} to={item.to} onClick={scrollToPageTabs} style={{ display: 'block', color: 'rgba(255,255,255,0.6)', textDecoration: 'none', marginBottom: 10, fontSize: '0.88rem', transition: 'color 0.2s' }}
                 onMouseEnter={e => e.target.style.color='var(--kashmir-gold)'}
                 onMouseLeave={e => e.target.style.color='rgba(255,255,255,0.6)'}
               >{item.label}</Link>
