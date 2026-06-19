@@ -6,7 +6,7 @@ const SLIDES = [
   { bg: BG_IMAGES[0], thumb: THUMB_IMAGES[0], title: 'Dal Lake', sub: 'Jewel of Kashmir', tag: 'Srinagar' },
   { bg: BG_IMAGES[1], thumb: THUMB_IMAGES[1], title: 'Kashmir Valley', sub: 'Paradise on Earth', tag: 'J&K, India' },
   { bg: BG_IMAGES[2], thumb: THUMB_IMAGES[2], title: 'Gulmarg', sub: 'Winter Wonderland', tag: 'Ski Destination' },
-  { bg: BG_IMAGES[3], thumb: THUMB_IMAGES[3], title: 'Kashmir\'s Sacred Land', sub: 'Where Earth Meets Heaven', tag: 'Kashmir Farmlands' },
+  { bg: BG_IMAGES[3], thumb: THUMB_IMAGES[3], title: 'Kashmir\'s Land', sub: 'Where Earth Meets Heaven', tag: 'Kashmir Farmlands' },
   { bg: BG_IMAGES[4], thumb: THUMB_IMAGES[4], title: 'Saffron Fields', sub: 'World\'s Finest Spice', tag: 'Pampore, Kashmir' },
 ];
 
