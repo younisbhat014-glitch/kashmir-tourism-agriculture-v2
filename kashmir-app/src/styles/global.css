@@ -1954,14 +1954,28 @@ table[style*="background: white"] {
   overflow: hidden;
   margin: 18px 0;
   padding: clamp(64px, 7vw, 96px) 6%;
-  border: 0;
+  border-block: 1px solid rgba(126, 161, 139, 0.12);
   border-radius: 0;
-  background: transparent;
-  box-shadow: none;
+  background:
+    radial-gradient(circle at 10% 18%, rgba(191, 224, 201, 0.38), transparent 32%),
+    radial-gradient(circle at 88% 14%, rgba(222, 235, 224, 0.52), transparent 30%),
+    radial-gradient(circle at 78% 88%, rgba(163, 255, 191, 0.13), transparent 34%),
+    linear-gradient(135deg, #f7f8f5 0%, #eef3ee 48%, #f8f7f1 100%);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.78),
+    inset 0 -1px rgba(100, 137, 113, 0.08);
 }
 
 .agri-highlight-section::before {
-  display: none;
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  pointer-events: none;
+  background:
+    linear-gradient(105deg, transparent 12%, rgba(127, 255, 164, 0.055) 36%, transparent 58%),
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.72), transparent 56%);
 }
 
 .agri-highlight-orb {
@@ -2266,6 +2280,11 @@ table[style*="background: white"] {
     margin: 10px 0;
     padding: 26px 16px 30px !important;
     border-radius: 30px;
+    background:
+      radial-gradient(circle at 6% 12%, rgba(192, 225, 202, 0.38), transparent 35%),
+      radial-gradient(circle at 94% 18%, rgba(221, 235, 223, 0.5), transparent 34%),
+      radial-gradient(circle at 72% 92%, rgba(158, 255, 187, 0.11), transparent 38%),
+      linear-gradient(145deg, #f7f8f5, #edf3ed 54%, #f8f6ef);
   }
 
   .agri-highlight-grid {
