@@ -65,7 +65,7 @@ export default function Hero() {
         }}>
 
           {/* LEFT TEXT — fixed layout so it never pushes buttons down */}
-          <div className="home-hero-copy" style={{ flex: '0 0 auto', maxWidth: 580 }}>
+          <div key={`copy-${current}`} className="home-hero-copy hero-slide-copy-enter" style={{ flex: '0 0 auto', maxWidth: 580 }}>
 
             {/* Badge */}
             <div className="home-hero-badge" style={{
@@ -116,7 +116,7 @@ export default function Hero() {
             animation: 'floatSide 8s ease-in-out infinite',
           }}>
             {/* Glass card behind thumb */}
-            <div className="hero-thumb-card" style={{
+            <div key={`media-${current}`} className="hero-thumb-card hero-slide-media-enter" style={{
               background: 'rgba(255,255,255,0.08)',
               backdropFilter: 'blur(14px)',
               border: '1px solid rgba(255,255,255,0.18)',
@@ -133,7 +133,7 @@ export default function Hero() {
             </div>
 
             {/* Caption */}
-            <div className="hero-thumb-caption" style={{
+            <div key={`caption-${current}`} className="hero-thumb-caption hero-slide-caption-enter" style={{
               marginTop: 10, textAlign: 'center',
               background: 'rgba(13,59,46,0.75)', backdropFilter: 'blur(12px)',
               borderRadius: 12, padding: '7px 14px',
