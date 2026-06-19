@@ -2369,14 +2369,45 @@ table[style*="background: white"] {
     align-items: stretch;
   }
 
-  .agri-story-panel,
-  .agri-products-panel {
-    height: 100%;
-  }
-
   .agri-story-panel {
     display: flex;
     flex-direction: column;
+    padding: clamp(28px, 2.6vw, 36px);
+  }
+
+  .agri-section-badge {
+    margin-bottom: 18px;
+  }
+
+  .agri-highlight-title {
+    margin-bottom: 14px;
+    font-size: clamp(2.25rem, 3.3vw, 3.2rem);
+    line-height: 1;
+  }
+
+  .agri-highlight-title span {
+    margin-top: 5px;
+  }
+
+  .agri-highlight-copy {
+    margin-bottom: 20px;
+    line-height: 1.65;
+  }
+
+  .agri-feature-grid {
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .agri-feature-card {
+    padding: 12px 14px;
+  }
+
+  .agri-feature-icon {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 6px;
+    font-size: 0.98rem;
   }
 
   .agri-highlight-button {
