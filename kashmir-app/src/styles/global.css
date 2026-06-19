@@ -1954,38 +1954,18 @@ table[style*="background: white"] {
   overflow: hidden;
   margin: 18px 0;
   padding: clamp(64px, 7vw, 96px) 6%;
-  border-block: 1px solid rgba(201, 168, 76, 0.34);
-  border-radius: 44px;
-  background:
-    radial-gradient(circle at 90% 5%, rgba(231, 196, 91, 0.18), transparent 27%),
-    radial-gradient(circle at 4% 100%, rgba(31, 173, 134, 0.16), transparent 30%),
-    linear-gradient(140deg, #073f35 0%, #0a5744 48%, #0c4a3d 100%);
-  box-shadow: 0 26px 64px rgba(5, 72, 62, 0.2);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .agri-highlight-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
-  background-size: 42px 42px;
-  mask-image: linear-gradient(90deg, transparent, black 20%, black 80%, transparent);
+  display: none;
 }
 
 .agri-highlight-orb {
-  position: absolute;
-  top: -180px;
-  right: -140px;
-  z-index: -1;
-  width: 480px;
-  height: 480px;
-  border: 1px solid rgba(235, 209, 117, 0.12);
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(226, 196, 86, 0.14), rgba(226, 196, 86, 0.02) 54%, transparent 70%);
+  display: none;
 }
 
 .agri-highlight-shell {
@@ -2008,9 +1988,9 @@ table[style*="background: white"] {
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 34px;
   background:
-    radial-gradient(circle at 12% 0%, rgba(92, 238, 164, 0.1), transparent 34%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
-  box-shadow: inset 0 1px rgba(255,255,255,0.1), 0 24px 54px rgba(1, 28, 21, 0.22);
+    radial-gradient(circle at 12% 0%, rgba(92, 238, 164, 0.12), transparent 34%),
+    linear-gradient(145deg, #0b5639, #0b482f);
+  box-shadow: inset 0 1px rgba(255,255,255,0.1), 0 24px 54px rgba(5, 72, 49, 0.2);
   backdrop-filter: blur(12px);
 }
 
