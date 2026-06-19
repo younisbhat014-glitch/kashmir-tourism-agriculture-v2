@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
+const ANDROID_APP_URL = 'https://expo.dev/artifacts/eas/ArLvK593o1TMPcfxejrfH_NPR5vVaXvi49rNlSvHp8w.apk';
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showInstallApp, setShowInstallApp] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -13,6 +16,12 @@ export default function Navbar() {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const isNativeApp = navigator.userAgent.includes('KashmirPortalApp/');
+    const isStandalone = window.matchMedia?.('(display-mode: standalone)').matches;
+    setShowInstallApp(!isNativeApp && !isStandalone);
   }, []);
 
   // Close menu on route change
@@ -71,6 +80,27 @@ export default function Navbar() {
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           {/* Auth buttons — desktop only */}
           <div className="nav-desktop" style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            {showInstallApp && (
+              <a
+                href={ANDROID_APP_URL}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  color: 'var(--kashmir-deep)',
+                  background: 'linear-gradient(135deg, #f3d66b, var(--kashmir-gold))',
+                  border: '1px solid rgba(255,255,255,0.34)',
+                  borderRadius: 50,
+                  padding: '8px 15px',
+                  textDecoration: 'none',
+                  fontWeight: 800,
+                  fontSize: '0.8rem',
+                  boxShadow: '0 8px 20px rgba(0,0,0,0.16)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Install App
+              </a>
+            )}
             {user ? (
               <>
                 <Link className="nav-user-pill" to={user.role === 'admin' ? '/admin' : '/dashboard'} style={{
@@ -151,6 +181,31 @@ export default function Navbar() {
 
         {/* Mobile auth */}
         <div style={{ marginTop: 16 }}>
+          {showInstallApp && (
+            <a
+              href={ANDROID_APP_URL}
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                display: 'block',
+                width: '100%',
+                marginBottom: 12,
+                padding: '12px 16px',
+                borderRadius: 12,
+                textAlign: 'center',
+                color: 'var(--kashmir-deep)',
+                background: 'linear-gradient(135deg, #f3d66b, var(--kashmir-gold))',
+                border: '1px solid rgba(255,255,255,0.3)',
+                boxShadow: '0 10px 24px rgba(0,0,0,0.18)',
+                textDecoration: 'none',
+                fontWeight: 800,
+                fontSize: '0.92rem',
+                boxSizing: 'border-box',
+              }}
+            >
+              Install App
+            </a>
+          )}
           {user ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <Link to={user.role === 'admin' ? '/admin' : '/dashboard'} style={{
