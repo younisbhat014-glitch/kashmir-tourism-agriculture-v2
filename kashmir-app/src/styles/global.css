@@ -2364,6 +2364,26 @@ table[style*="background: white"] {
   font-weight: 850;
 }
 
+@media (min-width: 901px) {
+  .agri-highlight-grid {
+    align-items: stretch;
+  }
+
+  .agri-story-panel,
+  .agri-products-panel {
+    height: 100%;
+  }
+
+  .agri-story-panel {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .agri-highlight-button {
+    margin-top: auto;
+  }
+}
+
 @media (max-width: 768px) {
   .agri-highlight-section {
     margin: 10px 0;
