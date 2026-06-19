@@ -1985,20 +1985,23 @@ table[style*="background: white"] {
 .agri-story-panel {
   position: relative;
   padding: clamp(28px, 3.4vw, 46px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(176, 211, 191, 0.2);
   border-radius: 34px;
   background:
-    radial-gradient(circle at 12% 0%, rgba(92, 238, 164, 0.12), transparent 34%),
-    linear-gradient(145deg, #0b5639, #0b482f);
-  box-shadow: inset 0 1px rgba(255,255,255,0.1), 0 24px 54px rgba(5, 72, 49, 0.2);
+    radial-gradient(circle at 12% 0%, rgba(118, 207, 153, 0.16), transparent 35%),
+    radial-gradient(circle at 92% 88%, rgba(151, 177, 160, 0.1), transparent 38%),
+    linear-gradient(145deg, #155d35 0%, #14532f 52%, #10462b 100%);
+  box-shadow:
+    inset 0 1px rgba(226, 239, 231, 0.14),
+    0 24px 54px rgba(35, 67, 49, 0.22);
   backdrop-filter: blur(12px);
 }
 
 .agri-section-badge {
   margin-bottom: 24px;
-  border-color: rgba(113, 234, 166, 0.3) !important;
-  background: rgba(68, 197, 124, 0.12) !important;
-  color: #9cf2bd !important;
+  border-color: rgba(142, 218, 172, 0.34) !important;
+  background: rgba(125, 166, 141, 0.16) !important;
+  color: #8ff0b6 !important;
   letter-spacing: 0.12em;
 }
 
@@ -2015,15 +2018,15 @@ table[style*="background: white"] {
 .agri-highlight-title span {
   display: inline-block;
   margin-top: 8px;
-  color: #e2c456;
+  color: #68e69b;
   font-style: italic;
-  text-shadow: 0 10px 28px rgba(226, 196, 86, 0.16);
+  text-shadow: 0 10px 28px rgba(104, 230, 155, 0.16);
 }
 
 .agri-highlight-copy {
   max-width: 610px;
   margin: 0 0 28px;
-  color: rgba(244, 255, 249, 0.72);
+  color: rgba(210, 225, 216, 0.78);
   font-size: clamp(0.94rem, 1.1vw, 1.05rem);
   line-height: 1.8;
 }
@@ -2040,9 +2043,9 @@ table[style*="background: white"] {
   overflow: hidden;
   min-width: 0;
   padding: 15px 16px;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(191, 215, 199, 0.14);
   border-radius: 18px;
-  background: linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.035));
+  background: linear-gradient(145deg, rgba(180, 207, 190, 0.11), rgba(126, 157, 138, 0.055));
   box-shadow: inset 0 1px rgba(255,255,255,0.06);
   transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
 }
@@ -2055,13 +2058,13 @@ table[style*="background: white"] {
   width: 66px;
   height: 66px;
   border-radius: 50%;
-  background: rgba(226, 196, 86, 0.06);
+  background: rgba(129, 195, 153, 0.08);
 }
 
 .agri-feature-card:hover {
   transform: translateY(-3px);
-  border-color: rgba(226, 196, 86, 0.32);
-  background: linear-gradient(145deg, rgba(255,255,255,0.13), rgba(255,255,255,0.055));
+  border-color: rgba(126, 218, 162, 0.34);
+  background: linear-gradient(145deg, rgba(188, 219, 199, 0.16), rgba(133, 170, 146, 0.075));
 }
 
 .agri-feature-icon {
@@ -2084,7 +2087,7 @@ table[style*="background: white"] {
 }
 
 .agri-feature-desc {
-  color: rgba(255,255,255,0.52);
+  color: rgba(202, 219, 208, 0.58);
   font-size: 0.73rem;
 }
 
