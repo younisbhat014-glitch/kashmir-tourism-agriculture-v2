@@ -1245,6 +1245,35 @@ table[style*="background: white"] {
   opacity: 0.78;
 }
 
+@media (min-width: 901px) {
+  .home-hero {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: hidden;
+  }
+
+  .home-hero-main {
+    height: auto !important;
+    min-height: max(700px, calc(100vh - 96px));
+    justify-content: center !important;
+    padding-top: 118px !important;
+    padding-bottom: 72px !important;
+  }
+
+  .home-hero-row {
+    width: 100%;
+    max-width: 1680px;
+    margin: 0 auto;
+  }
+
+  .hero-stats {
+    position: relative !important;
+    inset: auto !important;
+    bottom: auto !important;
+    width: 100%;
+  }
+}
+
 @media (max-width: 900px) {
   .page-content-shell,
   .spot-content {
