@@ -1949,78 +1949,441 @@ table[style*="background: white"] {
 }
 
 .agri-highlight-section {
-  border-block: 1px solid rgba(201, 168, 76, 0.28);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin: 18px 0;
+  padding: clamp(64px, 7vw, 96px) 6%;
+  border-block: 1px solid rgba(201, 168, 76, 0.34);
+  border-radius: 44px;
+  background:
+    radial-gradient(circle at 90% 5%, rgba(231, 196, 91, 0.18), transparent 27%),
+    radial-gradient(circle at 4% 100%, rgba(31, 173, 134, 0.16), transparent 30%),
+    linear-gradient(140deg, #073f35 0%, #0a5744 48%, #0c4a3d 100%);
+  box-shadow: 0 26px 64px rgba(5, 72, 62, 0.2);
+}
+
+.agri-highlight-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(90deg, transparent, black 20%, black 80%, transparent);
+}
+
+.agri-highlight-orb {
+  position: absolute;
+  top: -180px;
+  right: -140px;
+  z-index: -1;
+  width: 480px;
+  height: 480px;
+  border: 1px solid rgba(235, 209, 117, 0.12);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(226, 196, 86, 0.14), rgba(226, 196, 86, 0.02) 54%, transparent 70%);
+}
+
+.agri-highlight-shell {
+  position: relative;
+  z-index: 1;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.agri-highlight-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(460px, 1.08fr);
+  gap: clamp(30px, 5vw, 72px);
+  align-items: center;
+}
+
+.agri-story-panel {
+  position: relative;
+  padding: clamp(28px, 3.4vw, 46px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 34px;
-  box-shadow: 0 18px 42px rgba(5, 72, 62, 0.16);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(92, 238, 164, 0.1), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
+  box-shadow: inset 0 1px rgba(255,255,255,0.1), 0 24px 54px rgba(1, 28, 21, 0.22);
+  backdrop-filter: blur(12px);
+}
+
+.agri-section-badge {
+  margin-bottom: 24px;
+  border-color: rgba(113, 234, 166, 0.3) !important;
+  background: rgba(68, 197, 124, 0.12) !important;
+  color: #9cf2bd !important;
+  letter-spacing: 0.12em;
+}
+
+.agri-highlight-title {
+  margin: 0 0 18px;
+  color: white;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.35rem, 4.3vw, 4rem);
+  font-weight: 750;
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+}
+
+.agri-highlight-title span {
+  display: inline-block;
+  margin-top: 8px;
+  color: #e2c456;
+  font-style: italic;
+  text-shadow: 0 10px 28px rgba(226, 196, 86, 0.16);
+}
+
+.agri-highlight-copy {
+  max-width: 610px;
+  margin: 0 0 28px;
+  color: rgba(244, 255, 249, 0.72);
+  font-size: clamp(0.94rem, 1.1vw, 1.05rem);
+  line-height: 1.8;
+}
+
+.agri-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.agri-feature-card {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  padding: 15px 16px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.035));
+  box-shadow: inset 0 1px rgba(255,255,255,0.06);
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.agri-feature-card::after {
+  content: '';
+  position: absolute;
+  right: -18px;
+  bottom: -22px;
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: rgba(226, 196, 86, 0.06);
+}
+
+.agri-feature-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(226, 196, 86, 0.32);
+  background: linear-gradient(145deg, rgba(255,255,255,0.13), rgba(255,255,255,0.055));
+}
+
+.agri-feature-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 9px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.09);
+  font-size: 1.08rem;
+  box-shadow: inset 0 1px rgba(255,255,255,0.08);
+}
+
+.agri-feature-title {
+  margin-bottom: 3px;
+  color: white;
+  font-size: 0.87rem;
+  font-weight: 800;
+}
+
+.agri-feature-desc {
+  color: rgba(255,255,255,0.52);
+  font-size: 0.73rem;
+}
+
+.agri-highlight-button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  min-width: 268px;
+  padding: 10px 11px 10px 22px !important;
+  border: 1px solid rgba(255,255,255,0.48);
+  background: rgba(255,255,255,0.96) !important;
+  color: #084733 !important;
+  text-decoration: none;
+  box-shadow: 0 14px 34px rgba(1, 30, 21, 0.24);
+}
+
+.agri-highlight-button-arrow {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #137d50, #0c613f);
+  color: white;
+  box-shadow: 0 8px 18px rgba(8, 81, 53, 0.26);
+  transition: transform 0.25s ease;
+}
+
+.agri-highlight-button:hover .agri-highlight-button-arrow {
+  transform: translateX(3px);
+}
+
+.agri-products-panel {
+  padding: clamp(22px, 2.7vw, 34px);
+  border: 1px solid rgba(255,255,255,0.58);
+  border-radius: 36px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(226, 196, 86, 0.14), transparent 30%),
+    linear-gradient(145deg, rgba(250,255,249,0.96), rgba(239,249,240,0.91));
+  box-shadow: 0 28px 60px rgba(1, 28, 21, 0.28), inset 0 1px rgba(255,255,255,0.9);
+}
+
+.agri-products-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.agri-products-heading > div > span {
+  display: block;
+  margin-bottom: 5px;
+  color: #237758;
+  font-size: 0.67rem;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.agri-products-heading h3 {
+  margin: 0;
+  color: #092c21;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.65rem, 2.4vw, 2.2rem);
+  line-height: 1;
+}
+
+.agri-products-count {
+  flex: 0 0 auto;
+  padding: 7px 11px;
+  border: 1px solid rgba(23, 126, 82, 0.14);
+  border-radius: 999px;
+  background: rgba(24, 141, 88, 0.08);
+  color: #176c49;
+  font-size: 0.68rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.agri-crop-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .agri-crop-preview-card {
   min-width: 0;
-  background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.055)) !important;
-  border-color: rgba(231, 207, 126, 0.25) !important;
-  box-shadow: 0 14px 30px rgba(2, 24, 18, 0.18);
+  overflow: hidden;
+  border: 1px solid rgba(10, 91, 64, 0.1);
+  border-radius: 22px;
+  background: rgba(255,255,255,0.88);
+  box-shadow: 0 12px 30px rgba(7, 64, 44, 0.1);
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .agri-crop-preview-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(231, 207, 126, 0.55) !important;
-  box-shadow: 0 18px 36px rgba(2, 24, 18, 0.28);
+  transform: translateY(-5px);
+  border-color: rgba(29, 139, 92, 0.28);
+  box-shadow: 0 18px 38px rgba(7, 64, 44, 0.16);
+}
+
+.agri-crop-image-wrap {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
 }
 
 .agri-crop-preview-image {
-  aspect-ratio: 16 / 10;
-  height: auto !important;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s ease;
+}
+
+.agri-crop-preview-card:hover .agri-crop-preview-image {
+  transform: scale(1.045);
+}
+
+.agri-crop-fresh-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 5px 9px;
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: 999px;
+  background: rgba(5, 76, 50, 0.82);
+  color: white;
+  font-size: 0.61rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+
+.agri-crop-preview-content {
+  padding: 13px 14px 15px;
+}
+
+.agri-crop-preview-name {
+  overflow: hidden;
+  margin-bottom: 3px;
+  color: #102b20;
+  font-size: 0.88rem;
+  font-weight: 850;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agri-crop-preview-price {
+  color: #a77f12;
+  font-size: 0.8rem;
+  font-weight: 850;
 }
 
 @media (max-width: 768px) {
   .agri-highlight-section {
-    padding: 58px 5vw !important;
-    border-radius: 26px;
+    margin: 10px 0;
+    padding: 26px 16px 30px !important;
+    border-radius: 30px;
+  }
+
+  .agri-highlight-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .agri-story-panel {
+    padding: 27px 20px 22px;
+    border-radius: 27px;
+  }
+
+  .agri-section-badge {
+    margin-bottom: 19px;
+    font-size: 0.64rem !important;
+  }
+
+  .agri-highlight-title {
+    margin-bottom: 16px;
+    font-size: clamp(2.1rem, 10vw, 3rem);
+  }
+
+  .agri-highlight-copy {
+    margin-bottom: 22px;
+    font-size: 0.9rem;
+    line-height: 1.72;
   }
 
   .agri-feature-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 10px !important;
+    margin-bottom: 20px;
   }
 
-  .agri-feature-grid > div {
-    padding: 12px !important;
+  .agri-feature-grid > .agri-feature-card {
+    flex: 0 0 200px !important;
+    width: 200px !important;
+    min-height: 118px;
+    padding: 14px !important;
+    border-radius: 17px;
+  }
+
+  .agri-highlight-button {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .agri-products-panel {
+    padding: 20px 13px 15px;
+    border-radius: 27px;
+  }
+
+  .agri-products-heading {
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 0 4px;
+  }
+
+  .agri-products-heading h3 {
+    font-size: 1.65rem;
   }
 
   .agri-crop-preview-grid {
-    display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
+    gap: 9px !important;
     width: 100%;
   }
 
   .agri-crop-preview-card {
     width: 100% !important;
-    border-radius: 14px !important;
+    border-radius: 17px !important;
   }
 
-  .agri-crop-preview-card > div {
-    padding: 9px 10px !important;
+  .agri-crop-image-wrap {
+    aspect-ratio: 1.15 / 1;
   }
 
-  .agri-crop-preview-card > div > div:first-child {
-    font-size: 0.76rem !important;
-    line-height: 1.25;
+  .agri-crop-fresh-badge {
+    top: 7px;
+    left: 7px;
+    padding: 4px 7px;
+    font-size: 0.52rem;
   }
 
-  .agri-crop-preview-card > div > div:last-child {
-    font-size: 0.72rem !important;
+  .agri-crop-preview-content {
+    padding: 10px 10px 12px;
+  }
+
+  .agri-crop-preview-name {
+    font-size: 0.77rem;
+  }
+
+  .agri-crop-preview-price {
+    font-size: 0.72rem;
   }
 }
 
 @media (max-width: 380px) {
-  .agri-crop-preview-grid {
-    gap: 8px !important;
+  .agri-story-panel {
+    padding-inline: 16px;
   }
 
-  .agri-crop-preview-card > div {
-    padding: 8px !important;
+  .agri-products-heading {
+    gap: 8px;
+  }
+
+  .agri-products-count {
+    padding-inline: 8px;
+    font-size: 0.58rem;
+  }
+
+  .agri-crop-preview-grid {
+    gap: 7px !important;
+  }
+
+  .agri-crop-preview-content {
+    padding: 9px 8px 10px;
   }
 }
 

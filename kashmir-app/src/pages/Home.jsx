@@ -145,51 +145,62 @@ function FeaturedHotels({ hotels }) {
 function AgricultureHighlight({ crops }) {
   const ref = useInView();
   return (
-    <section ref={ref} className="agri-highlight-section" style={{ padding: '80px 8%', background: 'linear-gradient(135deg, #0a514a 0%, #0b5b52 100%)', position: 'relative', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', top: -100, right: -100, width: 400, height: 400, background: 'rgba(201,168,76,0.05)', borderRadius: '50%' }}/>
-      <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        <div className="agri-highlight-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'center' }}>
-          <div className="fade-in-left">
-            <div className="section-badge" style={{ background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.3)' }}>🌾 Farm to Table</div>
-            <h2 style={{ fontFamily: 'Cormorant Garamond', fontSize: 'clamp(2rem,4vw,3rem)', color: 'white', marginBottom: 16, lineHeight: 1.2 }}>
-              Fresh from Kashmir's<br/><span style={{ color: 'var(--kashmir-gold)', fontStyle: 'italic' }}>Fertile Fields</span>
+    <section ref={ref} className="agri-highlight-section">
+      <div className="agri-highlight-orb" aria-hidden="true" />
+      <div className="agri-highlight-shell">
+        <div className="agri-highlight-grid">
+          <div className="agri-story-panel fade-in-left">
+            <div className="section-badge agri-section-badge">🌾 Fresh from the fields</div>
+            <h2 className="agri-highlight-title">
+              Fresh from Kashmir's<br/><span>Fertile Fields</span>
             </h2>
-            <p style={{ color: 'rgba(255,255,255,0.75)', lineHeight: 1.8, marginBottom: 30 }}>
+            <p className="agri-highlight-copy">
               World-renowned Pampore Saffron, crisp Sopore Apples, premium Doon Walnuts — buy directly from farmers. No middlemen. Fresh quality.
             </p>
-            <div className="agri-feature-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 32 }}>
+            <div className="agri-feature-grid">
               {[
                 { icon: '🌸', title: 'GI Tagged Saffron', desc: 'Certified authentic' },
                 { icon: '🍎', title: '62K+ Farmers', desc: 'Direct sourcing' },
                 { icon: '🚜', title: 'Machine Rental', desc: 'Affordable access' },
                 { icon: '📅', title: 'Season Calendar', desc: 'Plan your harvest' },
               ].map(item => (
-                <div key={item.title} style={{ background: 'rgba(255,255,255,0.07)', borderRadius: 16, padding: '16px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                  <div style={{ fontSize: '1.5rem', marginBottom: 6 }}>{item.icon}</div>
-                  <div style={{ color: 'white', fontWeight: 700, fontSize: '0.88rem', marginBottom: 2 }}>{item.title}</div>
-                  <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.75rem' }}>{item.desc}</div>
+                <div key={item.title} className="agri-feature-card">
+                  <div className="agri-feature-icon">{item.icon}</div>
+                  <div className="agri-feature-title">{item.title}</div>
+                  <div className="agri-feature-desc">{item.desc}</div>
                 </div>
               ))}
             </div>
-            <Link to="/agriculture" className="btn-primary" style={{ textDecoration: 'none', display: 'inline-block' }}>Explore Agriculture Hub →</Link>
+            <Link to="/agriculture" className="btn-primary agri-highlight-button">
+              <span>Explore Agriculture Hub</span>
+              <span className="agri-highlight-button-arrow">→</span>
+            </Link>
           </div>
-          <div className="agri-crop-preview-grid fade-in-right" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-            {crops.slice(0,4).map(crop => (
-              <div key={crop._id} className="agri-crop-preview-card" style={{
-                background: 'rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden',
-                border: '1px solid rgba(255,255,255,0.1)',
-              }}>
-                <img className="agri-crop-preview-image" src={crop.image} alt={crop.name} style={{ width: '100%', height: 120, objectFit: 'cover' }}/>
-                <div style={{ padding: '10px 12px' }}>
-                  <div style={{ color: 'white', fontWeight: 700, fontSize: '0.85rem' }}>{crop.name}</div>
-                  <div style={{ color: 'var(--kashmir-gold)', fontSize: '0.8rem', fontWeight: 700 }}>₹{crop.price}/{crop.unit}</div>
-                </div>
+          <div className="agri-products-panel fade-in-right">
+            <div className="agri-products-heading">
+              <div>
+                <span>From valley to your doorstep</span>
+                <h3>Farm Fresh Collection</h3>
               </div>
-            ))}
+              <span className="agri-products-count">{Math.min(crops.length, 4)} picks</span>
+            </div>
+            <div className="agri-crop-preview-grid">
+              {crops.slice(0,4).map(crop => (
+                <div key={crop._id} className="agri-crop-preview-card">
+                  <div className="agri-crop-image-wrap">
+                    <img className="agri-crop-preview-image" src={crop.image} alt={crop.name}/>
+                    <span className="agri-crop-fresh-badge">Fresh</span>
+                  </div>
+                  <div className="agri-crop-preview-content">
+                    <div className="agri-crop-preview-name">{crop.name}</div>
+                    <div className="agri-crop-preview-price">₹{crop.price}/{crop.unit}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-      <style>{`@media(max-width:768px){.agri-highlight-grid{grid-template-columns:1fr!important;gap:32px!important}}`}</style>
     </section>
   );
 }
