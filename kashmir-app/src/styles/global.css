@@ -2119,13 +2119,28 @@ table[style*="background: white"] {
 }
 
 .agri-products-panel {
+  position: relative;
+  isolation: isolate;
   padding: clamp(22px, 2.7vw, 34px);
-  border: 1px solid rgba(255,255,255,0.58);
+  border: 0;
   border-radius: 36px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.agri-products-panel::before {
+  content: '';
+  position: absolute;
+  inset: -18px -12px;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 42px;
   background:
-    radial-gradient(circle at 100% 0%, rgba(226, 196, 86, 0.14), transparent 30%),
-    linear-gradient(145deg, rgba(250,255,249,0.96), rgba(239,249,240,0.91));
-  box-shadow: 0 28px 60px rgba(1, 28, 21, 0.28), inset 0 1px rgba(255,255,255,0.9);
+    radial-gradient(circle at 14% 12%, rgba(206, 239, 208, 0.72), transparent 35%),
+    radial-gradient(circle at 88% 16%, rgba(255, 241, 194, 0.72), transparent 34%),
+    radial-gradient(circle at 76% 86%, rgba(211, 241, 226, 0.62), transparent 38%),
+    linear-gradient(145deg, rgba(250, 249, 234, 0.54), rgba(239, 250, 240, 0.34));
+  filter: blur(2px);
 }
 
 .agri-products-heading {
@@ -2297,6 +2312,15 @@ table[style*="background: white"] {
   .agri-products-panel {
     padding: 20px 13px 15px;
     border-radius: 27px;
+  }
+
+  .agri-products-panel::before {
+    inset: -10px -3px;
+    border-radius: 30px;
+    background:
+      radial-gradient(circle at 12% 10%, rgba(207, 239, 209, 0.7), transparent 38%),
+      radial-gradient(circle at 92% 18%, rgba(255, 240, 194, 0.68), transparent 36%),
+      radial-gradient(circle at 70% 92%, rgba(216, 242, 228, 0.56), transparent 40%);
   }
 
   .agri-products-heading {
