@@ -44,6 +44,8 @@ export default function Hero() {
         background: 'linear-gradient(120deg, rgba(13,59,46,0.55) 0%, rgba(0,0,0,0.15) 55%, rgba(13,59,46,0.35) 100%)',
       }}/>
 
+      <div className="home-hero-bottom-fade" aria-hidden="true" />
+
       {/* ── MAIN CONTENT WRAPPER — fills full height, flex column, space-between ── */}
       <div className="home-hero-main" style={{
         position: 'relative', zIndex: 5,
