@@ -8,6 +8,7 @@ const ANDROID_APP_URL = 'https://expo.dev/artifacts/eas/ArLvK593o1TMPcfxejrfH_NP
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isNativeApp] = useState(() => navigator.userAgent.includes('KashmirPortalApp/'));
   const [showInstallApp, setShowInstallApp] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
@@ -20,10 +21,9 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const isNativeApp = navigator.userAgent.includes('KashmirPortalApp/');
     const isStandalone = window.matchMedia?.('(display-mode: standalone)').matches;
     setShowInstallApp(!isNativeApp && !isStandalone);
-  }, []);
+  }, [isNativeApp]);
 
   // Close menu on route change
   useEffect(() => { setMenuOpen(false); }, [location]);
@@ -81,7 +81,7 @@ export default function Navbar() {
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           {/* Auth buttons — desktop only */}
           <div className="nav-desktop" style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-            <NotificationBell />
+            {isNativeApp && <NotificationBell />}
             {showInstallApp && (
               <a
                 href={ANDROID_APP_URL}
@@ -133,9 +133,11 @@ export default function Navbar() {
           </div>
 
           {/* ── Hamburger — mobile only ── */}
-          <div className="nav-mobile-notification">
-            <NotificationBell mobile />
-          </div>
+          {isNativeApp && (
+            <div className="nav-mobile-notification">
+              <NotificationBell mobile />
+            </div>
+          )}
 
           <button
             onClick={() => setMenuOpen(o => !o)}
