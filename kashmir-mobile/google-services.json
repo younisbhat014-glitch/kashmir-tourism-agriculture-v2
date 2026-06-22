@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "348900065007",
+    "project_id": "kashmir-paradise-portal",
+    "storage_bucket": "kashmir-paradise-portal.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:348900065007:android:f704ff28478b3e4512a51a",
+        "android_client_info": {
+          "package_name": "com.kashmir.paradiseportal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgzturZYaBvVzWHznbMy19ZsX_cxDCgoQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

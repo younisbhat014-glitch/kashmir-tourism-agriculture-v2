@@ -12,6 +12,7 @@
     },
     "android": {
       "package": "com.kashmir.paradiseportal",
+      "googleServicesFile": "./google-services.json",
       "permissions": [
         "android.permission.INTERNET",
         "android.permission.CAMERA"

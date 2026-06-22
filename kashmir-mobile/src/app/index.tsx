@@ -81,6 +81,8 @@ Notifications.setNotificationHandler({
 
 export default function WebsiteApp() {
   const webView = useRef<WebView>(null);
+  const webViewReady = useRef(false);
+  const pendingNotificationPath = useRef<string | null>(null);
   const [canGoBack, setCanGoBack] = useState(false);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
@@ -91,6 +93,10 @@ export default function WebsiteApp() {
     const safePath = typeof path === 'string' && path.startsWith('/') && !path.startsWith('//')
       ? path
       : '/';
+    if (!webViewReady.current) {
+      pendingNotificationPath.current = safePath;
+      return;
+    }
     webView.current?.injectJavaScript(`
       window.location.href = ${JSON.stringify(`${WEBSITE_URL.replace(/\/$/, '')}${safePath}`)};
       true;
@@ -153,7 +159,10 @@ export default function WebsiteApp() {
     });
 
     Notifications.getLastNotificationResponseAsync().then((response) => {
-      if (response) openWebsitePath(response.notification.request.content.data?.link);
+      if (response) {
+        openWebsitePath(response.notification.request.content.data?.link);
+        Notifications.clearLastNotificationResponseAsync();
+      }
     });
 
     return () => responseSubscription.remove();
@@ -243,11 +252,21 @@ export default function WebsiteApp() {
         onNavigationStateChange={onNavigationChange}
         onMessage={onWebMessage}
         onShouldStartLoadWithRequest={allowRequest}
-        onLoadStart={() => { setLoading(true); setFailed(false); }}
+        onLoadStart={() => {
+          webViewReady.current = false;
+          setLoading(true);
+          setFailed(false);
+        }}
         onLoadEnd={() => {
+          webViewReady.current = true;
           setLoading(false);
           setRefreshing(false);
           sendPushTokenToWebsite();
+          if (pendingNotificationPath.current) {
+            const path = pendingNotificationPath.current;
+            pendingNotificationPath.current = null;
+            openWebsitePath(path);
+          }
         }}
         onError={() => { setLoading(false); setRefreshing(false); setFailed(true); }}
         onHttpError={(event) => {
