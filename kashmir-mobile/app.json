@@ -29,6 +29,13 @@
     "plugins": [
       "expo-router",
       [
+        "expo-notifications",
+        {
+          "color": "#0D3B2E",
+          "defaultChannel": "portal-updates"
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "backgroundColor": "#F2F4D7",

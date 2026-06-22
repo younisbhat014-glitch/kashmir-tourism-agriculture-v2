@@ -76,3 +76,46 @@ export const getAllBookingsAPI = () =>
   fetch(`${API}/admin/bookings`, {
     headers: headers()
   }).then(r => r.json());
+
+// Notification APIs
+export const getNotificationsAPI = () =>
+  fetch(`${API}/notifications`, {
+    headers: headers()
+  }).then(r => r.json());
+
+export const markNotificationReadAPI = (id) =>
+  fetch(`${API}/notifications/${id}/read`, {
+    method: 'PATCH',
+    headers: headers()
+  }).then(r => r.json());
+
+export const markAllNotificationsReadAPI = () =>
+  fetch(`${API}/notifications/read-all`, {
+    method: 'PATCH',
+    headers: headers()
+  }).then(r => r.json());
+
+export const registerPushTokenAPI = (data) =>
+  fetch(`${API}/notifications/push-token`, {
+    method: 'POST',
+    headers: headers(),
+    body: JSON.stringify(data)
+  }).then(r => r.json());
+
+export const getAdminNotificationHistoryAPI = () =>
+  fetch(`${API}/notifications/admin/history`, {
+    headers: headers()
+  }).then(r => r.json());
+
+export const sendAdminNotificationAPI = (data) =>
+  fetch(`${API}/notifications/admin/send`, {
+    method: 'POST',
+    headers: headers(),
+    body: JSON.stringify(data)
+  }).then(r => r.json());
+
+export const deleteAdminNotificationAPI = (id) =>
+  fetch(`${API}/notifications/admin/${id}`, {
+    method: 'DELETE',
+    headers: headers()
+  }).then(r => r.json());

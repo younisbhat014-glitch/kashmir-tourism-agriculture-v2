@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { API } from '../utils/api';
 import ImagePickerField from '../components/ui/ImagePickerField';
+import AdminNotifications from '../components/admin/AdminNotifications';
 
 const getToken = () => localStorage.getItem('kashmir_token');
 const authHeaders = () => ({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` });
@@ -157,6 +158,7 @@ export default function AdminDashboard() {
     if (activeTab === 'vehicles') fetchVehicles();
     if (activeTab === 'machines') fetchMachines();
     if (activeTab === 'restaurants') fetchRestaurants();
+    if (activeTab === 'notifications') fetchUsers();
   }, [activeTab]);
 
   const fetchStats = async () => {
@@ -249,6 +251,7 @@ export default function AdminDashboard() {
     { id: 'vehicles', label: '🚗 Vehicles' },
     { id: 'machines', label: '🚜 Machines' },
     { id: 'restaurants', label: '🍽 Restaurants' },
+    { id: 'notifications', label: 'Notifications' },
     { id: 'analytics', label: '📈 Analytics' },
   ];
 
@@ -598,6 +601,10 @@ export default function AdminDashboard() {
         )}
 
         {/* ANALYTICS */}
+        {activeTab === 'notifications' && (
+          <AdminNotifications users={users} />
+        )}
+
         {activeTab === 'analytics' && (
           <div>
             <h2 style={{ fontFamily: 'Cormorant Garamond', fontSize: '2rem', marginBottom: 28 }}>Analytics & Reports</h2>

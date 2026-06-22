@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { BackHandler, Linking, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Constants from 'expo-constants';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView, WebViewNavigation } from 'react-native-webview';
 import { colors } from '@/constants/app-theme';
@@ -67,12 +70,98 @@ const FIX_WEBVIEW_IMAGES = `
   })();
 `;
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
+
 export default function WebsiteApp() {
   const webView = useRef<WebView>(null);
   const [canGoBack, setCanGoBack] = useState(false);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [expoPushToken, setExpoPushToken] = useState('');
+
+  const openWebsitePath = useCallback((path: unknown) => {
+    const safePath = typeof path === 'string' && path.startsWith('/') && !path.startsWith('//')
+      ? path
+      : '/';
+    webView.current?.injectJavaScript(`
+      window.location.href = ${JSON.stringify(`${WEBSITE_URL.replace(/\/$/, '')}${safePath}`)};
+      true;
+    `);
+  }, []);
+
+  const sendPushTokenToWebsite = useCallback(() => {
+    if (!expoPushToken) return;
+    const payload = JSON.stringify({
+      token: expoPushToken,
+      platform: Platform.OS,
+      deviceId: '',
+    });
+    webView.current?.injectJavaScript(`
+      window.dispatchEvent(new CustomEvent('kashmir-native-push-token', {
+        detail: ${payload}
+      }));
+      true;
+    `);
+  }, [expoPushToken]);
+
+  useEffect(() => {
+    const registerForPushNotifications = async () => {
+      if (!Device.isDevice) return;
+
+      if (Platform.OS === 'android') {
+        await Notifications.setNotificationChannelAsync('portal-updates', {
+          name: 'Portal updates',
+          importance: Notifications.AndroidImportance.HIGH,
+          vibrationPattern: [0, 250, 250, 250],
+          lightColor: '#C9A84C',
+          sound: 'default',
+        });
+      }
+
+      const currentPermissions = await Notifications.getPermissionsAsync();
+      let finalStatus = currentPermissions.status;
+      if (finalStatus !== 'granted') {
+        const requestedPermissions = await Notifications.requestPermissionsAsync();
+        finalStatus = requestedPermissions.status;
+      }
+      if (finalStatus !== 'granted') return;
+
+      const projectId = Constants.expoConfig?.extra?.eas?.projectId
+        ?? Constants.easConfig?.projectId;
+      if (!projectId) return;
+
+      const token = await Notifications.getExpoPushTokenAsync({ projectId });
+      setExpoPushToken(token.data);
+    };
+
+    registerForPushNotifications().catch((error) => {
+      console.warn('Push notification registration failed:', error);
+    });
+  }, []);
+
+  useEffect(() => {
+    const responseSubscription = Notifications.addNotificationResponseReceivedListener((response) => {
+      openWebsitePath(response.notification.request.content.data?.link);
+    });
+
+    Notifications.getLastNotificationResponseAsync().then((response) => {
+      if (response) openWebsitePath(response.notification.request.content.data?.link);
+    });
+
+    return () => responseSubscription.remove();
+  }, [openWebsitePath]);
+
+  useEffect(() => {
+    sendPushTokenToWebsite();
+  }, [sendPushTokenToWebsite]);
 
   useEffect(() => {
     if (Platform.OS !== 'android') return;
@@ -110,6 +199,15 @@ export default function WebsiteApp() {
     setCanGoBack(navigation.canGoBack);
   }, []);
 
+  const onWebMessage = useCallback((event: { nativeEvent: { data: string } }) => {
+    try {
+      const message = JSON.parse(event.nativeEvent.data);
+      if (message.type === 'notification-bridge-ready') sendPushTokenToWebsite();
+    } catch {
+      // Ignore messages not intended for the native notification bridge.
+    }
+  }, [sendPushTokenToWebsite]);
+
   if (failed) {
     return (
       <SafeAreaView style={styles.errorPage}>
@@ -143,9 +241,14 @@ export default function WebsiteApp() {
         startInLoadingState
         pullToRefreshEnabled
         onNavigationStateChange={onNavigationChange}
+        onMessage={onWebMessage}
         onShouldStartLoadWithRequest={allowRequest}
         onLoadStart={() => { setLoading(true); setFailed(false); }}
-        onLoadEnd={() => { setLoading(false); setRefreshing(false); }}
+        onLoadEnd={() => {
+          setLoading(false);
+          setRefreshing(false);
+          sendPushTokenToWebsite();
+        }}
         onError={() => { setLoading(false); setRefreshing(false); setFailed(true); }}
         onHttpError={(event) => {
           if (event.nativeEvent.statusCode >= 500) setFailed(true);

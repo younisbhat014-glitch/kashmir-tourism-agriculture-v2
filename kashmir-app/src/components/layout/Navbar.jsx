@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import NotificationBell from '../notifications/NotificationBell';
 
 const ANDROID_APP_URL = 'https://expo.dev/artifacts/eas/ArLvK593o1TMPcfxejrfH_NPR5vVaXvi49rNlSvHp8w.apk';
 
@@ -80,6 +81,7 @@ export default function Navbar() {
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           {/* Auth buttons — desktop only */}
           <div className="nav-desktop" style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            <NotificationBell />
             {showInstallApp && (
               <a
                 href={ANDROID_APP_URL}
@@ -131,6 +133,10 @@ export default function Navbar() {
           </div>
 
           {/* ── Hamburger — mobile only ── */}
+          <div className="nav-mobile-notification">
+            <NotificationBell mobile />
+          </div>
+
           <button
             onClick={() => setMenuOpen(o => !o)}
             className="nav-hamburger"
@@ -246,11 +252,13 @@ export default function Navbar() {
         .nav-desktop { display: flex !important; }
         .nav-hamburger { display: none !important; }
         .nav-mobile-menu { display: none !important; }
+        .nav-mobile-notification { display: none !important; }
 
         @media (max-width: 900px) {
           .nav-desktop { display: none !important; }
           .nav-hamburger { display: flex !important; }
           .nav-mobile-menu { display: block !important; }
+          .nav-mobile-notification { display: block !important; }
         }
       `}</style>
     </>
