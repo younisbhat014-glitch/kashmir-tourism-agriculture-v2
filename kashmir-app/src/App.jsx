@@ -7,6 +7,7 @@ import Footer from './components/layout/Footer';
 import Chatbot from './components/chatbot/Chatbot';
 import ScrollReveal from './components/ui/ScrollReveal';
 import SwipeIndicators from './components/ui/SwipeIndicators';
+import PwaInstallPrompt from './components/ui/PwaInstallPrompt';
 import Home from './pages/Home';
 import Tourism from './pages/Tourism';
 import Agriculture from './pages/Agriculture';
@@ -45,6 +46,7 @@ export default function App() {
             <Route path="/about" element={<Layout><About /></Layout>} />
             <Route path="/spot/:id" element={<Layout><SpotDetail /></Layout>} />
           </Routes>
+          <PwaInstallPrompt />
         </ToastProvider>
       </AuthProvider>
     </BrowserRouter>

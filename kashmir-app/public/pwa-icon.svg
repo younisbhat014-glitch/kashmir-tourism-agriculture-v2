@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Kashmir Portal">
+  <rect width="512" height="512" rx="112" fill="#074a38"/>
+  <circle cx="404" cy="106" r="54" fill="#c9a84c"/>
+  <path fill="#f8f9fa" d="M58 350 182 164l66 101 44-58 162 143H58Z"/>
+  <path fill="#dfeff1" d="M182 164 248 265l-35-16-37 43-45-34-73 92h268L292 207l-44 58-66-101Z"/>
+  <path fill="#157185" d="M52 356h408v48H52z"/>
+  <path fill="#c9a84c" d="M145 401c42-34 82-34 124 0s82 34 124 0v34c-42 34-82 34-124 0s-82-34-124 0v-34Z"/>
+</svg>
