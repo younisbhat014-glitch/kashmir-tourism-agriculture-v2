@@ -125,10 +125,10 @@ export default function Navbar() {
                 }}>Logout</button>
               </>
             ) : (
-              <>
-                <Link to="/login" style={{ color: 'rgba(255,255,255,0.9)', textDecoration: 'none', fontWeight: 600, fontSize: '0.88rem' }}>Login</Link>
-                <Link to="/register" className="btn-primary" style={{ padding: '9px 22px', textDecoration: 'none', fontSize: '0.82rem' }}>Sign Up</Link>
-              </>
+              <div className="nav-auth-combo nav-auth-combo-desktop" aria-label="Account access">
+                <Link to="/login" className="nav-auth-combo-link nav-auth-login">Login</Link>
+                <Link to="/register" className="nav-auth-combo-link nav-auth-signup">Sign Up</Link>
+              </div>
             )}
           </div>
 
@@ -234,16 +234,9 @@ export default function Navbar() {
               }}>Logout</button>
             </div>
           ) : (
-            <div style={{ display: 'flex', gap: 10 }}>
-              <Link to="/login" style={{
-                flex: 1, textAlign: 'center', padding: '11px',
-                border: '1px solid rgba(255,255,255,0.25)', borderRadius: 12,
-                color: 'white', textDecoration: 'none', fontWeight: 700, fontSize: '0.9rem',
-              }}>Login</Link>
-              <Link to="/register" className="btn-primary" style={{
-                flex: 1, textAlign: 'center', textDecoration: 'none',
-                padding: '11px', fontSize: '0.9rem', borderRadius: 12,
-              }}>Sign Up</Link>
+            <div className="nav-auth-combo nav-auth-combo-mobile" aria-label="Account access">
+              <Link to="/login" className="nav-auth-combo-link nav-auth-login">Login</Link>
+              <Link to="/register" className="nav-auth-combo-link nav-auth-signup">Sign Up</Link>
             </div>
           )}
         </div>
@@ -255,6 +248,58 @@ export default function Navbar() {
         .nav-hamburger { display: none !important; }
         .nav-mobile-menu { display: none !important; }
         .nav-mobile-notification { display: none !important; }
+        .nav-auth-combo {
+          display: inline-flex;
+          align-items: center;
+          min-width: 0;
+          overflow: hidden;
+          border: 1px solid rgba(255,255,255,0.24);
+          border-radius: 999px;
+          background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
+          box-shadow: inset 0 1px rgba(255,255,255,0.22), 0 10px 24px rgba(2,32,26,0.16);
+          backdrop-filter: blur(14px);
+        }
+        .nav-auth-combo-link {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 40px;
+          padding: 0 18px;
+          color: rgba(255,255,255,0.94);
+          text-decoration: none;
+          font-size: 0.88rem;
+          font-weight: 800;
+          line-height: 1;
+          white-space: nowrap;
+          transition: color 0.24s ease, background 0.24s ease, transform 0.24s ease, box-shadow 0.24s ease;
+        }
+        .nav-auth-login:hover,
+        .nav-auth-login:focus-visible {
+          color: #fff7c9;
+          background: rgba(255,255,255,0.08);
+        }
+        .nav-auth-signup {
+          min-width: 104px;
+          color: var(--kashmir-deep);
+          background: linear-gradient(135deg, #f4d86d, var(--kashmir-gold));
+          box-shadow: 0 8px 18px rgba(201,168,76,0.28);
+        }
+        .nav-auth-signup:hover,
+        .nav-auth-signup:focus-visible {
+          color: #063b2c;
+          transform: translateY(-1px);
+          box-shadow: 0 12px 24px rgba(201,168,76,0.38);
+        }
+        .nav-auth-combo-mobile {
+          width: 100%;
+          display: flex;
+        }
+        .nav-auth-combo-mobile .nav-auth-combo-link {
+          flex: 1 1 0;
+          min-height: 46px;
+          font-size: 0.93rem;
+        }
 
         @media (max-width: 900px) {
           .nav-desktop { display: none !important; }
