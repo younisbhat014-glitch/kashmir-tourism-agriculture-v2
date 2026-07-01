@@ -706,6 +706,9 @@ table[style*="background: white"] {
 
 .pwa-install-button {
   grid-column: 1 / -1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   min-height: 42px;
   border: 0;
@@ -715,6 +718,7 @@ table[style*="background: white"] {
   font-family: 'Nunito', sans-serif;
   font-size: 0.9rem;
   font-weight: 850;
+  text-decoration: none;
   cursor: pointer;
   box-shadow: 0 10px 22px rgba(201,168,76,0.28);
 }

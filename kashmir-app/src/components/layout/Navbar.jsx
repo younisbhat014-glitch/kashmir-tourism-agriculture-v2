@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import NotificationBell from '../notifications/NotificationBell';
-
-const ANDROID_APP_URL = 'https://expo.dev/artifacts/eas/ArLvK593o1TMPcfxejrfH_NPR5vVaXvi49rNlSvHp8w.apk';
+import { APP_INSTALL_APK_URL } from '../../config/install';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -84,9 +83,8 @@ export default function Navbar() {
             {isNativeApp && <NotificationBell />}
             {showInstallApp && (
               <a
-                href={ANDROID_APP_URL}
-                target="_blank"
-                rel="noreferrer"
+                href={APP_INSTALL_APK_URL}
+                download
                 style={{
                   color: 'var(--kashmir-deep)',
                   background: 'linear-gradient(135deg, #f3d66b, var(--kashmir-gold))',
@@ -191,9 +189,8 @@ export default function Navbar() {
         <div style={{ marginTop: 16 }}>
           {showInstallApp && (
             <a
-              href={ANDROID_APP_URL}
-              target="_blank"
-              rel="noreferrer"
+              href={APP_INSTALL_APK_URL}
+              download
               style={{
                 display: 'block',
                 width: '100%',
