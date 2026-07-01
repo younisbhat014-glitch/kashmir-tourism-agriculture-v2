@@ -7,6 +7,21 @@
     <meta name="theme-color" content="#074a38" />
     <link rel="apple-touch-icon" href="/pwa-icon-192.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function () {
+        var installReadyEvent = 'kashmir:pwa-install-ready';
+
+        window.addEventListener('beforeinstallprompt', function (event) {
+          event.preventDefault();
+          window.__kashmirPwaInstallPrompt = event;
+          window.dispatchEvent(new Event(installReadyEvent));
+        });
+
+        if ('serviceWorker' in navigator && (window.isSecureContext || window.location.hostname === 'localhost')) {
+          navigator.serviceWorker.register('/sw.js').catch(function () {});
+        }
+      })();
+    </script>
     <title>Kashmir Valley - Tourism & Agriculture Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
