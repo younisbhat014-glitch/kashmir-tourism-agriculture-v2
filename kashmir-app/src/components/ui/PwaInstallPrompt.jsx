@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 const INSTALL_STATE_KEY = 'kashmir_pwa_installed';
 const INSTALL_DISMISSED_KEY = 'kashmir_pwa_install_dismissed';
+const PWA_INSTALL_READY_EVENT = 'kashmir:pwa-install-ready';
 
 function isStandaloneMode() {
   return (
@@ -20,30 +21,44 @@ export default function PwaInstallPrompt() {
       return undefined;
     }
 
-    const handleBeforeInstallPrompt = (event) => {
-      event.preventDefault();
+    const showInstallPrompt = (event) => {
+      const promptEvent = event?.prompt ? event : window.__kashmirPwaInstallPrompt;
 
-      if (sessionStorage.getItem(INSTALL_DISMISSED_KEY) === 'true') {
-        setDeferredPrompt(event);
+      if (!promptEvent) {
         return;
       }
 
-      setDeferredPrompt(event);
+      if (sessionStorage.getItem(INSTALL_DISMISSED_KEY) === 'true') {
+        setDeferredPrompt(promptEvent);
+        return;
+      }
+
+      setDeferredPrompt(promptEvent);
       setIsVisible(true);
+    };
+
+    const handleBeforeInstallPrompt = (event) => {
+      event.preventDefault();
+      window.__kashmirPwaInstallPrompt = event;
+      showInstallPrompt(event);
     };
 
     const handleAppInstalled = () => {
       localStorage.setItem(INSTALL_STATE_KEY, 'true');
       sessionStorage.removeItem(INSTALL_DISMISSED_KEY);
+      window.__kashmirPwaInstallPrompt = null;
       setDeferredPrompt(null);
       setIsVisible(false);
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener(PWA_INSTALL_READY_EVENT, showInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
+    showInstallPrompt();
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener(PWA_INSTALL_READY_EVENT, showInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
   }, []);
@@ -69,6 +84,7 @@ export default function PwaInstallPrompt() {
       sessionStorage.setItem(INSTALL_DISMISSED_KEY, 'true');
     }
 
+    window.__kashmirPwaInstallPrompt = null;
     setDeferredPrompt(null);
     setIsVisible(false);
   };

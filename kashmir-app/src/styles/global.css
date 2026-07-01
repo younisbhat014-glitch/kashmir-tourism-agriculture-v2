@@ -669,7 +669,7 @@ table[style*="background: white"] {
     radial-gradient(circle at 96% 18%, rgba(34,166,147,0.2), transparent 38%),
     linear-gradient(145deg, rgba(255,250,240,0.98), rgba(244,255,251,0.98));
   box-shadow: 0 22px 54px rgba(3, 42, 34, 0.24);
-  animation: slideInCard 0.28s ease both;
+  animation: slideInCard 0.16s ease both;
 }
 
 .pwa-install-icon {
