@@ -264,11 +264,11 @@ export default function Navbar() {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          min-height: 40px;
-          padding: 0 18px;
+          min-height: 34px;
+          padding: 0 13px;
           color: rgba(255,255,255,0.94);
           text-decoration: none;
-          font-size: 0.88rem;
+          font-size: 0.8rem;
           font-weight: 800;
           line-height: 1;
           white-space: nowrap;
@@ -280,7 +280,7 @@ export default function Navbar() {
           background: rgba(255,255,255,0.08);
         }
         .nav-auth-signup {
-          min-width: 104px;
+          min-width: 86px;
           color: var(--kashmir-deep);
           background: linear-gradient(135deg, #f4d86d, var(--kashmir-gold));
           box-shadow: 0 8px 18px rgba(201,168,76,0.28);
@@ -297,8 +297,8 @@ export default function Navbar() {
         }
         .nav-auth-combo-mobile .nav-auth-combo-link {
           flex: 1 1 0;
-          min-height: 46px;
-          font-size: 0.93rem;
+          min-height: 42px;
+          font-size: 0.88rem;
         }
 
         @media (max-width: 900px) {
