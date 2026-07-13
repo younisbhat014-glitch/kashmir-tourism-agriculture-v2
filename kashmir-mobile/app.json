@@ -8,7 +8,14 @@
     "scheme": "kashmirportal",
     "userInterfaceStyle": "light",
     "ios": {
-      "icon": "./assets/images/icon.png"
+      "icon": "./assets/images/icon.png",
+      "bundleIdentifier": "com.kashmir.paradiseportal",
+      "buildNumber": "1",
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Kashmir Portal uses the camera to let users add or update profile and listing photos.",
+        "NSPhotoLibraryUsageDescription": "Kashmir Portal uses the photo library to let users choose images for listings and profiles."
+      }
     },
     "android": {
       "package": "com.kashmir.paradiseportal",
@@ -40,6 +47,10 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#F2F4D7",
+          "ios": {
+            "image": "./assets/images/splash-icon.png",
+            "imageWidth": 190
+          },
           "android": {
             "image": "./assets/images/splash-icon.png",
             "imageWidth": 190
