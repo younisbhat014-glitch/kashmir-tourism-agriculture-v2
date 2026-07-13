@@ -38,8 +38,8 @@
     "ios": "expo start --ios",
     "ios:lan": "expo start --lan",
     "ios:tunnel": "expo start --tunnel",
-    "ios:build:preview": "npx eas build --platform ios --profile preview",
-    "ios:build:production": "npx eas build --platform ios --profile production",
+    "ios:build:preview": "npx eas-cli build --platform ios --profile preview",
+    "ios:build:production": "npx eas-cli build --platform ios --profile production",
     "web": "expo start --web",
     "lint": "expo lint"
   },
