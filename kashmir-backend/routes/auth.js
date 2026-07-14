@@ -86,4 +86,48 @@ router.get('/me', auth, async (req, res) => {
   res.json(publicUser(req.user));
 });
 
+router.post('/bootstrap-admin', async (req, res) => {
+  try {
+    const { email, key } = req.body || {};
+    const bootstrapKey = process.env.ADMIN_BOOTSTRAP_KEY;
+
+    if (!bootstrapKey) {
+      return res.status(500).json({ message: 'Admin bootstrap key is not configured' });
+    }
+
+    if (!email || !key) {
+      return res.status(400).json({ message: 'Email and key are required' });
+    }
+
+    if (key !== bootstrapKey) {
+      return res.status(403).json({ message: 'Invalid admin bootstrap key' });
+    }
+
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const user = await User.findOne({ email: normalizedEmail });
+
+    if (!user) {
+      return res.status(404).json({
+        message: 'User not found. Sign up first, then run bootstrap again.',
+      });
+    }
+
+    user.role = 'admin';
+    await user.save();
+
+    return res.json({
+      message: `${user.email} is now admin`,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error('Bootstrap admin error:', error);
+    return res.status(500).json({ message: 'Admin bootstrap failed' });
+  }
+});
+
 module.exports = router;
