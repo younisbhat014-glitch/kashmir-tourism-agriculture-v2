@@ -8,8 +8,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView, WebViewNavigation } from 'react-native-webview';
 import { colors } from '@/constants/app-theme';
 
-const WEBSITE_URL = 'https://aware-kashmir-portal-c64d.up.railway.app/';
-const WEBSITE_HOST = 'aware-kashmir-portal-c64d.up.railway.app';
+const WEBSITE_URL = 'https://kashmir-portal-production-bf57.up.railway.app/';
+const WEBSITE_HOST = 'kashmir-portal-production-bf57.up.railway.app';
 const MOBILE_USER_AGENT =
   'Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Mobile Safari/537.36 KashmirPortalApp/1.0';
 const FORCE_MOBILE_VIEWPORT = `

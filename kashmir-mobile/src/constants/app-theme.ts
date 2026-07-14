@@ -14,7 +14,7 @@ export const colors = {
 };
 
 export const API_URL =
-  'https://kashmir-tourism-agriculture-v2-production.up.railway.app/api';
+  'https://kashmir-tourism-agriculture-v2-production-b663.up.railway.app/api';
 
 export const heroSlides = [
   {
