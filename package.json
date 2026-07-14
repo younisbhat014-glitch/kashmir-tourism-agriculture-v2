@@ -1,0 +1,11 @@
+{
+  "name": "kashmir-tourism-agriculture-v2",
+  "private": true,
+  "scripts": {
+    "start": "npm --prefix kashmir-backend start",
+    "build": "npm --prefix kashmir-backend install"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
