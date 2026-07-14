@@ -8,6 +8,10 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const MONGO_RETRY_MS = Number(process.env.MONGO_RETRY_MS || 15000);
+let databaseStatus = 'starting';
+let databaseError = null;
+let hasSeededCatalog = false;
 
 const requiredEnv = ['MONGODB_URI', 'JWT_SECRET'];
 const missingEnv = requiredEnv.filter((key) => !process.env[key]);
@@ -34,6 +38,67 @@ const isAllowedOrigin = (origin) => {
 mongoose.set('strictQuery', false);
 dns.setServers(['8.8.8.8', '1.1.1.1']);
 
+const formatMongoError = (err) => {
+  if (!err) return 'Unknown MongoDB error';
+
+  if (err.codeName === 'AuthenticationFailed' || err.code === 18) {
+    return 'MongoDB authentication failed. Check MONGODB_URI username, password, auth database, and Atlas database-user permissions.';
+  }
+
+  return err.message || String(err);
+};
+
+const scheduleMongoReconnect = (err) => {
+  databaseStatus = 'disconnected';
+  databaseError = formatMongoError(err);
+  console.error(`MongoDB error: ${databaseError}`);
+
+  if (err && (err.codeName === 'AuthenticationFailed' || err.code === 18)) {
+    console.error('Backend is still running for health checks. Update MONGODB_URI in the deployment environment, then restart the backend.');
+    return;
+  }
+
+  setTimeout(connectMongo, MONGO_RETRY_MS).unref();
+};
+
+async function connectMongo() {
+  if (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2) {
+    return;
+  }
+
+  databaseStatus = 'connecting';
+  databaseError = null;
+
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      serverSelectionTimeoutMS: 30000,
+      socketTimeoutMS: 45000,
+      family: 4,
+    });
+
+    databaseStatus = 'connected';
+    databaseError = null;
+    console.log('MongoDB connected');
+
+    if (!hasSeededCatalog) {
+      hasSeededCatalog = true;
+      await seedDefaultCatalog();
+    }
+  } catch (err) {
+    scheduleMongoReconnect(err);
+  }
+}
+
+mongoose.connection.on('disconnected', () => {
+  if (databaseStatus !== 'starting') {
+    databaseStatus = 'disconnected';
+  }
+});
+
+mongoose.connection.on('error', (err) => {
+  databaseError = formatMongoError(err);
+});
+
 // Middleware
 app.use(cors({
   origin(origin, callback) {
@@ -48,6 +113,31 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '3mb' }));
 
+app.get('/', (req, res) => {
+  res.json({ message: 'Kashmir Portal Backend Running!' });
+});
+
+app.get('/health', (req, res) => {
+  const connected = mongoose.connection.readyState === 1;
+  res.status(connected ? 200 : 503).json({
+    status: connected ? 'ok' : 'degraded',
+    database: connected ? 'connected' : databaseStatus,
+    databaseError,
+  });
+});
+
+app.use('/api', (req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next();
+    return;
+  }
+
+  res.status(503).json({
+    message: 'Database is not connected. Please try again shortly.',
+    database: databaseStatus,
+  });
+});
+
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/hotels', require('./routes/hotels'));
@@ -59,41 +149,17 @@ app.use('/api/machines', require('./routes/machines'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/notifications', require('./routes/notifications'));
 
-// Test route
-app.get('/', (req, res) => {
-  res.json({ message: 'Kashmir Portal Backend Running!' });
+const server = app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+  verifyEmailTransport();
+  connectMongo();
 });
 
-app.get('/health', (req, res) => {
-  res.json({
-    status: 'ok',
-    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
-  });
-});
-
-mongoose.connect(process.env.MONGODB_URI, {
-  serverSelectionTimeoutMS: 30000,
-  socketTimeoutMS: 45000,
-  family: 4,
-})
-  .then(async () => {
-    console.log('MongoDB connected');
-    await seedDefaultCatalog();
-    const server = app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-      verifyEmailTransport();
-    });
-
-    server.on('error', (err) => {
-      if (err.code === 'EADDRINUSE') {
-        console.error(`Port ${PORT} is already in use. Stop the existing backend or set a different PORT in .env.`);
-        process.exit(1);
-      }
-
-      throw err;
-    });
-  })
-  .catch((err) => {
-    console.error('MongoDB error:', err);
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use. Stop the existing backend or set a different PORT in .env.`);
     process.exit(1);
-  });
+  }
+
+  throw err;
+});
