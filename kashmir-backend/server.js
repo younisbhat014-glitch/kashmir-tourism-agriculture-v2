@@ -13,8 +13,20 @@ let databaseStatus = 'starting';
 let databaseError = null;
 let hasSeededCatalog = false;
 
-const requiredEnv = ['MONGODB_URI', 'JWT_SECRET'];
-const missingEnv = requiredEnv.filter((key) => !process.env[key]);
+const getMongoUri = () => String(
+  process.env.MONGODB_URI
+    || process.env.MONGO_URL
+    || process.env.MONGO_PUBLIC_URL
+    || ''
+).trim();
+
+const hasMongoDatabaseName = (uri) => /^mongodb(?:\+srv)?:\/\/[^/]+\/[^/?]+/.test(uri);
+
+const mongoUri = getMongoUri();
+const missingEnv = [
+  !mongoUri ? 'MONGODB_URI or MONGO_URL' : null,
+  !process.env.JWT_SECRET ? 'JWT_SECRET' : null,
+].filter(Boolean);
 
 if (missingEnv.length > 0) {
   console.error(`Missing required environment variables: ${missingEnv.join(', ')}`);
@@ -42,7 +54,7 @@ const formatMongoError = (err) => {
   if (!err) return 'Unknown MongoDB error';
 
   if (err.codeName === 'AuthenticationFailed' || err.code === 18) {
-    return 'MongoDB authentication failed. Check MONGODB_URI username, password, auth database, and Atlas database-user permissions.';
+    return 'MongoDB authentication failed. Check MONGODB_URI/MONGO_URL username, password, auth database, and database-user permissions.';
   }
 
   return err.message || String(err);
@@ -54,7 +66,7 @@ const scheduleMongoReconnect = (err) => {
   console.error(`MongoDB error: ${databaseError}`);
 
   if (err && (err.codeName === 'AuthenticationFailed' || err.code === 18)) {
-    console.error('Backend is still running for health checks. Update MONGODB_URI in the deployment environment, then restart the backend.');
+    console.error('Backend is still running for health checks. Update MONGODB_URI/MONGO_URL in the deployment environment, then restart the backend.');
     return;
   }
 
@@ -70,11 +82,17 @@ async function connectMongo() {
   databaseError = null;
 
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
+    const connectOptions = {
       serverSelectionTimeoutMS: 30000,
       socketTimeoutMS: 45000,
       family: 4,
-    });
+    };
+
+    if (!hasMongoDatabaseName(mongoUri) && process.env.MONGODB_DB_NAME) {
+      connectOptions.dbName = process.env.MONGODB_DB_NAME;
+    }
+
+    await mongoose.connect(mongoUri, connectOptions);
 
     databaseStatus = 'connected';
     databaseError = null;
