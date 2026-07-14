@@ -14,7 +14,8 @@
       "supportsTablet": false,
       "infoPlist": {
         "NSCameraUsageDescription": "Kashmir Portal uses the camera to let users add or update profile and listing photos.",
-        "NSPhotoLibraryUsageDescription": "Kashmir Portal uses the photo library to let users choose images for listings and profiles."
+        "NSPhotoLibraryUsageDescription": "Kashmir Portal uses the photo library to let users choose images for listings and profiles.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
