@@ -765,18 +765,210 @@ table[style*="background: white"] {
 .chatbot-bubble {
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, var(--kashmir-teal), var(--kashmir-gold));
+  position: relative;
+  isolation: isolate;
+  border: 1px solid rgba(255,255,255,0.46);
+  background:
+    radial-gradient(circle at 30% 18%, rgba(255,255,255,0.98), rgba(255,255,255,0.52) 16%, transparent 34%),
+    conic-gradient(from 145deg, #043b35, var(--kashmir-teal), #e3c45a, #0c5d55, #043b35);
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(26,122,110,0.5);
-  transition: var(--transition);
-  animation: pulse 3s infinite;
+  color: white;
+  padding: 0;
+  overflow: visible;
+  box-shadow:
+    0 16px 34px rgba(3, 42, 34, 0.34),
+    0 0 0 9px rgba(255,255,255,0.12),
+    inset 0 1px rgba(255,255,255,0.5),
+    inset 0 -12px 18px rgba(0,0,0,0.18);
+  transition: transform 0.28s ease, box-shadow 0.28s ease, filter 0.28s ease;
+  animation: chatbotFloat 4.2s ease-in-out infinite;
 }
 
-.chatbot-bubble:hover { transform: scale(1.1); }
+.chatbot-bubble::before,
+.chatbot-bubble::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.chatbot-bubble::before {
+  z-index: -2;
+  background: radial-gradient(circle, rgba(34,166,147,0.26), transparent 68%);
+  animation: chatbotAura 2.8s ease-in-out infinite;
+}
+
+.chatbot-bubble::after {
+  z-index: -1;
+  border: 1px solid rgba(201,168,76,0.34);
+  transform: scale(0.86);
+  opacity: 0;
+  animation: chatbotRing 3.4s ease-out infinite;
+}
+
+.chatbot-bubble:hover,
+.chatbot-bubble:focus-visible {
+  transform: translateY(-3px) scale(1.08);
+  filter: saturate(1.08);
+  box-shadow:
+    0 22px 46px rgba(3, 42, 34, 0.42),
+    0 0 0 10px rgba(255,255,255,0.16),
+    inset 0 1px rgba(255,255,255,0.56),
+    inset 0 -12px 18px rgba(0,0,0,0.18);
+  outline: none;
+}
+
+.chatbot-bubble.is-open {
+  background: linear-gradient(135deg, var(--kashmir-deep), var(--kashmir-teal));
+  animation: none;
+}
+
+.chatbot-close-mark {
+  filter: drop-shadow(0 2px 7px rgba(0,0,0,0.22));
+}
+
+.chatbot-robot-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+}
+
+.chatbot-robot-antenna {
+  position: absolute;
+  top: 1px;
+  width: 3px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 -4px 0 1px var(--kashmir-gold);
+}
+
+.chatbot-robot-face {
+  position: relative;
+  display: block;
+  width: 36px;
+  height: 30px;
+  margin-top: 7px;
+  border-radius: 14px 14px 13px 13px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.95), rgba(222,248,244,0.88)),
+    linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0));
+  border: 1px solid rgba(255,255,255,0.88);
+  box-shadow:
+    inset 0 -7px 12px rgba(21,113,133,0.2),
+    0 9px 18px rgba(2,32,26,0.28);
+}
+
+.chatbot-robot-face::before,
+.chatbot-robot-face::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  width: 5px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--kashmir-deep);
+}
+
+.chatbot-robot-face::before { left: -5px; }
+.chatbot-robot-face::after { right: -5px; }
+
+.chatbot-robot-eye {
+  position: absolute;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #062f2b;
+  box-shadow: 0 0 9px rgba(34,166,147,0.68);
+  animation: chatbotBlink 4.8s infinite;
+}
+
+.chatbot-robot-eye.left { left: 9px; }
+.chatbot-robot-eye.right { right: 9px; animation-delay: 0.08s; }
+
+.chatbot-robot-mouth {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 8px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--kashmir-teal), var(--kashmir-gold));
+  animation: chatbotSmile 3.2s ease-in-out infinite;
+}
+
+.chatbot-robot-signal {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #f5d96e;
+  box-shadow: 0 0 10px rgba(245,217,110,0.82);
+}
+
+.chatbot-robot-signal.one {
+  right: 0;
+  top: 13px;
+  animation: chatbotSignal 2.4s ease-in-out infinite;
+}
+
+.chatbot-robot-signal.two {
+  left: 1px;
+  bottom: 6px;
+  width: 4px;
+  height: 4px;
+  background: #9be7dc;
+  animation: chatbotSignal 2.4s 0.7s ease-in-out infinite;
+}
+
+.chatbot-bubble:hover .chatbot-robot-mark,
+.chatbot-bubble:focus-visible .chatbot-robot-mark {
+  animation: chatbotReact 0.58s ease both;
+}
+
+@keyframes chatbotFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes chatbotAura {
+  0%, 100% { opacity: 0.52; transform: scale(0.96); }
+  50% { opacity: 0.86; transform: scale(1.08); }
+}
+
+@keyframes chatbotRing {
+  0% { opacity: 0.34; transform: scale(0.8); }
+  70%, 100% { opacity: 0; transform: scale(1.28); }
+}
+
+@keyframes chatbotBlink {
+  0%, 88%, 100% { transform: scaleY(1); }
+  91%, 94% { transform: scaleY(0.16); }
+}
+
+@keyframes chatbotSmile {
+  0%, 100% { transform: scaleX(0.72); opacity: 0.86; }
+  50% { transform: scaleX(1); opacity: 1; }
+}
+
+@keyframes chatbotSignal {
+  0%, 100% { opacity: 0.5; transform: scale(0.82); }
+  50% { opacity: 1; transform: scale(1.22); }
+}
+
+@keyframes chatbotReact {
+  0%, 100% { transform: rotate(0) scale(1); }
+  35% { transform: rotate(-8deg) scale(1.06); }
+  70% { transform: rotate(6deg) scale(1.04); }
+}
 
 .chatbot-window {
   position: absolute;

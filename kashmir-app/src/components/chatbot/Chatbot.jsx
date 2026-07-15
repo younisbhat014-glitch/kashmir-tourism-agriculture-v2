@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, MessageCircle, Send, X } from 'lucide-react';
+import { Bot, Send, X } from 'lucide-react';
 import {
   AG_MACHINES,
   CROPS,
@@ -237,9 +237,29 @@ export default function Chatbot() {
         </div>
       )}
 
-      <div className="chatbot-bubble" onClick={() => setOpen(!open)} title="Chat with Kashmir Guide">
-        {open ? <X size={26} strokeWidth={2.6} /> : <MessageCircle size={30} strokeWidth={2.4} />}
-      </div>
+      <button
+        type="button"
+        className={`chatbot-bubble ${open ? 'is-open' : ''}`}
+        onClick={() => setOpen(!open)}
+        title="Chat with Kashmir Guide"
+        aria-label={open ? 'Close Kashmir Guide chat' : 'Open Kashmir Guide chat'}
+        aria-expanded={open}
+      >
+        {open ? (
+          <X className="chatbot-close-mark" size={26} strokeWidth={2.6} />
+        ) : (
+          <span className="chatbot-robot-mark" aria-hidden="true">
+            <span className="chatbot-robot-antenna" />
+            <span className="chatbot-robot-face">
+              <span className="chatbot-robot-eye left" />
+              <span className="chatbot-robot-eye right" />
+              <span className="chatbot-robot-mouth" />
+            </span>
+            <span className="chatbot-robot-signal one" />
+            <span className="chatbot-robot-signal two" />
+          </span>
+        )}
+      </button>
     </div>
   );
 }
