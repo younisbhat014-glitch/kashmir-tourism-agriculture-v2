@@ -166,6 +166,7 @@ app.use('/api/restaurants', require('./routes/restaurants'));
 app.use('/api/machines', require('./routes/machines'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/chat', require('./routes/chat'));
 
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

@@ -1,138 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Send, X } from 'lucide-react';
-import {
-  AG_MACHINES,
-  CROPS,
-  HOTELS,
-  RESTAURANTS,
-  TOURIST_SPOTS,
-  VEHICLES,
-  WEATHER_DATA,
-} from '../../data/appData';
+import { API } from '../../utils/api';
 
-const normalize = (value) =>
-  value
-    .toLowerCase()
-    .replace(/[^\w\s]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+const fetchChatAnswer = async (message, history) => {
+  const response = await fetch(`${API}/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message,
+      history: history.slice(-8),
+    }),
+  });
 
-const hasAny = (question, words) => words.some((word) => question.includes(word));
+  const data = await response.json().catch(() => ({}));
 
-const formatPrice = (amount) => `Rs ${Number(amount).toLocaleString('en-IN')}`;
-
-const listNames = (items, count = 4) => items.slice(0, count).map((item) => item.name).join(', ');
-
-const getBestMatches = (input, items, fields) => {
-  const q = normalize(input);
-  const tokens = q.split(' ').filter((token) => token.length > 2);
-
-  return items
-    .map((item) => {
-      const haystack = normalize(fields.map((field) => item[field] || '').join(' '));
-      const score = tokens.reduce((total, token) => total + (haystack.includes(token) ? 1 : 0), 0);
-      return { item, score };
-    })
-    .filter(({ score }) => score > 0)
-    .sort((a, b) => b.score - a.score)
-    .map(({ item }) => item);
-};
-
-const buildWeatherAnswer = (input) => {
-  const q = normalize(input);
-  const city = Object.keys(WEATHER_DATA).find((name) => q.includes(name.toLowerCase()));
-  const selectedCity = city || 'Srinagar';
-  const weather = WEATHER_DATA[selectedCity];
-
-  return `${selectedCity} weather: ${weather.temp} C, ${weather.condition}, humidity ${weather.humidity}%, wind ${weather.wind} km/h. For tourism, keep a light jacket because Kashmir evenings can feel cooler.`;
-};
-
-const buildTourismAnswer = (input) => {
-  const matches = getBestMatches(input, TOURIST_SPOTS, ['name', 'category', 'description', 'bestTime']);
-  const spot = matches[0];
-
-  if (spot) {
-    return `${spot.name} is a good choice. It is known for ${spot.description} Entry: ${spot.entry}. Best time: ${spot.bestTime}. Rating: ${spot.rating}/5.`;
+  if (!response.ok) {
+    throw new Error(data.message || 'Chatbot failed');
   }
 
-  return `Top places to visit: ${listNames(TOURIST_SPOTS, 6)}. For first-time visitors, Dal Lake, Gulmarg, Pahalgam, and Sonamarg make a strong Kashmir itinerary.`;
-};
-
-const buildHotelAnswer = (input) => {
-  const matches = getBestMatches(input, HOTELS, ['name', 'location', 'amenities']);
-  const hotel = matches[0] || HOTELS[0];
-
-  return `${hotel.name} in ${hotel.location} is rated ${hotel.rating}/5 and starts around ${formatPrice(hotel.price)} per night. Amenities include ${hotel.amenities.join(', ')}. Other options: ${listNames(HOTELS.filter((item) => item.id !== hotel.id), 3)}.`;
-};
-
-const buildRestaurantAnswer = (input) => {
-  const matches = getBestMatches(input, RESTAURANTS, ['name', 'cuisine', 'location', 'specialty']);
-  const restaurant = matches[0] || RESTAURANTS[0];
-
-  return `${restaurant.name} at ${restaurant.location} is good for ${restaurant.cuisine}. Specialty: ${restaurant.specialty}. Timings: ${restaurant.timings}. Rating: ${restaurant.rating}/5.`;
-};
-
-const buildVehicleAnswer = (input) => {
-  const matches = getBestMatches(input, VEHICLES, ['name', 'type', 'features']);
-  const vehicle = matches[0] || VEHICLES[0];
-  const kmText = vehicle.pricePerKm ? `, or Rs ${vehicle.pricePerKm}/km` : '';
-
-  return `${vehicle.name} (${vehicle.type}) seats ${vehicle.capacity} people and costs about ${formatPrice(vehicle.pricePerDay)} per day${kmText}. Features: ${vehicle.features.join(', ')}.`;
-};
-
-const buildAgricultureAnswer = (input) => {
-  const cropMatches = getBestMatches(input, CROPS, ['name', 'category', 'seller', 'location', 'description']);
-  const machineMatches = getBestMatches(input, AG_MACHINES, ['name', 'type', 'owner']);
-
-  if (machineMatches.length) {
-    const machine = machineMatches[0];
-    const status = machine.available ? 'available' : 'currently unavailable';
-    return `${machine.name} is ${status}. Rent is ${formatPrice(machine.rentPerDay)} per day and buy price is around ${formatPrice(machine.buyPrice)}. Owner: ${machine.owner}.`;
-  }
-
-  const crop = cropMatches[0] || CROPS[0];
-  return `${crop.name} from ${crop.location} costs about ${formatPrice(crop.price)} per ${crop.unit}. Seller: ${crop.seller}. Stock: ${crop.stock} ${crop.unit}. ${crop.description}`;
-};
-
-const buildSeasonAnswer = () =>
-  'Best time for Kashmir tourism is April to October for gardens, lakes, valleys, and pleasant weather. December to February is best for snow and Gulmarg skiing. Saffron bloom is usually October to November.';
-
-const buildBudgetAnswer = () =>
-  `Approx budget: hotels start from ${formatPrice(Math.min(...HOTELS.map((hotel) => hotel.price)))}/night, vehicles from ${formatPrice(Math.min(...VEHICLES.map((vehicle) => vehicle.pricePerDay)))}/day, and crops like saffron start around Rs 450/gram.`;
-
-const buildGeneralAnswer = (input) => {
-  const q = normalize(input);
-
-  if (hasAny(q, ['hi', 'hello', 'hey', 'namaste', 'aadab', 'salam'])) {
-    return 'Aadab! Main Kashmir Guide hoon. Aap tourism, hotels, food, vehicles, weather, crops, ya farming machines ke baare mein kuch bhi pooch sakte ho.';
-  }
-
-  if (hasAny(q, ['weather', 'temp', 'rain', 'snow', 'climate', 'cold', 'warm', 'mausam'])) return buildWeatherAnswer(input);
-  if (hasAny(q, ['hotel', 'stay', 'houseboat', 'room', 'accommodation', 'rehna'])) return buildHotelAnswer(input);
-  if (hasAny(q, ['restaurant', 'food', 'eat', 'wazwan', 'cuisine', 'dine', 'khana'])) return buildRestaurantAnswer(input);
-  if (hasAny(q, ['vehicle', 'taxi', 'car', 'shikara', 'boat', 'bike', 'bus', 'travel', 'rent'])) return buildVehicleAnswer(input);
-  if (hasAny(q, ['agri', 'crop', 'farm', 'saffron', 'apple', 'walnut', 'cherry', 'tractor', 'machine', 'buy', 'sell', 'kheti'])) return buildAgricultureAnswer(input);
-  if (hasAny(q, ['season', 'time', 'best', 'when', 'month', 'visit', 'kab'])) return buildSeasonAnswer();
-  if (hasAny(q, ['price', 'cost', 'rate', 'cheap', 'expensive', 'budget', 'kitna'])) return buildBudgetAnswer();
-
-  const allMatches = [
-    ...getBestMatches(input, TOURIST_SPOTS, ['name', 'category', 'description']).map((item) => ({ type: 'place', item })),
-    ...getBestMatches(input, HOTELS, ['name', 'location', 'amenities']).map((item) => ({ type: 'hotel', item })),
-    ...getBestMatches(input, RESTAURANTS, ['name', 'cuisine', 'location', 'specialty']).map((item) => ({ type: 'restaurant', item })),
-    ...getBestMatches(input, CROPS, ['name', 'category', 'seller', 'location', 'description']).map((item) => ({ type: 'crop', item })),
-    ...getBestMatches(input, VEHICLES, ['name', 'type', 'features']).map((item) => ({ type: 'vehicle', item })),
-  ];
-
-  if (allMatches.length) {
-    const match = allMatches[0];
-    if (match.type === 'place') return buildTourismAnswer(match.item.name);
-    if (match.type === 'hotel') return buildHotelAnswer(match.item.name);
-    if (match.type === 'restaurant') return buildRestaurantAnswer(match.item.name);
-    if (match.type === 'crop') return buildAgricultureAnswer(match.item.name);
-    if (match.type === 'vehicle') return buildVehicleAnswer(match.item.name);
-  }
-
-  return 'Main aapka sawal samajh gaya. Is portal mein main Kashmir tourism, hotels, restaurants, vehicles, weather, crops, prices, aur agriculture machines par help kar sakta hoon. Thoda specific naam ya topic likho, jaise "Gulmarg", "saffron price", "hotel in Dal Lake", ya "taxi rent".';
+  return data.answer || 'Aadab! Main yahan hoon. Aap apna sawal thoda aur detail me pooch sakte ho?';
 };
 
 const QUICK_REPLIES = ['Best places?', 'Saffron price?', 'Gulmarg weather?', 'Taxi rent'];
@@ -153,18 +39,29 @@ export default function Chatbot() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, typing]);
 
-  const send = (text) => {
+  const send = async (text) => {
     const msg = text || input.trim();
-    if (!msg) return;
+    if (!msg || typing) return;
 
     setInput('');
-    setMessages((prev) => [...prev, { from: 'user', text: msg }]);
+    const nextMessages = [...messages, { from: 'user', text: msg }];
+    setMessages(nextMessages);
     setTyping(true);
 
-    setTimeout(() => {
+    try {
+      const answer = await fetchChatAnswer(msg, messages);
+      setMessages((prev) => [...prev, { from: 'bot', text: answer }]);
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          from: 'bot',
+          text: 'Connection issue aa gaya. Backend chatbot se answer nahi mila. Thoda baad dobara try karo.',
+        },
+      ]);
+    } finally {
       setTyping(false);
-      setMessages((prev) => [...prev, { from: 'bot', text: buildGeneralAnswer(msg) }]);
-    }, 650 + Math.random() * 350);
+    }
   };
 
   return (
