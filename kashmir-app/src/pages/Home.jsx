@@ -241,20 +241,79 @@ function Testimonials() {
 }
 
 function CTASection() {
+  const highlights = [
+    ['Curated stays', 'Hotels, houseboats, and local listings in one flow.'],
+    ['Farm marketplace', 'Saffron, apples, walnuts, and machines with clear details.'],
+    ['Quick booking', 'Tourism, vehicles, and agriculture actions stay close at hand.'],
+  ];
+
   return (
     <section className="home-cta-section" style={{
-      padding: '80px 8%', textAlign: 'center',
-      background: 'linear-gradient(135deg, #0c5d54 0%, #095048 100%)',
+      padding: '76px 8%', textAlign: 'center',
+      background: 'linear-gradient(135deg, #0b554d 0%, #083f3a 100%)',
       position: 'relative', overflow: 'hidden',
     }}>
-      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(201,168,76,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(255,255,255,0.05) 0%, transparent 50%)' }}/>
-      <div style={{ position: 'relative', zIndex: 1 }}>
-        <h2 style={{ fontFamily: 'Cormorant Garamond', fontSize: 'clamp(2rem,5vw,3.5rem)', color: 'white', marginBottom: 16 }}>
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        backgroundImage: [
+          'radial-gradient(circle at 18% 32%, rgba(201,168,76,0.14) 0%, transparent 34%)',
+          'radial-gradient(circle at 84% 70%, rgba(255,255,255,0.08) 0%, transparent 34%)',
+          'linear-gradient(180deg, rgba(255,255,255,0.08), transparent 28%, rgba(0,0,0,0.12))',
+        ].join(', '),
+      }}/>
+      <div style={{
+        position: 'absolute',
+        inset: '18px',
+        border: '1px solid rgba(255,255,255,0.12)',
+        borderRadius: 28,
+        pointerEvents: 'none',
+      }}/>
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: 920, margin: '0 auto' }}>
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 8,
+          padding: '7px 13px',
+          marginBottom: 18,
+          borderRadius: 999,
+          border: '1px solid rgba(201,168,76,0.34)',
+          background: 'rgba(255,255,255,0.08)',
+          color: 'rgba(255,255,255,0.78)',
+          fontSize: '0.78rem',
+          fontWeight: 800,
+          letterSpacing: 1.4,
+          textTransform: 'uppercase',
+        }}>
+          Kashmir Portal
+        </div>
+        <h2 style={{ fontFamily: 'Cormorant Garamond', fontSize: 'clamp(2rem,5vw,3.6rem)', color: 'white', marginBottom: 16, lineHeight: 1.05 }}>
           Ready to Explore <span style={{ color: 'var(--kashmir-gold)', fontStyle: 'italic' }}>Paradise?</span>
         </h2>
-        <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '1.1rem', marginBottom: 40, maxWidth: 500, margin: '0 auto 40px' }}>
-          Join thousands of satisfied tourists and farmers on Kashmir's premier digital portal.
+        <p style={{ color: 'rgba(255,255,255,0.82)', fontSize: '1.05rem', lineHeight: 1.7, maxWidth: 650, margin: '0 auto 30px' }}>
+          Plan stays, explore destinations, book vehicles, and connect with Kashmir's agriculture market from one polished portal.
         </p>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
+          gap: 12,
+          maxWidth: 760,
+          margin: '0 auto 34px',
+          textAlign: 'left',
+        }}>
+          {highlights.map(([title, text]) => (
+            <div key={title} style={{
+              padding: '15px 16px',
+              border: '1px solid rgba(255,255,255,0.13)',
+              borderRadius: 16,
+              background: 'rgba(255,255,255,0.07)',
+              boxShadow: 'inset 0 1px rgba(255,255,255,0.08)',
+            }}>
+              <div style={{ color: 'white', fontWeight: 900, fontSize: '0.92rem', marginBottom: 5 }}>{title}</div>
+              <div style={{ color: 'rgba(255,255,255,0.68)', fontSize: '0.8rem', lineHeight: 1.45 }}>{text}</div>
+            </div>
+          ))}
+        </div>
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link to="/register" className="btn-primary" style={{ textDecoration: 'none', fontSize: '1rem', padding: '16px 40px' }}>Create Free Account</Link>
           <Link to="/tourism" className="btn-secondary" style={{ textDecoration: 'none', fontSize: '1rem' }}>Browse Tourism</Link>
