@@ -18,7 +18,11 @@ const fetchChatAnswer = async (message, history) => {
     throw new Error(data.message || 'Chatbot failed');
   }
 
-  return data.answer || 'Aadab! Main yahan hoon. Aap apna sawal thoda aur detail me pooch sakte ho?';
+  if (Array.isArray(data.answers) && data.answers.length) {
+    return data.answers.filter(Boolean);
+  }
+
+  return [data.answer || 'Aadab! Main yahan hoon. Aap apna sawal thoda aur detail me pooch sakte ho?'];
 };
 
 const QUICK_REPLIES = ['Best places?', 'Saffron price?', 'Gulmarg weather?', 'Taxi rent'];
@@ -49,8 +53,11 @@ export default function Chatbot() {
     setTyping(true);
 
     try {
-      const answer = await fetchChatAnswer(msg, messages);
-      setMessages((prev) => [...prev, { from: 'bot', text: answer }]);
+      const answers = await fetchChatAnswer(msg, messages);
+      setMessages((prev) => [
+        ...prev,
+        ...answers.map((answer) => ({ from: 'bot', text: answer })),
+      ]);
     } catch (error) {
       setMessages((prev) => [
         ...prev,
