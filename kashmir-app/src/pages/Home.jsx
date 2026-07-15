@@ -249,11 +249,11 @@ function CTASection() {
 
   return (
     <section className="home-cta-section" style={{
-      padding: '76px 8%', textAlign: 'center',
+      padding: '54px 8%', textAlign: 'center',
       background: [
-        'radial-gradient(circle at 22% 18%, rgba(218,238,198,0.28) 0%, transparent 32%)',
-        'radial-gradient(circle at 82% 22%, rgba(225,193,84,0.22) 0%, transparent 30%)',
-        'linear-gradient(135deg, #edf6e9 0%, #dcebd2 34%, #1c7467 72%, #074a43 100%)',
+        'radial-gradient(circle at 22% 12%, rgba(201,168,76,0.18) 0%, transparent 32%)',
+        'radial-gradient(circle at 82% 82%, rgba(218,238,198,0.16) 0%, transparent 34%)',
+        'linear-gradient(135deg, #0c5a51 0%, #0a4a43 46%, #073b36 100%)',
       ].join(', '),
       position: 'relative', overflow: 'hidden',
     }}>
@@ -261,9 +261,9 @@ function CTASection() {
         position: 'absolute',
         inset: 0,
         backgroundImage: [
-          'linear-gradient(115deg, rgba(255,252,238,0.74) 0%, rgba(255,252,238,0.28) 35%, transparent 64%)',
-          'radial-gradient(circle at 12% 78%, rgba(201,168,76,0.18) 0%, transparent 34%)',
-          'linear-gradient(180deg, rgba(255,255,255,0.1), transparent 32%, rgba(5,54,47,0.18))',
+          'linear-gradient(115deg, rgba(255,252,238,0.12) 0%, transparent 42%)',
+          'radial-gradient(circle at 12% 78%, rgba(201,168,76,0.14) 0%, transparent 34%)',
+          'linear-gradient(180deg, rgba(255,255,255,0.05), transparent 32%, rgba(5,54,47,0.16))',
         ].join(', '),
       }}/>
       <div style={{
@@ -280,12 +280,12 @@ function CTASection() {
           alignItems: 'center',
           gap: 8,
           padding: '7px 13px',
-          marginBottom: 18,
+          marginBottom: 12,
           borderRadius: 999,
           border: '1px solid rgba(201,168,76,0.5)',
-          background: 'rgba(255,252,238,0.46)',
-          color: '#0c4c43',
-          fontSize: '0.78rem',
+          background: 'rgba(255,252,238,0.12)',
+          color: '#f8efd9',
+          fontSize: '0.72rem',
           fontWeight: 800,
           letterSpacing: 1.4,
           textTransform: 'uppercase',
@@ -293,31 +293,31 @@ function CTASection() {
         }}>
           Kashmir Portal
         </div>
-        <h2 style={{ fontFamily: 'Cormorant Garamond', fontSize: 'clamp(2rem,5vw,3.6rem)', color: '#fff9ec', marginBottom: 16, lineHeight: 1.05, textShadow: '0 14px 32px rgba(4,45,39,0.26)' }}>
+        <h2 style={{ fontFamily: 'Cormorant Garamond', fontSize: 'clamp(1.9rem,4.2vw,3.15rem)', color: '#fff9ec', marginBottom: 12, lineHeight: 1.04, textShadow: '0 12px 28px rgba(2,24,20,0.34)' }}>
           Ready to Explore <span style={{ color: 'var(--kashmir-gold)', fontStyle: 'italic' }}>Paradise?</span>
         </h2>
-        <p style={{ color: 'rgba(255,249,236,0.86)', fontSize: '1.05rem', lineHeight: 1.7, maxWidth: 650, margin: '0 auto 30px', textShadow: '0 8px 20px rgba(4,45,39,0.18)' }}>
+        <p style={{ color: 'rgba(255,249,236,0.84)', fontSize: '0.98rem', lineHeight: 1.55, maxWidth: 650, margin: '0 auto 22px', textShadow: '0 8px 20px rgba(2,24,20,0.24)' }}>
           Plan stays, explore destinations, book vehicles, and connect with Kashmir's agriculture market from one polished portal.
         </p>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
-          gap: 12,
+          gap: 10,
           maxWidth: 760,
-          margin: '0 auto 34px',
+          margin: '0 auto 26px',
           textAlign: 'left',
         }}>
           {highlights.map(([title, text]) => (
             <div key={title} style={{
-              padding: '15px 16px',
+              padding: '12px 14px',
               border: '1px solid rgba(255,252,238,0.32)',
-              borderRadius: 16,
-              background: 'linear-gradient(145deg, rgba(255,252,238,0.26), rgba(218,238,198,0.12))',
-              boxShadow: 'inset 0 1px rgba(255,255,255,0.2), 0 16px 34px rgba(5,72,62,0.14)',
+              borderRadius: 14,
+              background: 'linear-gradient(145deg, rgba(255,252,238,0.13), rgba(218,238,198,0.07))',
+              boxShadow: 'inset 0 1px rgba(255,255,255,0.16), 0 12px 26px rgba(2,24,20,0.14)',
               backdropFilter: 'blur(14px)',
             }}>
-              <div style={{ color: '#fff9ec', fontWeight: 900, fontSize: '0.92rem', marginBottom: 5 }}>{title}</div>
-              <div style={{ color: 'rgba(255,249,236,0.76)', fontSize: '0.8rem', lineHeight: 1.45 }}>{text}</div>
+              <div style={{ color: '#fff9ec', fontWeight: 900, fontSize: '0.86rem', marginBottom: 4 }}>{title}</div>
+              <div style={{ color: 'rgba(255,249,236,0.72)', fontSize: '0.76rem', lineHeight: 1.4 }}>{text}</div>
             </div>
           ))}
         </div>
