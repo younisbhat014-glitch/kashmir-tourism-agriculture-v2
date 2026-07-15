@@ -51,15 +51,31 @@ export default function Navbar() {
       }}>
 
         {/* ── Logo ── */}
-        <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+        <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
           <div style={{
-            width: 38, height: 38, borderRadius: '50%',
-            background: 'linear-gradient(135deg, var(--kashmir-gold), var(--kashmir-teal))',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem',
+            width: 42, height: 42, borderRadius: '50%',
+            background: 'radial-gradient(circle at 30% 25%, #f4d86d, var(--kashmir-gold) 32%, var(--kashmir-teal) 76%)',
+            border: '1px solid rgba(255,255,255,0.34)',
+            boxShadow: '0 12px 28px rgba(0,0,0,0.2), inset 0 1px rgba(255,255,255,0.38)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.15rem',
           }}>🏔</div>
           <div>
-            <div style={{ fontFamily: 'Cormorant Garamond', fontSize: '1.2rem', fontWeight: 700, color: 'white', lineHeight: 1 }}>Kashmir</div>
-            <div style={{ fontSize: '0.6rem', color: 'var(--kashmir-gold)', letterSpacing: 2, textTransform: 'uppercase' }}>Paradise Portal</div>
+            <div style={{
+              fontFamily: 'Cormorant Garamond',
+              fontSize: '1.34rem',
+              fontWeight: 800,
+              color: 'white',
+              lineHeight: 0.92,
+              textShadow: '0 2px 12px rgba(0,0,0,0.28)',
+            }}>Kashmir</div>
+            <div style={{
+              fontSize: '0.62rem',
+              color: 'var(--kashmir-gold)',
+              letterSpacing: 3,
+              textTransform: 'uppercase',
+              fontWeight: 900,
+              marginTop: 5,
+            }}>Paradise Portal</div>
           </div>
         </Link>
 
