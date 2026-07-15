@@ -10,8 +10,10 @@ import { colors } from '@/constants/app-theme';
 
 const WEBSITE_URL = 'https://kashmir-portal-production-bf57.up.railway.app/';
 const WEBSITE_HOST = 'kashmir-portal-production-bf57.up.railway.app';
-const MOBILE_USER_AGENT =
-  'Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Mobile Safari/537.36 KashmirPortalApp/1.0';
+const MOBILE_USER_AGENT = Platform.select({
+  ios: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1 KashmirPortalApp/1.0',
+  default: 'Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Mobile Safari/537.36 KashmirPortalApp/1.0',
+});
 const FORCE_MOBILE_VIEWPORT = `
   (function () {
     var viewport = document.querySelector('meta[name="viewport"]');
