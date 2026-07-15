@@ -250,23 +250,28 @@ function CTASection() {
   return (
     <section className="home-cta-section" style={{
       padding: '76px 8%', textAlign: 'center',
-      background: 'linear-gradient(135deg, #0b554d 0%, #083f3a 100%)',
+      background: [
+        'radial-gradient(circle at 22% 18%, rgba(218,238,198,0.28) 0%, transparent 32%)',
+        'radial-gradient(circle at 82% 22%, rgba(225,193,84,0.22) 0%, transparent 30%)',
+        'linear-gradient(135deg, #edf6e9 0%, #dcebd2 34%, #1c7467 72%, #074a43 100%)',
+      ].join(', '),
       position: 'relative', overflow: 'hidden',
     }}>
       <div style={{
         position: 'absolute',
         inset: 0,
         backgroundImage: [
-          'radial-gradient(circle at 18% 32%, rgba(201,168,76,0.14) 0%, transparent 34%)',
-          'radial-gradient(circle at 84% 70%, rgba(255,255,255,0.08) 0%, transparent 34%)',
-          'linear-gradient(180deg, rgba(255,255,255,0.08), transparent 28%, rgba(0,0,0,0.12))',
+          'linear-gradient(115deg, rgba(255,252,238,0.74) 0%, rgba(255,252,238,0.28) 35%, transparent 64%)',
+          'radial-gradient(circle at 12% 78%, rgba(201,168,76,0.18) 0%, transparent 34%)',
+          'linear-gradient(180deg, rgba(255,255,255,0.1), transparent 32%, rgba(5,54,47,0.18))',
         ].join(', '),
       }}/>
       <div style={{
         position: 'absolute',
         inset: '18px',
-        border: '1px solid rgba(255,255,255,0.12)',
+        border: '1px solid rgba(255,252,238,0.36)',
         borderRadius: 28,
+        boxShadow: 'inset 0 1px rgba(255,255,255,0.2)',
         pointerEvents: 'none',
       }}/>
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 920, margin: '0 auto' }}>
@@ -277,20 +282,21 @@ function CTASection() {
           padding: '7px 13px',
           marginBottom: 18,
           borderRadius: 999,
-          border: '1px solid rgba(201,168,76,0.34)',
-          background: 'rgba(255,255,255,0.08)',
-          color: 'rgba(255,255,255,0.78)',
+          border: '1px solid rgba(201,168,76,0.5)',
+          background: 'rgba(255,252,238,0.46)',
+          color: '#0c4c43',
           fontSize: '0.78rem',
           fontWeight: 800,
           letterSpacing: 1.4,
           textTransform: 'uppercase',
+          boxShadow: '0 10px 22px rgba(5,72,62,0.1)',
         }}>
           Kashmir Portal
         </div>
-        <h2 style={{ fontFamily: 'Cormorant Garamond', fontSize: 'clamp(2rem,5vw,3.6rem)', color: 'white', marginBottom: 16, lineHeight: 1.05 }}>
+        <h2 style={{ fontFamily: 'Cormorant Garamond', fontSize: 'clamp(2rem,5vw,3.6rem)', color: '#fff9ec', marginBottom: 16, lineHeight: 1.05, textShadow: '0 14px 32px rgba(4,45,39,0.26)' }}>
           Ready to Explore <span style={{ color: 'var(--kashmir-gold)', fontStyle: 'italic' }}>Paradise?</span>
         </h2>
-        <p style={{ color: 'rgba(255,255,255,0.82)', fontSize: '1.05rem', lineHeight: 1.7, maxWidth: 650, margin: '0 auto 30px' }}>
+        <p style={{ color: 'rgba(255,249,236,0.86)', fontSize: '1.05rem', lineHeight: 1.7, maxWidth: 650, margin: '0 auto 30px', textShadow: '0 8px 20px rgba(4,45,39,0.18)' }}>
           Plan stays, explore destinations, book vehicles, and connect with Kashmir's agriculture market from one polished portal.
         </p>
         <div style={{
@@ -304,13 +310,14 @@ function CTASection() {
           {highlights.map(([title, text]) => (
             <div key={title} style={{
               padding: '15px 16px',
-              border: '1px solid rgba(255,255,255,0.13)',
+              border: '1px solid rgba(255,252,238,0.32)',
               borderRadius: 16,
-              background: 'rgba(255,255,255,0.07)',
-              boxShadow: 'inset 0 1px rgba(255,255,255,0.08)',
+              background: 'linear-gradient(145deg, rgba(255,252,238,0.26), rgba(218,238,198,0.12))',
+              boxShadow: 'inset 0 1px rgba(255,255,255,0.2), 0 16px 34px rgba(5,72,62,0.14)',
+              backdropFilter: 'blur(14px)',
             }}>
-              <div style={{ color: 'white', fontWeight: 900, fontSize: '0.92rem', marginBottom: 5 }}>{title}</div>
-              <div style={{ color: 'rgba(255,255,255,0.68)', fontSize: '0.8rem', lineHeight: 1.45 }}>{text}</div>
+              <div style={{ color: '#fff9ec', fontWeight: 900, fontSize: '0.92rem', marginBottom: 5 }}>{title}</div>
+              <div style={{ color: 'rgba(255,249,236,0.76)', fontSize: '0.8rem', lineHeight: 1.45 }}>{text}</div>
             </div>
           ))}
         </div>
