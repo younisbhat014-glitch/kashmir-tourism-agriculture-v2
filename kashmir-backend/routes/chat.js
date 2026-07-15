@@ -45,22 +45,37 @@ const fallbackAnswer = (question) => {
   const q = question.toLowerCase();
 
   if (q.includes('hotel') || q.includes('stay') || q.includes('room')) {
-    return 'Hotels ke liye Tourism section me available stays dekho. Location, price, rating aur amenities compare karke booking kar sakte ho.';
+    return [
+      'Aadab! Hinglish: Hotels ke liye Tourism section me available stays dekho. Location, price, rating aur amenities compare karke booking kar sakte ho.',
+      'English: For hotels, open the Tourism section and compare available stays by location, price, rating, and amenities before booking.',
+    ].join('\n\n');
   }
 
   if (q.includes('taxi') || q.includes('vehicle') || q.includes('car') || q.includes('rent')) {
-    return 'Vehicle rentals ke liye Tourism section me taxi/car options available hain. Capacity, per-day rate, per-km rate aur driver option check karo.';
+    return [
+      'Aadab! Hinglish: Vehicle rental ke liye Tourism section me taxi/car options dekho. Capacity, per-day rate, per-km rate aur driver option zaroor check karo.',
+      'English: For vehicle rentals, check the Tourism section for taxi/car options and compare capacity, daily price, per-km price, and driver availability.',
+    ].join('\n\n');
   }
 
   if (q.includes('saffron') || q.includes('crop') || q.includes('apple') || q.includes('machine') || q.includes('farm')) {
-    return 'Agriculture section me crops aur machines live catalog se milenge. Price, seller, stock, rent aur buy price wahi se confirm karo.';
+    return [
+      'Aadab! Hinglish: Saffron/crops/machines ke liye Agriculture section me live catalog dekho. Price, seller, stock, rent aur buy price wahi se confirm karo.',
+      'English: For saffron, crops, or farming machines, use the Agriculture section to confirm live price, seller, stock, rental cost, and purchase price.',
+    ].join('\n\n');
   }
 
   if (q.includes('weather') || q.includes('mausam') || q.includes('snow')) {
-    return 'Kashmir weather jaldi change hota hai. Travel se pehle current forecast check karo, aur evenings ke liye jacket zaroor rakho.';
+    return [
+      'Aadab! Hinglish: Kashmir ka mausam jaldi change hota hai. Travel se pehle current forecast check karo, aur evening ke liye jacket zaroor rakho.',
+      'English: Kashmir weather can change quickly. Check the current forecast before travel and carry a jacket for cooler evenings.',
+    ].join('\n\n');
   }
 
-  return 'Aadab! Main Kashmir Guide hoon. Aap tourism, hotels, restaurants, vehicles, bookings, crops, farming machines, weather ya budget ke baare me pooch sakte ho.';
+  return [
+    'Aadab! Hinglish: Main Kashmir Guide hoon. Aap tourism, hotels, restaurants, vehicles, bookings, crops, farming machines, weather ya budget ke baare me pooch sakte ho.',
+    'English: I am Kashmir Guide. You can ask me about tourism, hotels, restaurants, vehicles, bookings, crops, farming machines, weather, or budget planning.',
+  ].join('\n\n');
 };
 
 const callOpenAI = async ({ question, history, catalogContext }) => {
@@ -90,7 +105,9 @@ const callOpenAI = async ({ question, history, catalogContext }) => {
             role: 'system',
             content: [
               'You are Kashmir Guide, a warm expert assistant inside the Kashmir Tourism and Agriculture Portal.',
-              'Answer naturally in the user language: Hinglish, Hindi, Urdu-style Roman, Kashmiri-style phrasing, or English as appropriate.',
+              'Always answer in two short sections: "Hinglish:" first, then "English:".',
+              'The Hinglish section should feel warm and Kashmir-style with light phrases like "Aadab", "zaroor", or "yahan", but stay clear and professional.',
+              'The English section should explain the same answer clearly for English readers.',
               'Use the live portal catalog context when recommending hotels, vehicles, restaurants, crops, or machines.',
               'Keep answers useful, concise, and practical. If booking or exact availability is needed, guide the user to the relevant portal section.',
               'Do not invent live prices or availability outside the provided catalog. If unsure, say what to check next.',
