@@ -1342,6 +1342,117 @@ table[style*="background: white"] {
   font-size: 0.78rem;
 }
 
+.web-notification-popup {
+  position: fixed;
+  right: 22px;
+  bottom: 94px;
+  z-index: 155;
+  width: min(390px, calc(100vw - 28px));
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 13px;
+  padding: 15px;
+  color: var(--kashmir-deep);
+  background:
+    linear-gradient(135deg, rgba(255, 253, 247, 0.98), rgba(238, 250, 243, 0.96)),
+    var(--warm-white);
+  border: 1px solid rgba(13, 59, 46, 0.14);
+  border-radius: 22px;
+  box-shadow: 0 24px 70px rgba(4, 41, 32, 0.24);
+  backdrop-filter: blur(18px);
+  animation: webNotificationIn 0.32s ease both;
+}
+
+.web-notification-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  color: white;
+  background: linear-gradient(135deg, var(--kashmir-deep), var(--kashmir-teal));
+  border-radius: 16px;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.18);
+}
+
+.web-notification-copy {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.web-notification-copy > span {
+  color: var(--kashmir-gold);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.web-notification-copy strong {
+  color: var(--kashmir-deep);
+  font-size: 0.95rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.web-notification-copy p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.web-notification-copy small {
+  color: rgba(27, 67, 57, 0.55);
+  font-size: 0.66rem;
+}
+
+.web-notification-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.web-notification-actions button {
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 0;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+}
+
+.web-notification-open {
+  padding: 0 14px;
+  color: var(--kashmir-deep);
+  background: linear-gradient(135deg, #f3d66b, var(--kashmir-gold));
+  border-radius: 999px;
+}
+
+.web-notification-close {
+  width: 36px;
+  padding: 0;
+  color: var(--kashmir-deep);
+  background: rgba(13, 59, 46, 0.08);
+  border-radius: 50%;
+}
+
+@keyframes webNotificationIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .admin-notifications {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
@@ -1750,6 +1861,22 @@ table[style*="background: white"] {
 
   .notification-list {
     max-height: calc(100svh - 164px);
+  }
+
+  .web-notification-popup {
+    right: 12px;
+    bottom: 82px;
+    width: calc(100vw - 24px);
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 11px;
+    padding: 13px;
+    border-radius: 18px;
+  }
+
+  .web-notification-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
   }
 
   .admin-notifications {

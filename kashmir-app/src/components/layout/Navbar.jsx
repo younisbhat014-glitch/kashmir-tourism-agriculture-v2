@@ -96,7 +96,7 @@ export default function Navbar() {
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           {/* Auth buttons — desktop only */}
           <div className="nav-desktop" style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-            {isNativeApp && <NotificationBell />}
+            {user && <NotificationBell />}
             {showInstallApp && (
               <a
                 href={APP_INSTALL_APK_URL}
@@ -147,7 +147,7 @@ export default function Navbar() {
           </div>
 
           {/* ── Hamburger — mobile only ── */}
-          {isNativeApp && (
+          {user && (
             <div className="nav-mobile-notification">
               <NotificationBell mobile />
             </div>

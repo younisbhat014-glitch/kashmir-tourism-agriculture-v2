@@ -5,6 +5,7 @@ import { ToastProvider } from './components/ui/Toast';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import Chatbot from './components/chatbot/Chatbot';
+import WebsiteNotificationPopup from './components/notifications/WebsiteNotificationPopup';
 import ScrollReveal from './components/ui/ScrollReveal';
 import SwipeIndicators from './components/ui/SwipeIndicators';
 import PwaInstallPrompt from './components/ui/PwaInstallPrompt';
@@ -24,6 +25,7 @@ function Layout({ children }) {
       <main>{children}</main>
       <Footer />
       <Chatbot />
+      <WebsiteNotificationPopup />
     </>
   );
 }
