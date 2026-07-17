@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { LogOut } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import NotificationBell from '../notifications/NotificationBell';
@@ -132,11 +133,10 @@ export default function Navbar() {
                     <span className="nav-admin-badge" style={{ background: 'var(--kashmir-gold)', color: 'var(--kashmir-deep)', fontSize: '0.6rem', padding: '2px 7px', borderRadius: 50, fontWeight: 800 }}>ADMIN</span>
                   )}
                 </Link>
-                <button onClick={handleLogout} style={{
-                  background: 'rgba(196,112,106,0.18)', border: '1px solid rgba(196,112,106,0.4)',
-                  color: '#ff8a80', padding: '7px 14px', borderRadius: 50,
-                  fontFamily: 'Nunito', fontWeight: 700, fontSize: '0.82rem', cursor: 'pointer',
-                }}>Logout</button>
+                <button onClick={handleLogout} className="nav-logout-button">
+                  <LogOut size={15} strokeWidth={2.4} />
+                  <span>Logout</span>
+                </button>
               </>
             ) : (
               <div className="nav-auth-combo nav-auth-combo-desktop" aria-label="Account access">
@@ -240,11 +240,10 @@ export default function Navbar() {
                   <div style={{ fontSize: '0.72rem', color: 'var(--kashmir-gold)', textTransform: 'uppercase' }}>{user.role} Dashboard</div>
                 </div>
               </Link>
-              <button onClick={handleLogout} style={{
-                background: 'rgba(196,112,106,0.15)', border: '1px solid rgba(196,112,106,0.3)',
-                color: '#ff8a80', padding: '11px', borderRadius: 12,
-                fontFamily: 'Nunito', fontWeight: 700, cursor: 'pointer', width: '100%',
-              }}>Logout</button>
+              <button onClick={handleLogout} className="nav-logout-button nav-logout-button-mobile">
+                <LogOut size={17} strokeWidth={2.4} />
+                <span>Logout</span>
+              </button>
             </div>
           ) : (
             <div className="nav-auth-combo nav-auth-combo-mobile" aria-label="Account access">
@@ -312,6 +311,48 @@ export default function Navbar() {
           flex: 1 1 0;
           min-height: 42px;
           font-size: 0.88rem;
+        }
+        .nav-logout-button {
+          position: relative;
+          min-height: 36px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 7px;
+          padding: 0 14px;
+          color: #ffe8e4;
+          background:
+            linear-gradient(135deg, rgba(255,255,255,0.13), rgba(196,112,106,0.17)),
+            rgba(196,112,106,0.12);
+          border: 1px solid rgba(255, 183, 174, 0.34);
+          border-radius: 999px;
+          box-shadow: inset 0 1px rgba(255,255,255,0.18), 0 10px 22px rgba(71, 14, 18, 0.14);
+          font-family: 'Nunito', sans-serif;
+          font-weight: 900;
+          font-size: 0.78rem;
+          letter-spacing: 0.01em;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+        }
+        .nav-logout-button:hover,
+        .nav-logout-button:focus-visible {
+          transform: translateY(-1px);
+          color: #fff7f5;
+          background:
+            linear-gradient(135deg, rgba(255,255,255,0.18), rgba(210,118,110,0.24)),
+            rgba(196,112,106,0.16);
+          border-color: rgba(255, 205, 199, 0.58);
+          box-shadow: inset 0 1px rgba(255,255,255,0.25), 0 14px 26px rgba(71, 14, 18, 0.22);
+        }
+        .nav-logout-button svg {
+          flex: 0 0 auto;
+        }
+        .nav-logout-button-mobile {
+          width: 100%;
+          min-height: 44px;
+          border-radius: 14px;
+          font-size: 0.9rem;
         }
 
         @media (max-width: 900px) {
