@@ -1,11 +1,31 @@
 import React, { useState, useEffect } from 'react';
+import { getPaymentConfigAPI, createPaymentOrderAPI, verifyPaymentAPI } from '../../utils/api';
+
+const loadRazorpayScript = () => new Promise((resolve) => {
+  if (window.Razorpay) return resolve(true);
+  const script = document.createElement('script');
+  script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+  script.onload = () => resolve(true);
+  script.onerror = () => resolve(false);
+  document.body.appendChild(script);
+});
 
 export default function PaymentCheckoutModal({ item, total, method, onClose, onSuccess }) {
   const [activeTab, setActiveTab] = useState(method || 'card');
   const [processing, setProcessing] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
   const [success, setSuccess] = useState(false);
-  const [transactionId] = useState(() => `KPAY-${Math.floor(10000000 + Math.random() * 90000000)}`);
+  const [payError, setPayError] = useState('');
+  const [gatewayConfigured, setGatewayConfigured] = useState(false);
+  const [transactionId, setTransactionId] = useState(() => `KPAY-${Math.floor(10000000 + Math.random() * 90000000)}`);
+
+  useEffect(() => {
+    let active = true;
+    getPaymentConfigAPI()
+      .then((cfg) => { if (active) setGatewayConfigured(Boolean(cfg && cfg.configured)); })
+      .catch(() => { if (active) setGatewayConfigured(false); });
+    return () => { active = false; };
+  }, []);
 
   // Card Form State
   const [cardNumber, setCardNumber] = useState('');
@@ -45,6 +65,58 @@ export default function PaymentCheckoutModal({ item, total, method, onClose, onS
     }
   }, [processing]);
 
+  const runSimulation = () => {
+    setPayError('');
+    setProcessing(true);
+    setLoadingStep(0);
+  };
+
+  const runRazorpay = async () => {
+    setPayError('');
+    const ok = await loadRazorpayScript();
+    if (!ok) {
+      setPayError('Could not load the payment gateway. Check your internet connection.');
+      return;
+    }
+
+    const order = await createPaymentOrderAPI({ amount: Number(total || 0), item });
+    if (!order || !order.orderId) {
+      setPayError(order?.message || 'Could not start the payment. Please try again.');
+      return;
+    }
+
+    const rzp = new window.Razorpay({
+      key: order.keyId,
+      amount: order.amount,
+      currency: order.currency,
+      name: 'Kashmir Portal',
+      description: item || 'Portal Booking',
+      order_id: order.orderId,
+      theme: { color: '#1a7a6e' },
+      prefill: { name: cardName || '', vpa: upiId || '' },
+      handler: async (response) => {
+        setProcessing(true);
+        setLoadingStep(0);
+        const result = await verifyPaymentAPI(response);
+        setProcessing(false);
+        if (result && result.verified) {
+          setTransactionId(result.paymentReference || response.razorpay_payment_id);
+          setSuccess(true);
+        } else {
+          setPayError(result?.message || 'Payment could not be verified.');
+        }
+      },
+      modal: {
+        ondismiss: () => setPayError('Payment was cancelled.'),
+      },
+    });
+
+    rzp.on('payment.failed', (resp) => {
+      setPayError(resp?.error?.description || 'Payment failed. Please try again.');
+    });
+    rzp.open();
+  };
+
   const handlePay = (e) => {
     e.preventDefault();
     if (activeTab === 'card') {
@@ -54,8 +126,12 @@ export default function PaymentCheckoutModal({ item, total, method, onClose, onS
     } else if (activeTab === 'netbanking') {
       if (!selectedBank) return;
     }
-    setProcessing(true);
-    setLoadingStep(0);
+
+    if (gatewayConfigured) {
+      runRazorpay();
+    } else {
+      runSimulation();
+    }
   };
 
   const handleComplete = () => {
@@ -72,7 +148,7 @@ export default function PaymentCheckoutModal({ item, total, method, onClose, onS
 
     onSuccess({
       paymentStatus: 'paid',
-      paymentProvider: 'Kashmir Portal Secure Gateway',
+      paymentProvider: gatewayConfigured ? 'Razorpay' : 'Kashmir Portal Secure Gateway',
       paymentReference: transactionId,
       paymentNote,
     });
@@ -475,6 +551,20 @@ export default function PaymentCheckoutModal({ item, total, method, onClose, onS
                 )}
 
                 {/* Bottom buttons */}
+                {payError && (
+                  <div style={{
+                    marginTop: '18px',
+                    padding: '10px 14px',
+                    background: '#fdecea',
+                    border: '1px solid #f5c6cb',
+                    borderRadius: '10px',
+                    color: '#a11',
+                    fontSize: '0.82rem',
+                    fontWeight: 600
+                  }}>
+                    {payError}
+                  </div>
+                )}
                 <div style={{ display: 'flex', gap: '12px', marginTop: '30px', borderTop: '1px solid #dfe8e1', paddingTop: '18px' }}>
                   <button
                     type="button"

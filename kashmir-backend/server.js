@@ -160,6 +160,7 @@ app.use('/api', (req, res, next) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/hotels', require('./routes/hotels'));
 app.use('/api/bookings', require('./routes/bookings'));
+app.use('/api/payments', require('./routes/payments'));
 app.use('/api/crops', require('./routes/crops'));
 app.use('/api/vehicles', require('./routes/vehicles'));
 app.use('/api/restaurants', require('./routes/restaurants'));

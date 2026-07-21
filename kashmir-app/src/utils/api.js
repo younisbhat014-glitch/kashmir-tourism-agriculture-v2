@@ -119,3 +119,21 @@ export const deleteAdminNotificationAPI = (id) =>
     method: 'DELETE',
     headers: headers()
   }).then(r => r.json());
+
+// Razorpay payment APIs
+export const getPaymentConfigAPI = () =>
+  fetch(`${API}/payments/config`).then(r => r.json());
+
+export const createPaymentOrderAPI = (data) =>
+  fetch(`${API}/payments/order`, {
+    method: 'POST',
+    headers: headers(),
+    body: JSON.stringify(data)
+  }).then(r => r.json());
+
+export const verifyPaymentAPI = (data) =>
+  fetch(`${API}/payments/verify`, {
+    method: 'POST',
+    headers: headers(),
+    body: JSON.stringify(data)
+  }).then(r => r.json());
