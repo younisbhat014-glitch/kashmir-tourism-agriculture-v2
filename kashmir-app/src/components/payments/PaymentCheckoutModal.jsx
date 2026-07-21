@@ -105,17 +105,24 @@ export default function PaymentCheckoutModal({ item, total, method, onClose, onS
       alignItems: 'center',
       justifyContent: 'center',
       zIndex: 9999,
-      fontFamily: 'Nunito, sans-serif'
+      fontFamily: 'Nunito, sans-serif',
+      padding: '16px',
+      boxSizing: 'border-box',
+      overflowY: 'auto'
     }}>
       <div style={{
         background: '#ffffff',
         width: '100%',
         maxWidth: '540px',
+        maxHeight: 'calc(100vh - 32px)',
         borderRadius: '24px',
         boxShadow: '0 24px 64px rgba(15, 53, 41, 0.18)',
         border: '1px solid #dfe8e1',
         overflow: 'hidden',
-        position: 'relative'
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        margin: 'auto'
       }}>
         
         {/* Header */}
@@ -125,7 +132,8 @@ export default function PaymentCheckoutModal({ item, total, method, onClose, onS
           color: '#ffffff',
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
+          flexShrink: 0
         }}>
           <div>
             <div style={{ fontSize: '0.72rem', letterSpacing: '1.5px', textTransform: 'uppercase', color: '#c9a84c', fontWeight: 800 }}>Kashmir Gateway</div>
@@ -136,6 +144,9 @@ export default function PaymentCheckoutModal({ item, total, method, onClose, onS
             <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#e8c96c' }}>₹{Number(total || 0).toLocaleString('en-IN')}</div>
           </div>
         </div>
+
+        {/* Scrollable body */}
+        <div style={{ overflowY: 'auto', flex: 1, minHeight: 0 }}>
 
         {/* PROCESSING SCREEN */}
         {processing && (
@@ -505,6 +516,9 @@ export default function PaymentCheckoutModal({ item, total, method, onClose, onS
             </div>
           </div>
         )}
+
+        </div>
+        {/* end scrollable body */}
 
       </div>
     </div>
