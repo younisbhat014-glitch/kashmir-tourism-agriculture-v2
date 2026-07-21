@@ -15,6 +15,33 @@ const categoryLabels = {
   service: 'Equipment',
 };
 
+const paymentModeLabels = {
+  online: 'Pay Online',
+  pay_at_hotel: 'Pay at Hotel',
+  pay_at_restaurant: 'Pay at Restaurant',
+  pay_to_driver: 'Pay to Driver',
+  cash_on_delivery: 'Cash on Delivery',
+  pay_to_seller: 'Pay to Seller',
+  pay_to_owner: 'Pay to Owner',
+};
+
+const paymentMethodLabels = {
+  card: 'Debit / Credit Card',
+  upi: 'UPI',
+  netbanking: 'Net Banking',
+  wallet: 'Wallet',
+  cash: 'Cash',
+  provider: 'Provider Collection',
+};
+
+const paymentStatusLabels = {
+  pending: 'Payment Pending',
+  initiated: 'Online Payment Initiated',
+  paid: 'Paid',
+  failed: 'Payment Failed',
+  pay_at_location: 'Pay at Location',
+};
+
 const escapeHtml = (value) => String(value ?? '')
   .replace(/&/g, '&amp;')
   .replace(/</g, '&lt;')
@@ -62,7 +89,33 @@ const getRequestKind = (type) => {
   return 'tourism';
 };
 
-const getPaymentInstructions = (kind) => {
+const getPaymentInstructions = (booking, kind) => {
+  const mode = booking.paymentMode || '';
+
+  if (mode === 'online') {
+    return 'Online payment option selected. Your booking/order is recorded with an online payment reference. If gateway capture is not completed, our team/provider may contact you before final fulfilment.';
+  }
+
+  if (mode === 'pay_at_hotel') {
+    return 'Payment hotel par check-in/front desk ke time complete karni hogi. Please carry this Booking ID with you.';
+  }
+
+  if (mode === 'pay_at_restaurant') {
+    return 'Payment restaurant counter par visit/reservation ke time complete karni hogi. Please carry this Booking ID with you.';
+  }
+
+  if (mode === 'pay_to_driver') {
+    return 'Payment driver ya vehicle provider ko pickup ke time directly complete karni hogi. Please keep this Booking ID ready.';
+  }
+
+  if (mode === 'cash_on_delivery') {
+    return 'Payment delivery/pickup ke time farmer ya seller ko cash/available local method se complete karni hogi. Please keep this Order ID ready.';
+  }
+
+  if (mode === 'pay_to_owner' || mode === 'pay_to_seller') {
+    return 'Payment owner/seller ke confirmation ke baad directly complete karni hogi. Please keep this Order ID ready.';
+  }
+
   if (kind === 'agriculture') {
     return 'Your agriculture request has been received. Final price, availability, delivery/pickup, and payment method seller/farmer/machine owner ke confirmation ke baad decide hoga. Payment seller/farmer/service provider ke saath directly complete hogi.';
   }
@@ -88,7 +141,10 @@ const buildConfirmationEmail = ({ booking, user }) => {
   const amount = formatAmount(booking.total);
   const quantityText = getQuantityText(booking);
   const status = getStatusLabel(kind);
-  const paymentInstructions = getPaymentInstructions(kind);
+  const paymentMode = paymentModeLabels[booking.paymentMode] || 'Payment at Provider';
+  const paymentMethod = paymentMethodLabels[booking.paymentMethod] || booking.paymentMethod;
+  const paymentStatus = paymentStatusLabels[booking.paymentStatus] || booking.paymentStatus;
+  const paymentInstructions = getPaymentInstructions(booking, kind);
   const supportEmail = process.env.SUPPORT_EMAIL || 'info@kashmirportal.gov.in';
   const supportPhone = process.env.SUPPORT_PHONE || '+91-194-2452690';
   const supportAddress = process.env.SUPPORT_ADDRESS || 'Tourist Reception Centre, Srinagar';
@@ -103,10 +159,16 @@ const buildConfirmationEmail = ({ booking, user }) => {
     ['Date and time', formatDateTime(booking)],
     ['Guests/quantity/rental duration', quantityText],
     ['Estimated amount', amount],
+    ['Payment option', paymentMode],
+    ['Payment method', paymentMethod],
+    ['Payment status', paymentStatus],
+    ['Payment reference', booking.paymentReference],
     ['Status', status],
   ]);
 
-  const preheader = kind === 'agriculture'
+  const preheader = booking.paymentMode === 'online'
+    ? 'Your online payment request has been recorded.'
+    : kind === 'agriculture'
     ? 'Your agriculture request has been received.'
     : 'Your booking request is confirmed.';
 
@@ -125,6 +187,10 @@ const buildConfirmationEmail = ({ booking, user }) => {
     `Date and time: ${formatDateTime(booking)}`,
     quantityText,
     amount ? `Estimated amount: ${amount}` : null,
+    `Payment option: ${paymentMode}`,
+    paymentMethod ? `Payment method: ${paymentMethod}` : null,
+    paymentStatus ? `Payment status: ${paymentStatus}` : null,
+    booking.paymentReference ? `Payment reference: ${booking.paymentReference}` : null,
     `Status: ${status}`,
     '',
     `Payment instructions: ${paymentInstructions}`,

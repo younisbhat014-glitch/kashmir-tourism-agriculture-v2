@@ -6,10 +6,19 @@ import { WEATHER_DATA } from '../data/appData';
 import { TOURIST_SPOTS } from '../data/touristSpotsData';
 import { fetchWeatherByQuery } from '../services/weatherApi';
 import { getHotelsAPI, getRestaurantsAPI, getVehiclesAPI } from '../utils/api';
+import PaymentSelector, { buildPaymentPayload } from '../components/payments/PaymentSelector';
 
 function BookingModal({ item, type, onClose, onBook }) {
   const [form, setForm] = useState({ checkIn: '', checkOut: '', guests: 1, name: '', phone: '', date: '', time: '12:00', from: '', to: '' });
+  const [paymentChoice, setPaymentChoice] = useState('later');
+  const [paymentMethod, setPaymentMethod] = useState('upi');
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+  const nights = Math.max(1, parseInt(form.checkOut && form.checkIn ? (new Date(form.checkOut)-new Date(form.checkIn))/(1000*60*60*24) : 1));
+  const total = type === 'hotel'
+    ? item.price * nights
+    : type === 'vehicle'
+      ? item.pricePerDay * parseInt(form.guests || 1)
+      : 0;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -99,13 +108,29 @@ function BookingModal({ item, type, onClose, onBook }) {
           <div style={{ borderTop: '1px dashed #ddd', paddingTop: 10, display: 'flex', justifyContent: 'space-between' }}>
             <span style={{ fontWeight: 700, color: 'var(--kashmir-deep)' }}>Estimated Total</span>
             <span style={{ fontWeight: 800, color: 'var(--kashmir-teal)', fontSize: '1.1rem' }}>
-              {type === 'hotel' ? `₹${(item.price * Math.max(1, parseInt(form.checkOut && form.checkIn ? (new Date(form.checkOut)-new Date(form.checkIn))/(1000*60*60*24) : 1))).toLocaleString()}` : type === 'vehicle' ? `₹${(item.pricePerDay * parseInt(form.guests || 1)).toLocaleString()}` : 'Confirm at venue'}
+              {total ? `₹${total.toLocaleString()}` : 'Confirm at venue'}
             </span>
           </div>
         </div>
 
-        <button className="btn-teal" style={{ width: '100%', padding: '14px', fontSize: '1rem' }} onClick={() => onBook(form)}>
-          Confirm Booking ✓
+        <PaymentSelector
+          type={type}
+          total={total}
+          value={paymentChoice}
+          method={paymentMethod}
+          onModeChange={setPaymentChoice}
+          onMethodChange={setPaymentMethod}
+        />
+
+        <button
+          className="btn-teal"
+          style={{ width: '100%', padding: '14px', fontSize: '1rem' }}
+          onClick={() => onBook({
+            ...form,
+            ...buildPaymentPayload({ paymentChoice, paymentMethod, type, action: 'book', total }),
+          })}
+        >
+          {paymentChoice === 'online' ? 'Pay Online & Confirm' : 'Confirm Booking'}
         </button>
       </div>
     </div>
@@ -222,10 +247,20 @@ export default function Tourism() {
     setModal({ item, type });
   };
 
-  const confirmBook = (form) => {
+  const confirmBook = async (form) => {
     if (!form.name || !form.phone) { toast('Please fill all fields!', 'error'); return; }
-    addBooking({ type: modal.type, item: modal.item.name, ...form });
-    toast(`${modal.item.name} booked successfully! 🎉`, 'success');
+    const result = await addBooking({
+      type: modal.type,
+      action: 'book',
+      itemId: modal.item._id,
+      item: modal.item.name,
+      ...form,
+    });
+    if (!result.success) {
+      toast(result.message || 'Booking failed', 'error');
+      return;
+    }
+    toast(`${modal.item.name} booked successfully!`, 'success');
     setModal(null);
   };
 

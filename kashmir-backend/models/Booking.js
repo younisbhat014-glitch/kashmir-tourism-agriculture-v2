@@ -17,6 +17,24 @@ const bookingSchema = new mongoose.Schema({
   to: { type: String },
   qty: { type: Number },
   total: { type: Number },
+  paymentMode: {
+    type: String,
+    enum: ['online', 'pay_at_hotel', 'pay_at_restaurant', 'pay_to_driver', 'cash_on_delivery', 'pay_to_seller', 'pay_to_owner'],
+    default: 'pay_at_hotel',
+  },
+  paymentMethod: {
+    type: String,
+    enum: ['card', 'upi', 'netbanking', 'wallet', 'cash', 'provider'],
+    default: 'cash',
+  },
+  paymentStatus: {
+    type: String,
+    enum: ['pending', 'initiated', 'paid', 'failed', 'pay_at_location'],
+    default: 'pay_at_location',
+  },
+  paymentProvider: { type: String },
+  paymentReference: { type: String },
+  paymentNote: { type: String },
   status: { type: String, enum: ['pending', 'confirmed', 'cancelled'], default: 'confirmed' },
 }, { timestamps: true });
 

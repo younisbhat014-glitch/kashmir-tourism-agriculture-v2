@@ -5,6 +5,7 @@ import { useToast } from '../components/ui/Toast';
 import { CROP_CALENDAR } from '../data/appData';
 import { createCropAPI, getCropsAPI, getMachinesAPI } from '../utils/api';
 import ImagePickerField from '../components/ui/ImagePickerField';
+import PaymentSelector, { buildPaymentPayload } from '../components/payments/PaymentSelector';
 
 function SellModal({ onClose, onSubmit }) {
   const [form, setForm] = useState({ cropName: '', category: 'Fruit', quantity: '', unit: 'kg', price: '', location: '', image: '', description: '', organic: false });
@@ -69,6 +70,8 @@ function SellModal({ onClose, onSubmit }) {
 
 function BuyModal({ item, type, action, onClose, onBuy }) {
   const [qty, setQty] = useState(1);
+  const [paymentChoice, setPaymentChoice] = useState('later');
+  const [paymentMethod, setPaymentMethod] = useState('upi');
   const isMachineBuy = type === 'machine' && action === 'buy';
   const total = isMachineBuy ? item.buyPrice * qty : type === 'crop' ? item.price * qty : item.rentPerDay * qty;
   return (
@@ -114,7 +117,20 @@ function BuyModal({ item, type, action, onClose, onBuy }) {
             <span style={{ fontWeight: 800, color: 'var(--kashmir-teal)', fontSize: '1.2rem' }}>₹{total.toLocaleString()}</span>
           </div>
         </div>
-        <button className="btn-teal" style={{ width: '100%', padding: '14px', fontSize: '1rem' }} onClick={() => onBuy(qty, total)}>
+        <PaymentSelector
+          type={type}
+          action={action}
+          total={total}
+          value={paymentChoice}
+          method={paymentMethod}
+          onModeChange={setPaymentChoice}
+          onMethodChange={setPaymentMethod}
+        />
+        <button
+          className="btn-teal"
+          style={{ width: '100%', padding: '14px', fontSize: '1rem' }}
+          onClick={() => onBuy(qty, total, buildPaymentPayload({ paymentChoice, paymentMethod, type, action, total }))}
+        >
           {type === 'crop' || isMachineBuy ? '🛒 Place Order' : '🚜 Confirm Rental'} — ₹{total.toLocaleString()}
         </button>
       </div>
@@ -246,7 +262,7 @@ export default function Agriculture() {
     setModal({ item, type, action });
   };
 
-  const confirmBuy = async (qty, total) => {
+  const confirmBuy = async (qty, total, payment) => {
     const result = await addBooking({
       type: modal.type,
       action: modal.action,
@@ -254,6 +270,7 @@ export default function Agriculture() {
       item: modal.item.name,
       qty,
       total,
+      ...payment,
     });
     if (!result.success) {
       toast(result.message || 'Booking failed', 'error');

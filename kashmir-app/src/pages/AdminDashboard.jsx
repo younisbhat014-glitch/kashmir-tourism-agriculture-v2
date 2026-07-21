@@ -9,6 +9,24 @@ import AdminNotifications from '../components/admin/AdminNotifications';
 const getToken = () => localStorage.getItem('kashmir_token');
 const authHeaders = () => ({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` });
 
+const paymentModeLabels = {
+  online: 'Pay Online',
+  pay_at_hotel: 'Pay at Hotel',
+  pay_at_restaurant: 'Pay at Restaurant',
+  pay_to_driver: 'Pay to Driver',
+  cash_on_delivery: 'Cash on Delivery',
+  pay_to_seller: 'Pay to Seller',
+  pay_to_owner: 'Pay to Owner',
+};
+
+const paymentStatusLabels = {
+  initiated: 'Online Initiated',
+  pay_at_location: 'Pay at Location',
+  paid: 'Paid',
+  pending: 'Pending',
+  failed: 'Failed',
+};
+
 const MONTHLY_DATA = [
   { month: 'Jan', tourists: 42000, revenue: 180000, bookings: 320 },
   { month: 'Feb', tourists: 38000, revenue: 165000, bookings: 290 },
@@ -408,7 +426,7 @@ export default function AdminDashboard() {
               <table style={{ width: '100%', borderCollapse: 'collapse', background: 'white', borderRadius: 20, overflow: 'hidden', fontSize: '0.88rem' }}>
                 <thead style={{ background: 'var(--kashmir-deep)' }}>
                   <tr>
-                    {['User', 'Type', 'Action', 'Item', 'Date', 'Status'].map(h => (
+                    {['User', 'Type', 'Action', 'Item', 'Amount', 'Payment', 'Date', 'Status'].map(h => (
                       <th key={h} style={{ padding: '14px 18px', textAlign: 'left', color: 'white', fontWeight: 700, fontSize: '0.78rem', textTransform: 'uppercase' }}>{h}</th>
                     ))}
                   </tr>
@@ -420,6 +438,14 @@ export default function AdminDashboard() {
                       <td style={{ padding: '13px 18px' }}><span className="badge badge-teal" style={{ fontSize: '0.7rem' }}>{b.type}</span></td>
                       <td style={{ padding: '13px 18px', textTransform: 'capitalize' }}>{b.action || 'book'}</td>
                       <td style={{ padding: '13px 18px', color: 'var(--text-secondary)' }}>{b.itemName}</td>
+                      <td style={{ padding: '13px 18px', fontWeight: 800, color: 'var(--kashmir-teal)' }}>{b.total ? `₹${Number(b.total).toLocaleString('en-IN')}` : '-'}</td>
+                      <td style={{ padding: '13px 18px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                          <span className="badge badge-gold" style={{ fontSize: '0.68rem', width: 'max-content' }}>{paymentModeLabels[b.paymentMode] || 'Payment'}</span>
+                          <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>{paymentStatusLabels[b.paymentStatus] || b.paymentStatus || 'Recorded'}</span>
+                          {b.paymentReference && <span style={{ fontSize: '0.7rem', color: 'var(--kashmir-teal)', fontWeight: 800 }}>{b.paymentReference}</span>}
+                        </div>
+                      </td>
                       <td style={{ padding: '13px 18px', color: 'var(--text-secondary)' }}>{new Date(b.createdAt).toLocaleDateString('en-IN')}</td>
                       <td style={{ padding: '13px 18px' }}><span className="badge badge-teal" style={{ fontSize: '0.7rem' }}>✓ {b.status}</span></td>
                     </tr>

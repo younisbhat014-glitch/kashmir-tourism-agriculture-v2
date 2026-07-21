@@ -4,10 +4,37 @@ const Booking = require('../models/Booking');
 const { auth } = require('../middleware/auth');
 const { sendBookingConfirmationEmail } = require('../services/confirmationEmail');
 
+const getDefaultPayLaterMode = (type, action) => {
+  if (type === 'hotel') return 'pay_at_hotel';
+  if (type === 'restaurant') return 'pay_at_restaurant';
+  if (type === 'vehicle') return 'pay_to_driver';
+  if (type === 'crop') return 'cash_on_delivery';
+  if (type === 'machine' && action === 'rent') return 'pay_to_owner';
+  return 'pay_to_seller';
+};
+
+const normalizePayment = (body) => {
+  const paymentMode = body.paymentMode || getDefaultPayLaterMode(body.type, body.action);
+  const isOnline = paymentMode === 'online';
+
+  return {
+    paymentMode,
+    paymentMethod: isOnline ? (body.paymentMethod || 'upi') : (body.paymentMethod || 'cash'),
+    paymentStatus: isOnline ? (body.paymentStatus || 'initiated') : (body.paymentStatus || 'pay_at_location'),
+    paymentProvider: body.paymentProvider || (isOnline ? 'Kashmir Portal Online Payment' : undefined),
+    paymentReference: body.paymentReference || (isOnline ? `KPAY-${Date.now()}` : undefined),
+    paymentNote: body.paymentNote,
+  };
+};
+
 // Create booking
 router.post('/', auth, async (req, res) => {
   try {
-    const booking = await Booking.create({ ...req.body, user: req.user._id });
+    const booking = await Booking.create({
+      ...req.body,
+      ...normalizePayment(req.body),
+      user: req.user._id,
+    });
 
     sendBookingConfirmationEmail({ booking, user: req.user }).catch((err) => {
       console.error(`[email] Confirmation failed for booking ${booking._id}:`, err.message);

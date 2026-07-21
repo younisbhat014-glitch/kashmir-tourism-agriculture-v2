@@ -1,16 +1,48 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { WEATHER_DATA } from '../data/appData';
+import { getMyBookingsAPI } from '../utils/api';
+
+const paymentModeLabels = {
+  online: 'Pay Online',
+  pay_at_hotel: 'Pay at Hotel',
+  pay_at_restaurant: 'Pay at Restaurant',
+  pay_to_driver: 'Pay to Driver',
+  cash_on_delivery: 'Cash on Delivery',
+  pay_to_seller: 'Pay to Seller',
+  pay_to_owner: 'Pay to Owner',
+};
+
+const paymentStatusLabels = {
+  initiated: 'Online Initiated',
+  pay_at_location: 'Pay at Location',
+  paid: 'Paid',
+  pending: 'Pending',
+  failed: 'Failed',
+};
+
+const getBookingName = (booking) => booking.itemName || booking.item || 'Booking';
+const getBookingDate = (booking) => new Date(booking.createdAt || booking.date || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
 
 export default function UserDashboard() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
+  const [dashboardBookings, setDashboardBookings] = useState(user?.bookings || []);
+
+  useEffect(() => {
+    if (!user) return;
+    getMyBookingsAPI()
+      .then(data => {
+        if (Array.isArray(data)) setDashboardBookings(data);
+      })
+      .catch(() => {});
+  }, [user]);
 
   if (!user) return <Navigate to="/login" />;
   if (user.role === 'admin') return <Navigate to="/admin" />;
 
-  const bookings = user.bookings || [];
+  const bookings = dashboardBookings;
   const purchases = user.purchases || [];
 
   const tabs = [
@@ -114,11 +146,14 @@ export default function UserDashboard() {
                           {b.type === 'hotel' ? '🏨' : b.type === 'restaurant' ? '🍽' : b.type === 'vehicle' ? '🚗' : '📦'}
                         </div>
                         <div>
-                          <div style={{ fontWeight: 700 }}>{b.item}</div>
-                          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>{b.type} · {new Date(b.date).toLocaleDateString('en-IN')}</div>
+                          <div style={{ fontWeight: 700 }}>{getBookingName(b)}</div>
+                          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>{b.type} · {getBookingDate(b)}</div>
                         </div>
                       </div>
-                      <span className="badge badge-teal">Confirmed ✓</span>
+                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                        <span className="badge badge-gold">{paymentModeLabels[b.paymentMode] || 'Payment'}</span>
+                        <span className="badge badge-teal">Confirmed</span>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -159,14 +194,19 @@ export default function UserDashboard() {
                           {b.type === 'hotel' ? '🏨' : b.type === 'restaurant' ? '🍽' : b.type === 'vehicle' ? '🚗' : b.type === 'crop' ? '🌾' : '📦'}
                         </div>
                         <div>
-                          <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: 4 }}>{b.item}</div>
+                          <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: 4 }}>{getBookingName(b)}</div>
                           <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', textTransform: 'capitalize' }}>{b.type}</div>
                           {b.checkIn && <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>Check-in: {b.checkIn} · Out: {b.checkOut}</div>}
                           {b.qty && <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>Quantity: {b.qty} · Total: ₹{b.total?.toLocaleString()}</div>}
-                          <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: 4 }}>Booked on {new Date(b.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: 4 }}>Booked on {getBookingDate(b)}</div>
+                          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 10 }}>
+                            <span className="badge badge-gold">{paymentModeLabels[b.paymentMode] || 'Payment Pending'}</span>
+                            <span className="badge badge-teal">{paymentStatusLabels[b.paymentStatus] || b.paymentStatus || 'Recorded'}</span>
+                            {b.paymentReference && <span className="badge badge-green">{b.paymentReference}</span>}
+                          </div>
                         </div>
                       </div>
-                      <span className="badge badge-teal">Confirmed ✓</span>
+                      <span className="badge badge-teal">Confirmed</span>
                     </div>
                   </div>
                 ))}
