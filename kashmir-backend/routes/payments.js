@@ -63,10 +63,10 @@ router.post('/verify', auth, (req, res) => {
     .update(`${razorpay_order_id}|${razorpay_payment_id}`)
     .digest('hex');
 
-  const valid = crypto.timingSafeEqual(
-    Buffer.from(expected),
-    Buffer.from(razorpay_signature),
-  );
+  const expectedBuf = Buffer.from(expected);
+  const receivedBuf = Buffer.from(String(razorpay_signature));
+  const valid = expectedBuf.length === receivedBuf.length
+    && crypto.timingSafeEqual(expectedBuf, receivedBuf);
 
   if (!valid) {
     return res.status(400).json({ verified: false, message: 'Payment signature verification failed.' });
