@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getPaymentConfigAPI, createPaymentOrderAPI, verifyPaymentAPI } from '../../utils/api';
 
 const loadRazorpayScript = () => new Promise((resolve) => {
@@ -17,13 +17,16 @@ export default function PaymentCheckoutModal({ item, total, method, onClose, onS
   const [success, setSuccess] = useState(false);
   const [payError, setPayError] = useState('');
   const [gatewayConfigured, setGatewayConfigured] = useState(false);
+  const [configChecked, setConfigChecked] = useState(false);
   const [transactionId, setTransactionId] = useState(() => `KPAY-${Math.floor(10000000 + Math.random() * 90000000)}`);
+  const autoStartedRef = useRef(false);
 
   useEffect(() => {
     let active = true;
     getPaymentConfigAPI()
       .then((cfg) => { if (active) setGatewayConfigured(Boolean(cfg && cfg.configured)); })
-      .catch(() => { if (active) setGatewayConfigured(false); });
+      .catch(() => { if (active) setGatewayConfigured(false); })
+      .finally(() => { if (active) setConfigChecked(true); });
     return () => { active = false; };
   }, []);
 
@@ -117,6 +120,14 @@ export default function PaymentCheckoutModal({ item, total, method, onClose, onS
     rzp.open();
   };
 
+  // Razorpay configured hai to seedha popup kholo - custom form skip karo
+  useEffect(() => {
+    if (configChecked && gatewayConfigured && !autoStartedRef.current && !success && !processing) {
+      autoStartedRef.current = true;
+      runRazorpay();
+    }
+  }, [configChecked, gatewayConfigured, success, processing]);
+
   const handlePay = (e) => {
     e.preventDefault();
     if (activeTab === 'card') {
@@ -136,7 +147,9 @@ export default function PaymentCheckoutModal({ item, total, method, onClose, onS
 
   const handleComplete = () => {
     let paymentNote = '';
-    if (activeTab === 'card') {
+    if (gatewayConfigured) {
+      paymentNote = `Paid via Razorpay - Ref: ${transactionId}`;
+    } else if (activeTab === 'card') {
       paymentNote = `Paid via Card (ending in ${cardNumber.slice(-4)}) - Name: ${cardName}`;
     } else if (activeTab === 'upi') {
       paymentNote = `Paid via UPI - VPA: ${upiId}`;
@@ -299,7 +312,35 @@ export default function PaymentCheckoutModal({ item, total, method, onClose, onS
         )}
 
         {/* GATEWAY FORMS */}
-        {!processing && !success && (
+        {/* RAZORPAY REDIRECT SCREEN (custom form skip) */}
+        {!processing && !success && configChecked && gatewayConfigured && (
+          <div style={{ padding: '48px 24px', textAlign: 'center', minHeight: '280px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{ fontWeight: 800, color: '#0f3529', fontSize: '1.1rem', marginBottom: '10px' }}>Redirecting to Razorpay…</div>
+            <div style={{ fontSize: '0.86rem', color: '#666', marginBottom: '22px', maxWidth: '340px' }}>
+              A secure Razorpay window is opening to complete your payment of ₹{Number(total || 0).toLocaleString('en-IN')}.
+            </div>
+            {payError && (
+              <div style={{ color: '#b23b3b', fontSize: '0.85rem', marginBottom: '18px' }}>{payError}</div>
+            )}
+            {payError && (
+              <button onClick={runRazorpay} style={{
+                background: 'linear-gradient(135deg, #1a7a6e, #0f3529)',
+                color: '#fff',
+                border: 'none',
+                padding: '12px 32px',
+                borderRadius: '50px',
+                fontWeight: 800,
+                fontSize: '0.9rem',
+                cursor: 'pointer'
+              }}>
+                Retry Payment
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* GATEWAY FORMS (fallback: only when Razorpay is NOT configured) */}
+        {!processing && !success && configChecked && !gatewayConfigured && (
           <div>
             {/* Tabs */}
             <div style={{ display: 'flex', borderBottom: '1px solid #dfe8e1', background: '#f8faf8' }}>
