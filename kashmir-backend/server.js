@@ -96,7 +96,8 @@ async function connectMongo() {
 
     databaseStatus = 'connected';
     databaseError = null;
-    console.log('MongoDB connected');
+    const conn = mongoose.connection;
+    console.log(`MongoDB connected -> host: ${conn.host}, database: ${conn.name}`);
 
     if (!hasSeededCatalog) {
       hasSeededCatalog = true;
@@ -140,6 +141,8 @@ app.get('/health', (req, res) => {
   res.status(connected ? 200 : 503).json({
     status: connected ? 'ok' : 'degraded',
     database: connected ? 'connected' : databaseStatus,
+    databaseHost: connected ? mongoose.connection.host : null,
+    databaseName: connected ? mongoose.connection.name : null,
     databaseError,
   });
 });
