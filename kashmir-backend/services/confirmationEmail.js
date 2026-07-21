@@ -272,7 +272,7 @@ const getFromAddress = () => (
     ? process.env.MAIL_FROM
     : `Kashmir Portal <${getSmtpUser()}>`
 );
-const getResendFromAddress = () => process.env.RESEND_FROM || 'Kashmir Portal <onboarding@resend.dev>';
+const getResendFromAddress = () => process.env.RESEND_FROM || 'Kashmir Portal <noreply@kashmirportal.railway.app>';
 
 const hasMailConfig = () => Boolean(
   process.env.SMTP_HOST
