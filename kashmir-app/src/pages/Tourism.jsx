@@ -7,11 +7,13 @@ import { TOURIST_SPOTS } from '../data/touristSpotsData';
 import { fetchWeatherByQuery } from '../services/weatherApi';
 import { getHotelsAPI, getRestaurantsAPI, getVehiclesAPI } from '../utils/api';
 import PaymentSelector, { buildPaymentPayload } from '../components/payments/PaymentSelector';
+import PaymentCheckoutModal from '../components/payments/PaymentCheckoutModal';
 
 function BookingModal({ item, type, onClose, onBook }) {
   const [form, setForm] = useState({ checkIn: '', checkOut: '', guests: 1, name: '', phone: '', date: '', time: '12:00', from: '', to: '' });
   const [paymentChoice, setPaymentChoice] = useState('later');
   const [paymentMethod, setPaymentMethod] = useState('upi');
+  const [showGateway, setShowGateway] = useState(false);
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
   const nights = Math.max(1, parseInt(form.checkOut && form.checkIn ? (new Date(form.checkOut)-new Date(form.checkIn))/(1000*60*60*24) : 1));
   const total = type === 'hotel'
@@ -19,6 +21,25 @@ function BookingModal({ item, type, onClose, onBook }) {
     : type === 'vehicle'
       ? item.pricePerDay * parseInt(form.guests || 1)
       : 0;
+
+  const handleBookingClick = () => {
+    if (!form.name || !form.phone) {
+      onBook({
+        ...form,
+        ...buildPaymentPayload({ paymentChoice, paymentMethod, type, action: 'book', total }),
+      });
+      return;
+    }
+
+    if (paymentChoice === 'online') {
+      setShowGateway(true);
+    } else {
+      onBook({
+        ...form,
+        ...buildPaymentPayload({ paymentChoice, paymentMethod, type, action: 'book', total }),
+      });
+    }
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -51,7 +72,7 @@ function BookingModal({ item, type, onClose, onBook }) {
               <label className="form-label">Check-Out Date</label>
               <input className="form-input" type="date" value={form.checkOut} onChange={e => set('checkOut', e.target.value)}/>
             </div>
-            <div className="form-group" style={{ gridColumn: '1/-1' }}>
+            <div style={{ gridColumn: '1/-1' }} className="form-group">
               <label className="form-label">Number of Guests</label>
               <select className="form-select" value={form.guests} onChange={e => set('guests', e.target.value)}>
                 {[1,2,3,4,5,6,7,8].map(n => <option key={n} value={n}>{n} Guest{n>1?'s':''}</option>)}
@@ -69,7 +90,7 @@ function BookingModal({ item, type, onClose, onBook }) {
                 {['12:00','13:00','14:00','19:00','19:30','20:00','20:30','21:00'].map(t => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
-            <div className="form-group" style={{ gridColumn: '1/-1' }}>
+            <div style={{ gridColumn: '1/-1' }} className="form-group">
               <label className="form-label">Number of Guests</label>
               <select className="form-select" value={form.guests} onChange={e => set('guests', e.target.value)}>
                 {[1,2,3,4,5,6,7,8,10].map(n => <option key={n} value={n}>{n}</option>)}
@@ -98,7 +119,7 @@ function BookingModal({ item, type, onClose, onBook }) {
           </>}
         </div>
 
-        <div style={{ background: 'var(--kashmir-light)', borderRadius: 12, padding: '16px', marginBottom: 20 }}>
+        <div style={{ background: 'var(--kashmir-light)', borderRadius: 12, padding: '16px', marginBottom: 20, marginTop: 14 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
             <span style={{ color: 'var(--text-secondary)', fontSize: '0.88rem' }}>{item.name}</span>
             <span style={{ fontWeight: 600 }}>
@@ -125,13 +146,27 @@ function BookingModal({ item, type, onClose, onBook }) {
         <button
           className="btn-teal"
           style={{ width: '100%', padding: '14px', fontSize: '1rem' }}
-          onClick={() => onBook({
-            ...form,
-            ...buildPaymentPayload({ paymentChoice, paymentMethod, type, action: 'book', total }),
-          })}
+          onClick={handleBookingClick}
         >
           {paymentChoice === 'online' ? 'Pay Online & Confirm' : 'Confirm Booking'}
         </button>
+
+        {showGateway && (
+          <PaymentCheckoutModal
+            item={item.name}
+            total={total}
+            method={paymentMethod}
+            onClose={() => setShowGateway(false)}
+            onSuccess={(paymentDetails) => {
+              setShowGateway(false);
+              onBook({
+                ...form,
+                ...buildPaymentPayload({ paymentChoice, paymentMethod, type, action: 'book', total }),
+                ...paymentDetails,
+              });
+            }}
+          />
+        )}
       </div>
     </div>
   );

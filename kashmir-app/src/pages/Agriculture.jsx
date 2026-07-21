@@ -6,6 +6,7 @@ import { CROP_CALENDAR } from '../data/appData';
 import { createCropAPI, getCropsAPI, getMachinesAPI } from '../utils/api';
 import ImagePickerField from '../components/ui/ImagePickerField';
 import PaymentSelector, { buildPaymentPayload } from '../components/payments/PaymentSelector';
+import PaymentCheckoutModal from '../components/payments/PaymentCheckoutModal';
 
 function SellModal({ onClose, onSubmit }) {
   const [form, setForm] = useState({ cropName: '', category: 'Fruit', quantity: '', unit: 'kg', price: '', location: '', image: '', description: '', organic: false });
@@ -72,8 +73,18 @@ function BuyModal({ item, type, action, onClose, onBuy }) {
   const [qty, setQty] = useState(1);
   const [paymentChoice, setPaymentChoice] = useState('later');
   const [paymentMethod, setPaymentMethod] = useState('upi');
+  const [showGateway, setShowGateway] = useState(false);
   const isMachineBuy = type === 'machine' && action === 'buy';
   const total = isMachineBuy ? item.buyPrice * qty : type === 'crop' ? item.price * qty : item.rentPerDay * qty;
+
+  const handleBuyClick = () => {
+    if (paymentChoice === 'online') {
+      setShowGateway(true);
+    } else {
+      onBuy(qty, total, buildPaymentPayload({ paymentChoice, paymentMethod, type, action, total }));
+    }
+  };
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-box" onClick={e => e.stopPropagation()}>
@@ -129,10 +140,26 @@ function BuyModal({ item, type, action, onClose, onBuy }) {
         <button
           className="btn-teal"
           style={{ width: '100%', padding: '14px', fontSize: '1rem' }}
-          onClick={() => onBuy(qty, total, buildPaymentPayload({ paymentChoice, paymentMethod, type, action, total }))}
+          onClick={handleBuyClick}
         >
           {type === 'crop' || isMachineBuy ? '🛒 Place Order' : '🚜 Confirm Rental'} — ₹{total.toLocaleString()}
         </button>
+
+        {showGateway && (
+          <PaymentCheckoutModal
+            item={item.name}
+            total={total}
+            method={paymentMethod}
+            onClose={() => setShowGateway(false)}
+            onSuccess={(paymentDetails) => {
+              setShowGateway(false);
+              onBuy(qty, total, {
+                ...buildPaymentPayload({ paymentChoice, paymentMethod, type, action, total }),
+                ...paymentDetails,
+              });
+            }}
+          />
+        )}
       </div>
     </div>
   );

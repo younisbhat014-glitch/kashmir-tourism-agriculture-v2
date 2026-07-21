@@ -66,4 +66,32 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
+// Update booking status
+router.patch('/:id', auth, async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    if (req.user.role !== 'admin' && String(booking.user) !== String(req.user._id)) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    const allowedUpdates = ['status', 'paymentStatus', 'paymentReference', 'paymentNote'];
+    allowedUpdates.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        booking[field] = req.body[field];
+      }
+    });
+
+    const saved = await booking.save();
+    const populated = await Booking.findById(saved._id).populate('user', 'name email');
+    res.json(populated);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
 module.exports = router;
+

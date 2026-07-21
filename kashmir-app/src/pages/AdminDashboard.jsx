@@ -152,6 +152,85 @@ function ItemModal({ type, item, onClose, onSave }) {
   );
 }
 
+function BookingStatusModal({ booking, onClose, onSave }) {
+  const [status, setStatus] = useState(booking.status || 'confirmed');
+  const [paymentStatus, setPaymentStatus] = useState(booking.paymentStatus || 'pay_at_location');
+  const [paymentReference, setPaymentReference] = useState(booking.paymentReference || '');
+  const [paymentNote, setPaymentNote] = useState(booking.paymentNote || '');
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-box" onClick={e => e.stopPropagation()}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 24 }}>
+          <h2 style={{ fontFamily: 'Cormorant Garamond', fontSize: '1.8rem', color: 'var(--kashmir-deep)' }}>Manage Booking Status</h2>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: '#999' }}>✕</button>
+        </div>
+        
+        <div style={{ background: 'var(--kashmir-light)', borderRadius: 12, padding: 14, marginBottom: 20 }}>
+          <div style={{ fontWeight: 800, color: 'var(--kashmir-deep)', fontSize: '1.05rem' }}>{booking.itemName}</div>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: 6 }}>
+            Booked by: <strong>{booking.user?.name || 'N/A'}</strong> ({booking.user?.email || 'N/A'})
+          </div>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: 2 }}>
+            Total Amount: <strong>₹{booking.total ? Number(booking.total).toLocaleString('en-IN') : 'N/A'}</strong>
+          </div>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: 2 }}>
+            Category: <strong>{booking.type}</strong> · Action: <strong>{booking.action || 'book'}</strong>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Booking Status</label>
+          <select className="form-select" value={status} onChange={e => setStatus(e.target.value)}>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Payment Status</label>
+          <select className="form-select" value={paymentStatus} onChange={e => setPaymentStatus(e.target.value)}>
+            <option value="pending">Payment Pending</option>
+            <option value="initiated">Online Payment Initiated</option>
+            <option value="paid">Paid</option>
+            <option value="failed">Payment Failed</option>
+            <option value="pay_at_location">Pay at Location / COD</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Payment Reference</label>
+          <input 
+            className="form-input" 
+            placeholder="e.g. KPAY-123456" 
+            value={paymentReference} 
+            onChange={e => setPaymentReference(e.target.value)} 
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Payment Note / Method Details</label>
+          <input 
+            className="form-input" 
+            placeholder="e.g. Paid via J&K Bank / Cash paid to driver" 
+            value={paymentNote} 
+            onChange={e => setPaymentNote(e.target.value)} 
+          />
+        </div>
+
+        <button 
+          className="btn-teal" 
+          style={{ width: '100%', padding: '13px', marginTop: 16, fontSize: '1rem' }}
+          onClick={() => onSave({ status, paymentStatus, paymentReference, paymentNote })}
+        >
+          Save Status Settings ✓
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function AdminDashboard() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
@@ -164,9 +243,30 @@ export default function AdminDashboard() {
   const [machines, setMachines] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
   const [modal, setModal] = useState(null);
+  const [selectedBooking, setSelectedBooking] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => { fetchStats(); }, []);
+
+  const handleUpdateBookingStatus = async (formDetails) => {
+    try {
+      const res = await fetch(`${API}/bookings/${selectedBooking._id}`, {
+        method: 'PATCH',
+        headers: authHeaders(),
+        body: JSON.stringify(formDetails)
+      });
+      if (res.ok) {
+        setSelectedBooking(null);
+        fetchBookings();
+        fetchStats();
+      } else {
+        alert('Booking status update failed');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error updating booking status');
+    }
+  };
 
   useEffect(() => {
     if (activeTab === 'users') fetchUsers();
@@ -426,7 +526,7 @@ export default function AdminDashboard() {
               <table style={{ width: '100%', borderCollapse: 'collapse', background: 'white', borderRadius: 20, overflow: 'hidden', fontSize: '0.88rem' }}>
                 <thead style={{ background: 'var(--kashmir-deep)' }}>
                   <tr>
-                    {['User', 'Type', 'Action', 'Item', 'Amount', 'Payment', 'Date', 'Status'].map(h => (
+                    {['User', 'Type', 'Action', 'Item', 'Amount', 'Payment', 'Date', 'Status', 'Actions'].map(h => (
                       <th key={h} style={{ padding: '14px 18px', textAlign: 'left', color: 'white', fontWeight: 700, fontSize: '0.78rem', textTransform: 'uppercase' }}>{h}</th>
                     ))}
                   </tr>
@@ -442,12 +542,34 @@ export default function AdminDashboard() {
                       <td style={{ padding: '13px 18px' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
                           <span className="badge badge-gold" style={{ fontSize: '0.68rem', width: 'max-content' }}>{paymentModeLabels[b.paymentMode] || 'Payment'}</span>
-                          <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>{paymentStatusLabels[b.paymentStatus] || b.paymentStatus || 'Recorded'}</span>
+                          <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{paymentStatusLabels[b.paymentStatus] || b.paymentStatus || 'Recorded'}</span>
                           {b.paymentReference && <span style={{ fontSize: '0.7rem', color: 'var(--kashmir-teal)', fontWeight: 800 }}>{b.paymentReference}</span>}
                         </div>
                       </td>
                       <td style={{ padding: '13px 18px', color: 'var(--text-secondary)' }}>{new Date(b.createdAt).toLocaleDateString('en-IN')}</td>
-                      <td style={{ padding: '13px 18px' }}><span className="badge badge-teal" style={{ fontSize: '0.7rem' }}>✓ {b.status}</span></td>
+                      <td style={{ padding: '13px 18px' }}>
+                        <span className={`badge ${b.status === 'confirmed' ? 'badge-teal' : b.status === 'cancelled' ? 'badge-rose' : 'badge-gold'}`} style={{ fontSize: '0.7rem' }}>
+                          {b.status}
+                        </span>
+                      </td>
+                      <td style={{ padding: '13px 18px' }}>
+                        <button
+                          onClick={() => setSelectedBooking(b)}
+                          style={{
+                            padding: '5px 12px',
+                            background: 'rgba(26,122,110,0.1)',
+                            border: '1px solid rgba(26,122,110,0.2)',
+                            borderRadius: 8,
+                            color: 'var(--kashmir-teal)',
+                            fontFamily: 'Nunito',
+                            fontWeight: 700,
+                            fontSize: '0.72rem',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Manage
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -671,6 +793,14 @@ export default function AdminDashboard() {
           item={modal.item}
           onClose={() => setModal(null)}
           onSave={(form) => handleSave(modal.type, form, modal.item?._id)}
+        />
+      )}
+
+      {selectedBooking && (
+        <BookingStatusModal
+          booking={selectedBooking}
+          onClose={() => setSelectedBooking(null)}
+          onSave={handleUpdateBookingStatus}
         />
       )}
     </div>

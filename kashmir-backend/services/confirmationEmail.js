@@ -93,34 +93,37 @@ const getPaymentInstructions = (booking, kind) => {
   const mode = booking.paymentMode || '';
 
   if (mode === 'online') {
-    return 'Online payment option selected. Your booking/order is recorded with an online payment reference. If gateway capture is not completed, our team/provider may contact you before final fulfilment.';
+    if (kind === 'agriculture') {
+      return 'Your online payment for the agricultural order has been successfully processed. The seller/farmer has been notified to prepare your items for pickup/delivery. Thank you for supporting local Kashmir farmers!';
+    }
+    return 'Your online payment has been successfully recorded. Thank you for booking with Kashmir Tourism! Please keep a copy of this booking confirmation for your records.';
   }
 
   if (mode === 'pay_at_hotel') {
-    return 'Payment hotel par check-in/front desk ke time complete karni hogi. Please carry this Booking ID with you.';
+    return 'Payment must be completed at the hotel front desk during check-in. Please carry this Booking ID along with a valid government-issued photo ID card (such as Aadhaar, Passport, or Voter ID) for all guests check-in verification.';
   }
 
   if (mode === 'pay_at_restaurant') {
-    return 'Payment restaurant counter par visit/reservation ke time complete karni hogi. Please carry this Booking ID with you.';
+    return 'Payment must be completed at the restaurant counter during your visit. Please carry this Booking ID to locate your table reservation.';
   }
 
   if (mode === 'pay_to_driver') {
-    return 'Payment driver ya vehicle provider ko pickup ke time directly complete karni hogi. Please keep this Booking ID ready.';
+    return 'Payment must be completed directly to the driver or vehicle provider at the time of pickup. Please ensure you have this Booking ID and a valid Photo ID ready.';
   }
 
   if (mode === 'cash_on_delivery') {
-    return 'Payment delivery/pickup ke time farmer ya seller ko cash/available local method se complete karni hogi. Please keep this Order ID ready.';
+    return 'Payment must be made in cash (or the seller\'s preferred local mobile payment option) directly to the farmer or seller at the time of crop delivery or pickup. Please keep this Order ID ready.';
   }
 
   if (mode === 'pay_to_owner' || mode === 'pay_to_seller') {
-    return 'Payment owner/seller ke confirmation ke baad directly complete karni hogi. Please keep this Order ID ready.';
+    return 'Payment must be completed directly to the seller/owner after confirmation of item availability. Please keep this Order ID ready for verification.';
   }
 
   if (kind === 'agriculture') {
-    return 'Your agriculture request has been received. Final price, availability, delivery/pickup, and payment method seller/farmer/machine owner ke confirmation ke baad decide hoga. Payment seller/farmer/service provider ke saath directly complete hogi.';
+    return 'Your agricultural request has been recorded and is pending farmer/provider confirmation. Details on pricing, pickup/delivery times, and payment method will be coordinated directly with the provider. Please retain this Order ID.';
   }
 
-  return 'Your booking request is confirmed. Payment website par nahi hogi. Payment hotel/restaurant/vehicle provider/travel service provider ke location par hi karni hogi. Wahan par available payment options jaise Cash, UPI, Card ya Online Transfer provider ke rules ke according mil sakte hain.';
+  return 'Your booking request is confirmed. Payment will be collected at the venue/location via Cash, UPI, or Card as per the provider\'s accepted payment options. Please present this Booking ID on arrival.';
 };
 
 const getStatusLabel = (kind) => (kind === 'agriculture' ? 'Pending Provider Confirmation' : 'Confirmed');

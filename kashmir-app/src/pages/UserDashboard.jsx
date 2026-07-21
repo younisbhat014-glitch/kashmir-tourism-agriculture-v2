@@ -25,6 +25,42 @@ const paymentStatusLabels = {
 const getBookingName = (booking) => booking.itemName || booking.item || 'Booking';
 const getBookingDate = (booking) => new Date(booking.createdAt || booking.date || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
 
+const getPaymentStatusBadgeStyle = (status) => {
+  const base = {
+    padding: '4px 10px',
+    borderRadius: '12px',
+    fontSize: '0.7rem',
+    fontWeight: 800,
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px',
+    display: 'inline-block'
+  };
+  
+  if (status === 'paid') {
+    return { ...base, background: '#eef6f2', color: '#1a7a6e', border: '1px solid #1a7a6e' };
+  }
+  if (status === 'failed') {
+    return { ...base, background: '#fdf3f2', color: '#c4706a', border: '1px solid #c4706a' };
+  }
+  if (status === 'pay_at_location') {
+    return { ...base, background: '#f0f5ff', color: '#2b6cb0', border: '1px solid #b3d1ff' };
+  }
+  return { ...base, background: '#fff9e8', color: '#b7791f', border: '1px solid #f6e0b5' };
+};
+
+const getPaymentModeBadgeStyle = () => {
+  return {
+    padding: '4px 10px',
+    borderRadius: '12px',
+    fontSize: '0.7rem',
+    fontWeight: 800,
+    background: 'rgba(201,168,76,0.12)',
+    color: '#8a6d1c',
+    border: '1px solid rgba(201,168,76,0.25)',
+    display: 'inline-block'
+  };
+};
+
 export default function UserDashboard() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
@@ -143,16 +179,16 @@ export default function UserDashboard() {
                     <div key={i} className="glass-card" style={{ padding: '18px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
                       <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
                         <div style={{ width: 44, height: 44, background: 'linear-gradient(135deg, var(--kashmir-teal), var(--kashmir-gold))', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem' }}>
-                          {b.type === 'hotel' ? '🏨' : b.type === 'restaurant' ? '🍽' : b.type === 'vehicle' ? '🚗' : '📦'}
+                          {b.type === 'hotel' ? '🏨' : b.type === 'restaurant' ? '🍽' : b.type === 'vehicle' ? '🚗' : b.type === 'crop' ? '🌾' : '📦'}
                         </div>
                         <div>
                           <div style={{ fontWeight: 700 }}>{getBookingName(b)}</div>
                           <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>{b.type} · {getBookingDate(b)}</div>
                         </div>
                       </div>
-                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-                        <span className="badge badge-gold">{paymentModeLabels[b.paymentMode] || 'Payment'}</span>
-                        <span className="badge badge-teal">Confirmed</span>
+                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end', alignItems: 'center' }}>
+                        <span style={getPaymentModeBadgeStyle()}>{paymentModeLabels[b.paymentMode] || 'Payment'}</span>
+                        <span style={getPaymentStatusBadgeStyle(b.paymentStatus)}>{paymentStatusLabels[b.paymentStatus] || b.paymentStatus}</span>
                       </div>
                     </div>
                   ))}
@@ -200,10 +236,15 @@ export default function UserDashboard() {
                           {b.qty && <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>Quantity: {b.qty} · Total: ₹{b.total?.toLocaleString()}</div>}
                           <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: 4 }}>Booked on {getBookingDate(b)}</div>
                           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 10 }}>
-                            <span className="badge badge-gold">{paymentModeLabels[b.paymentMode] || 'Payment Pending'}</span>
-                            <span className="badge badge-teal">{paymentStatusLabels[b.paymentStatus] || b.paymentStatus || 'Recorded'}</span>
-                            {b.paymentReference && <span className="badge badge-green">{b.paymentReference}</span>}
+                            <span style={getPaymentModeBadgeStyle()}>{paymentModeLabels[b.paymentMode] || 'Payment Option'}</span>
+                            <span style={getPaymentStatusBadgeStyle(b.paymentStatus)}>{paymentStatusLabels[b.paymentStatus] || b.paymentStatus || 'Recorded'}</span>
+                            {b.paymentReference && <span style={{ padding: '4px 10px', borderRadius: '12px', fontSize: '0.7rem', fontWeight: 800, background: '#edf2f7', color: '#4a5568', border: '1px solid #cbd5e0' }}>Ref: {b.paymentReference}</span>}
                           </div>
+                          {b.paymentNote && (
+                            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: 8, fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: 4 }}>
+                              <span>ℹ️</span> <span>{b.paymentNote}</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                       <span className="badge badge-teal">Confirmed</span>
